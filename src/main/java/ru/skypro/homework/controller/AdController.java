@@ -11,9 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.Ad;
 import ru.skypro.homework.dto.AdInfo;
 import ru.skypro.homework.dto.Ads;
+import ru.skypro.homework.dto.NewPassword;
 
 import javax.persistence.Lob;
 
@@ -178,6 +180,13 @@ public class AdController {
 
     @PutMapping("{id}/image")
     @Operation(summary = "Renews the ad's image for the ad's entry with pk=id if it exists.",
+            operationId = "updateImage",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @Content(
+                            mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
+                            schema = @Schema(implementation = MultipartFile.class)
+                    )
+            ),
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -201,7 +210,7 @@ public class AdController {
                             description = "Not found"
                     )
             })
-    public ResponseEntity<?>updateImg(@PathVariable Long id, @RequestBody byte[] img) {
+    public ResponseEntity<?>updateImg(@PathVariable Long id, @RequestBody MultipartFile image) {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 }
