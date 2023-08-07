@@ -11,6 +11,7 @@ public class Ad {
     private Long author;
 
     private String title;
+    private String description;
     private BigDecimal price;
     private String image;
 }

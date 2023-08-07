@@ -1,0 +1,36 @@
+### Get the ad by its ID=1
+GET http://localhost:8080/ads/1
+
+### Get all the ads of the authorized user
+GET http://localhost:8080/ads/me
+
+### Get all the ads
+GET http://localhost:8080/ads/
+
+### Delete the ad by its ID=1
+DELETE http://localhost:8080/ads/1
+
+### Create a new ad
+POST http://localhost:8080/ads/
+Content-Type: multipart/form-data
+
+{
+  "title": "Big Ben",
+  "price": 1007.99,
+  "description": "Watches for your mansion. The Great Bell of the Great Clock of Westminster"
+}
+
+### Update the ad by its ID=1
+PUT http://localhost:8080/ads/1
+Content-Type: application/json
+
+{
+  "title": "Bender",
+  "price": 105.95,
+  "description": "A Useful tool and good friend"
+}
+
+### Update the ad's image for the ad with ID=1
+PUT http://localhost:8080/ads/1/image
+Content-Type: multipart/form-data
+
