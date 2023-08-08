@@ -2,16 +2,26 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
-import java.math.BigDecimal;
-
 @Data
 public class Ad {
 
+    /**
+     * ad's id
+     */
     private Long pk;
-    private Long author;
+    /**
+     * ad's author id
+     */
+    private int author;
 
     private String title;
-    private String description;
-    private BigDecimal price;
+
+    private int price;
+
+    /**
+     * link to the ad's image
+     */
     private String image;
+
+
 }
