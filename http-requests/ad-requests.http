@@ -12,25 +12,46 @@ DELETE http://localhost:8080/ads/1
 
 ### Create a new ad
 POST http://localhost:8080/ads/
-Content-Type: multipart/form-data
+Content-Type: multipart/form-data; boundary=PartBoundary
+
+--PartBoundary
+Content-Disposition: multipart; name="property";
+Content-Type: application/json
 
 {
   "title": "Big Ben",
-  "price": 1007.99,
+  "price": 9999999,
   "description": "Watches for your mansion. The Great Bell of the Great Clock of Westminster"
 }
 
-### Update the ad by its ID=1
-PUT http://localhost:8080/ads/1
+--PartBoundary
+Content-Disposition: form-data; name="image"; filename="Big_Ben_small_with_Labour_Party_(UK)_colour.png"
+Content-Type: image/jpeg
+
+< ../data/img-ads/Big_Ben_small_with_Labour_Party_(UK)_colour.png
+--PartBoundary
+
+
+### Patch the ad by its ID=1
+PATCH http://localhost:8080/ads/1
 Content-Type: application/json
 
 {
   "title": "Bender",
-  "price": 105.95,
-  "description": "A Useful tool and good friend"
+  "price": 105,
+  "description": "explicitly useful tool and good friend"
 }
 
-### Update the ad's image for the ad with ID=1
-PUT http://localhost:8080/ads/1/image
-Content-Type: multipart/form-data
+### Patch the ad's image for the ad with ID=1
+PATCH http://localhost:8080/ads/1/image
+Content-Type: multipart/form-data; boundary=PartBoundary
+
+--PartBoundary
+Content-Disposition: form-data; name="image"; filename="bender.jpg"
+Content-Type: image/jpeg
+
+< ../data/img-ads/bender.jpg
+--PartBoundary
+
+
 
