@@ -10,5 +10,5 @@ public class User {
     private String lastName;
     private String phone;
     private Role role;
-    private byte[] image;
+    private String image;
 }

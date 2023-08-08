@@ -73,8 +73,8 @@ public class UsersController {
             tags = "Пользователи"
     )
     @GetMapping("/me")
-    public ResponseEntity<Register> getUser() {
-        return ResponseEntity.ok(new Register());
+    public ResponseEntity<User> getUser() {
+        return ResponseEntity.ok(new User());
     }
 
 
@@ -126,7 +126,7 @@ public class UsersController {
             tags = "Пользователи"
     )
     @PatchMapping(path = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateUserImage(@RequestBody() MultipartFile image) {
+    public ResponseEntity<?> updateUserImage(@RequestParam() MultipartFile image) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
