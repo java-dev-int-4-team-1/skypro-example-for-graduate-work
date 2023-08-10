@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Comment;
+import ru.skypro.homework.dto.CreateOrUpdateComment;
 
 import java.util.List;
 
@@ -17,23 +18,25 @@ import java.util.List;
 public class CommentsController {
 
     @GetMapping("/{id}/comments")
-    public ResponseEntity<List<Comment>> getComments(@PathVariable("id") long adId) {
+    public ResponseEntity<List<Comment>> getComments(@PathVariable("id") Integer adId) {
         return ResponseEntity.ok(List.of(new Comment()));
     }
 
     @PostMapping("/{id}/comments")
-    public ResponseEntity<Comment> addComment(@PathVariable("id") long adId, @RequestBody String text) {
+    public ResponseEntity<Comment> addComment(@PathVariable("id") Integer adId,
+                                              @RequestBody CreateOrUpdateComment CreateOrUpdateComment) {
         return ResponseEntity.ok(new Comment());
     }
 
     @DeleteMapping("/{adId}/comments/{commentId}")
-    public ResponseEntity<Void> deleteComment(@PathVariable("adId") long adId, @PathVariable("commentId") long id) {
+    public ResponseEntity<Void> deleteComment(@PathVariable("adId") Integer adId,
+                                              @PathVariable("commentId") Integer id) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PatchMapping("/{adId}/comments/{commentId}")
     public ResponseEntity<Comment> updateComment(@PathVariable("adId") long adId, @PathVariable("commentId") long Id,
-                                                 @RequestBody String text) {
+                                                 @RequestBody CreateOrUpdateComment CreateOrUpdateComment) {
         return ResponseEntity.ok(new Comment());
     }
 
