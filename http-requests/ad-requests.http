@@ -3,19 +3,23 @@ GET http://localhost:8080/ads/1
 
 ### Get all the ads of the authorized user
 GET http://localhost:8080/ads/me
+Authorization: Basic user@gmail.com password
 
 ### Get all the ads
 GET http://localhost:8080/ads/
+Authorization: Basic user@gmail.com password
 
 ### Delete the ad by its ID=1
 DELETE http://localhost:8080/ads/1
+Authorization: Basic user@gmail.com password
 
 ### Create a new ad
 POST http://localhost:8080/ads/
+Authorization: Basic user@gmail.com password
 Content-Type: multipart/form-data; boundary=PartBoundary
 
 --PartBoundary
-Content-Disposition: multipart/; name="property";
+Content-Disposition: form-data; name="properties";
 Content-Type: application/json
 
 {
@@ -34,6 +38,7 @@ Content-Type: image/jpeg
 
 ### Patch the ad by its ID=1
 PATCH http://localhost:8080/ads/1
+Authorization: Basic user@gmail.com password
 Content-Type: application/json
 
 {
@@ -44,6 +49,7 @@ Content-Type: application/json
 
 ### Patch the ad's image for the ad with ID=1
 PATCH http://localhost:8080/ads/1/image
+Authorization: Basic user@gmail.com password
 Content-Type: multipart/form-data; boundary=PartBoundary
 
 --PartBoundary
@@ -52,6 +58,3 @@ Content-Type: image/jpeg
 
 < ../data/img-ads/bender.jpg
 --PartBoundary
-
-
-
