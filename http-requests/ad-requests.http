@@ -15,7 +15,7 @@ POST http://localhost:8080/ads/
 Content-Type: multipart/form-data; boundary=PartBoundary
 
 --PartBoundary
-Content-Disposition: multipart; name="property";
+Content-Disposition: multipart/; name="property";
 Content-Type: application/json
 
 {
