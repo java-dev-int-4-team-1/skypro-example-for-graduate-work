@@ -9,6 +9,8 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.Ads;
 
+import javax.validation.Valid;
+
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
 @RequiredArgsConstructor
@@ -34,7 +36,7 @@ public class AdController {
     }
 
     @PostMapping
-     public ResponseEntity<?>create(@RequestPart CreateOrUpdateAd createAd, @RequestPart MultipartFile imgFile) {
+     public ResponseEntity<?>create(@Valid @RequestPart CreateOrUpdateAd createAd, @RequestPart MultipartFile imgFile) {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
@@ -45,7 +47,7 @@ public class AdController {
     }
 
     @PatchMapping("{id}")
-    public ResponseEntity<?>update(@PathVariable Integer id, @RequestPart CreateOrUpdateAd updateAd) {
+    public ResponseEntity<?>update(@PathVariable Integer id, @Valid @RequestPart CreateOrUpdateAd updateAd) {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
