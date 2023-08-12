@@ -3,6 +3,7 @@ package ru.skypro.homework.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,8 +36,8 @@ public class AdController {
         return new ResponseEntity<>(new Ads(), HttpStatus.OK);
     }
 
-    @PostMapping
-     public ResponseEntity<?>create(@Valid @RequestPart CreateOrUpdateAd createAd, @RequestPart MultipartFile imgFile) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+     public ResponseEntity<?>create(@Valid @RequestPart CreateOrUpdateAd properties, @RequestPart MultipartFile image) {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
@@ -47,12 +48,12 @@ public class AdController {
     }
 
     @PatchMapping("{id}")
-    public ResponseEntity<?>update(@PathVariable Integer id, @Valid @RequestPart CreateOrUpdateAd updateAd) {
+    public ResponseEntity<?>update(@PathVariable Integer id, @Valid @RequestBody CreateOrUpdateAd updateAd) {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @PatchMapping("{id}/image")
-    public ResponseEntity<?>updateImg(@PathVariable Long id, @RequestBody MultipartFile image) {
+    @PatchMapping(path="{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?>updateImg(@PathVariable Long id, @RequestPart MultipartFile image) {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 }
