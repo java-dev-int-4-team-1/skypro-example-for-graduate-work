@@ -19,7 +19,7 @@ Authorization: Basic user@gmail.com password
 Content-Type: multipart/form-data; boundary=PartBoundary
 
 --PartBoundary
-Content-Disposition: form-data; name="properties";
+Content-Disposition: form-data; name="properties"
 Content-Type: application/json
 
 {
@@ -35,16 +35,40 @@ Content-Type: image/jpeg
 < ../data/img-ads/Big_Ben_small_with_Labour_Party_(UK)_colour.png
 --PartBoundary
 
-
-### Patch the ad by its ID=1
-PATCH http://localhost:8080/ads/1
+###
+PATCH http://localhost:8080/hogwarts/faculty/
 Authorization: Basic user@gmail.com password
 Content-Type: application/json
 
 {
+  "name"  : "Gryffindor",
+  "color" : "red",
   "title": "Bender",
   "price": 105,
   "description": "explicitly useful tool and good friend"
+}
+
+### Patch the ad by its ID=1 : does not work
+PATCH http://localhost:8080/ads/1
+Content-Type: application/json
+
+{
+  "title": "The Title",
+  "price": 100,
+  "description": "some description"
+}
+
+### Just an example here if some different unknown PATH-request is described
+PATCH http://localhost:8080/hogwards/
+Authorization: Basic user@gmail.com password
+Content-Type: application/json
+
+{
+"name"  : "Gryffindor",
+"color" : "red",
+"title": "Bender",
+"price": 105,
+"description": "explicitly useful tool and good friend"
 }
 
 ### Patch the ad's image for the ad with ID=1
