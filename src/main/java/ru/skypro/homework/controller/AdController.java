@@ -19,13 +19,13 @@ import javax.validation.Valid;
 @RequestMapping("/ads")
 public class AdController {
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?>get(@PathVariable Integer id) {
 
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @GetMapping("me")
+    @GetMapping("/me")
     public ResponseEntity<?>getMyAds() {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
@@ -37,22 +37,24 @@ public class AdController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-     public ResponseEntity<?>create(@Valid @RequestPart CreateOrUpdateAd properties, @RequestPart MultipartFile image) {
+     public ResponseEntity<?>create(
+             @Valid @RequestPart CreateOrUpdateAd properties,
+             @RequestPart MultipartFile image) {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?>delete(@PathVariable Integer id) {
 
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @PatchMapping("{id}")
+    @PatchMapping("/{id}")
     public ResponseEntity<?>update(@PathVariable Integer id, @Valid @RequestBody CreateOrUpdateAd updateAd) {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @PatchMapping(path="{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PatchMapping(path="/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?>updateImg(@PathVariable Long id, @RequestPart MultipartFile image) {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
