@@ -3,7 +3,7 @@ package ru.skypro.homework.dto;
 import lombok.Data;
 
 @Data
-public class Ad {
+public class AdDto {
 
     /**
      * ad's id

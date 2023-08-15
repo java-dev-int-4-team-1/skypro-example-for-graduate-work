@@ -11,5 +11,5 @@ import java.util.Collection;
 public class Ads {
 
     private int count;
-    private Collection <Ad> results;
+    private Collection <AdDto> results;
 }
