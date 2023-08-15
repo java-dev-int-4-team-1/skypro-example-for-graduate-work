@@ -12,6 +12,8 @@ import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.User;
 
+import javax.validation.Valid;
+
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -22,7 +24,7 @@ public class UsersController {
 
 
     @PostMapping("/set_password")
-    public ResponseEntity<?> setPassword(@RequestBody NewPassword newPassword) {
+    public ResponseEntity<?> setPassword(@Valid @RequestBody NewPassword newPassword) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -32,7 +34,7 @@ public class UsersController {
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<?> updateUser(@RequestBody UpdateUser updateUser) {
+    public ResponseEntity<?> updateUser(@Valid @RequestBody UpdateUser updateUser) {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
