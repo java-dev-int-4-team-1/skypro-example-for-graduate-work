@@ -7,11 +7,12 @@ import javax.persistence.*;
 
 @Entity
 @Data
+@Table(name = "users")
 public class User {
 
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     private String username;
 
@@ -28,14 +29,15 @@ public class User {
     private Role role;
 
     private String image;
-    /** ToDo fix this relation **/
-    @ManyToOne
+    /** ToDo fix thess relations */
+    /*@ManyToOne
     @JoinColumn(name="comment_id")
     private Comment comment;
-    /** ToDo fix this relation **/
+
     @ManyToOne
     @JoinColumn(name="ad_pk")
     private Ad ad;
+    */
 
 
 

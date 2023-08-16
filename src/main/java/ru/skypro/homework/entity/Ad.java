@@ -6,6 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
+@Table(name ="ads")
 public class Ad {
     /**
      * ad's id
@@ -14,8 +15,8 @@ public class Ad {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pk;
 
-    @ManyToOne
     @JoinColumn(name="user_id")
+    @ManyToOne
     private User author;
 
     private String title;
