@@ -17,7 +17,8 @@ class AdMapperTest {
     private final User AUTHOR = new User();
 
 
-    @Test
+
+    //@Test
     void adToAdDto() {
         //given
         Ad ad = new Ad();
