@@ -29,16 +29,4 @@ public class User {
     private Role role;
 
     private String image;
-    /** ToDo fix thess relations */
-    /*@ManyToOne
-    @JoinColumn(name="comment_id")
-    private Comment comment;
-
-    @ManyToOne
-    @JoinColumn(name="ad_pk")
-    private Ad ad;
-    */
-
-
-
 }
