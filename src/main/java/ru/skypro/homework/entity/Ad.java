@@ -13,7 +13,7 @@ public class Ad {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long pk;
+    private int pk;
 
     @JoinColumn(name="user_id")
     @ManyToOne

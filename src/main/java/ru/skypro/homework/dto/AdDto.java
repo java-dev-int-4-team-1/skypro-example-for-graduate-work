@@ -8,7 +8,7 @@ public class AdDto {
     /**
      * ad's id
      */
-    private Long pk;
+    private int pk;
     /**
      * ad's author id
      */
