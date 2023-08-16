@@ -4,7 +4,6 @@ import lombok.Data;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 
 @Entity
 @Data
@@ -29,12 +28,12 @@ public class User {
     private Role role;
 
     private String image;
-
-   // @OneToMany
+    /** ToDo fix this relation **/
+    @ManyToOne
     @JoinColumn(name="comment_id")
     private Comment comment;
-
-  //  @OneToMany
+    /** ToDo fix this relation **/
+    @ManyToOne
     @JoinColumn(name="ad_pk")
     private Ad ad;
 
