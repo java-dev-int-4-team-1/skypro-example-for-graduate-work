@@ -15,10 +15,10 @@ public interface AdMapper {
     AdDto adToAdDto(Ad ad);
 
     /** ToDo : define source based on User-data-members */
-    @Mapping(target = "authorFirstName")
-    @Mapping(target = "authorLastName")
-    @Mapping(target = "email")
-    @Mapping(target = "phone")
+    //ToDo @Mapping(target = "authorFirstName")
+    //ToDo @Mapping(target = "authorLastName")
+    //ToDo @Mapping(target = "email")
+    //ToDo @Mapping(target = "phone")
     ExtendedAd adToExtendedAd(Ad ad);
 
 
