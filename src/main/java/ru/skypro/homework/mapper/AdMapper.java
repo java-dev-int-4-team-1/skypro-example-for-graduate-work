@@ -25,7 +25,7 @@ public interface AdMapper {
     ExtendedAd adToExtendedAd(Ad ad);
 
 
-    Ad createOrUpdateAdToAd(CreateOrUpdateAd createOrUpdateAd);
+    Ad createOrUpdateAdToAd(CreateOrUpdateAd createOrUpdateAd, String image);
 
     default Ads adsToAdsDto(Collection<Ad> ads) {
         Ads result = new Ads();
@@ -37,4 +37,6 @@ public interface AdMapper {
         result.setCount(ads.size());
         return result;
     }
+
+    AdDto createOrUpdateAdToAdDto(CreateOrUpdateAd createOrUpdateAd, String image);
 }
