@@ -33,10 +33,10 @@ class AdControllerTest {
     private final static String LOGIN = "user@gmail.com";
     private final static String PASSWORD = "password";
 
-    private static CreateOrUpdateAd createAd(String title, String desription, int price ) {
+    private static CreateOrUpdateAd createAd(String title, String description, int price ) {
         CreateOrUpdateAd createAd = new CreateOrUpdateAd();
         createAd.setTitle(title);
-        createAd.setDescription(desription);
+        createAd.setDescription(description);
         createAd.setPrice(price);
         return createAd;
     }
@@ -71,8 +71,8 @@ class AdControllerTest {
     }
     @ParameterizedTest
     @MethodSource ("streamCorrectAdProperties")
-    public void givenCreate_whenIncorrectInput_thenUnauthorized(CreateOrUpdateAd correctCreateAd) throws Exception {
-        performCreate(correctCreateAd).andExpect(status().isUnauthorized());
+    public void givenCreate_whenCorrectInput_thenCreated(CreateOrUpdateAd correctCreateAd) throws Exception {
+        performCreate(correctCreateAd).andExpect(status().isCreated());
     }
 
     private ResultActions performCreate(CreateOrUpdateAd incorrectCreateAd) throws Exception {
@@ -93,6 +93,35 @@ class AdControllerTest {
                                         LOGIN + ":" + PASSWORD).getBytes(StandardCharsets.UTF_8))
                         )
                 );
+    }
+
+    @ParameterizedTest
+    @MethodSource ("streamCorrectAdProperties")
+    public void givenCreate_whenCorrectInputButUnauthorized_thenUnauthorized(CreateOrUpdateAd correctCreateAd) throws Exception {
+        performCreateUnauthorized(correctCreateAd).andExpect(status().isUnauthorized());
+    }
+
+    @ParameterizedTest
+    @MethodSource ("streamIncorrectAdProperties")
+    public void givenCreate_whenIncorrectInputButUnauthorized_thenUnauthorized(CreateOrUpdateAd incorrectCreateAd) throws Exception {
+        performCreateUnauthorized(incorrectCreateAd).andExpect(status().isUnauthorized());
+    }
+
+
+    private ResultActions performCreateUnauthorized(CreateOrUpdateAd incorrectCreateAd) throws Exception {
+        byte[] propertiesJson = objectMapper.writeValueAsBytes(incorrectCreateAd);
+
+        MockMultipartFile propertiesMockMultipartFile = new MockMultipartFile("properties", "ad.txt",
+                "application/json", propertiesJson);
+        MockMultipartFile imageMockMultipartFile = new MockMultipartFile("image", "some-image.png",
+                "image/png", "an-image".getBytes());
+
+
+        return mockMvc.perform(MockMvcRequestBuilders
+                .multipart(HttpMethod.POST, "/ads")
+                .file(propertiesMockMultipartFile)
+                .file(imageMockMultipartFile)
+        );
     }
 
     @Test

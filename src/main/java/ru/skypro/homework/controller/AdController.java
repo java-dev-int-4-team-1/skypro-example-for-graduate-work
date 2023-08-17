@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.Ads;
+import ru.skypro.homework.service.AdService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @Slf4j
 @CrossOrigin(value = "http://localhost:3000")
@@ -19,43 +21,49 @@ import javax.validation.Valid;
 @RequestMapping("/ads")
 public class AdController {
 
+    private final AdService adService;
+
     @GetMapping("/{id}")
     public ResponseEntity<?>get(@PathVariable Integer id) {
-
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(adService.getById(id), HttpStatus.OK);
     }
 
     @GetMapping("/me")
     public ResponseEntity<?>getMyAds() {
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(adService.getAllByUser(), HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity<Ads>getAll() {
-
-        return new ResponseEntity<>(new Ads(), HttpStatus.OK);
+        return new ResponseEntity<>(adService.getAll(), HttpStatus.OK);
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
      public ResponseEntity<?>create(
              @Valid @RequestPart CreateOrUpdateAd properties,
              @RequestPart MultipartFile image) {
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(adService.create(properties, image), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?>delete(@PathVariable Integer id) {
-
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<?>delete(@NotNull @PathVariable Integer id) {
+        return new ResponseEntity<>(adService.delete(id)?
+                HttpStatus.NO_CONTENT :
+                HttpStatus.NOT_FOUND
+        );
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?>update(@PathVariable Integer id, @Valid @RequestBody CreateOrUpdateAd updateAd) {
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<?> patchProperties(
+            @NotNull @PathVariable Integer id,
+            @Valid @RequestBody CreateOrUpdateAd updateAd) {
+        return new ResponseEntity<>(adService.patchProperties(id, updateAd), HttpStatus.OK);
     }
 
     @PatchMapping(path="/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?>updateImg(@PathVariable Long id, @RequestPart MultipartFile image) {
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<?>patchImg(
+            @NotNull @PathVariable Integer id,
+            @RequestPart MultipartFile image) {
+        return new ResponseEntity<>(adService.patchImage(id, image), HttpStatus.OK);
     }
 }
