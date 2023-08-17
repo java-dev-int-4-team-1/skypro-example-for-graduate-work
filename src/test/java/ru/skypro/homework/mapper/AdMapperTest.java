@@ -1,12 +1,15 @@
 package ru.skypro.homework.mapper;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.User;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@SpringBootTest
 class AdMapperTest {
 
     private final static String TITLE = "title";
@@ -16,7 +19,8 @@ class AdMapperTest {
 
     private final User AUTHOR = new User();
 
-
+    @Autowired
+    private AdMapper adMapper;
 
     @Test
     void adToAdDto() {
@@ -29,7 +33,7 @@ class AdMapperTest {
         ad.setPrice(PRICE);
 
         //when
-        AdDto adDto = AdMapper.INSTANCE.adToAdDto(ad);
+        AdDto adDto = adMapper.adToAdDto(ad);
 
         //then
         assertThat(adDto).isNotNull();
