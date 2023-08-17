@@ -18,7 +18,7 @@ class AdMapperTest {
 
 
 
-    //@Test
+    @Test
     void adToAdDto() {
         //given
         Ad ad = new Ad();
