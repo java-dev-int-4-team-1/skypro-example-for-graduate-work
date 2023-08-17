@@ -9,6 +9,7 @@ import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.User;
+import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
 
@@ -41,7 +42,11 @@ public class AdService {
 
     public AdDto getById(Integer id) {
         log.debug("getById({})", id);
-        return adMapper.adToAdDto(new Ad());
+        return adMapper.adToAdDto(
+                adRepository.findById(id)
+                        .orElseThrow(() -> new AdNotFoundException(id)
+                        )
+        );
     }
 
     public AdDto create(CreateOrUpdateAd properties, MultipartFile image) {
