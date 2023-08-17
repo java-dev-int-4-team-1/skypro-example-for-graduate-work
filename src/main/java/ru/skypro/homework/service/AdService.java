@@ -50,8 +50,14 @@ public class AdService {
     }
 
     public AdDto create(CreateOrUpdateAd properties, MultipartFile image) {
+
         log.debug("create({}, {})", properties, image);
-        return adMapper.adToAdDto(emptyAd);
+
+        return adMapper.adToAdDto(
+                adRepository.save(
+                        adMapper.createOrUpdateAdToAd(properties, image.getName())
+                )
+        );
     }
 
     /**

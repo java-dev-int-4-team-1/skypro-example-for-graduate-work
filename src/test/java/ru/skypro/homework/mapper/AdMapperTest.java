@@ -68,7 +68,7 @@ class AdMapperTest extends AdTestUtil {
         createOrUpdateAd.setTitle(TITLE);
 
         //when
-        Ad ad =  adMapper.createOrUpdateAdToAd(createOrUpdateAd);
+        Ad ad =  adMapper.createOrUpdateAdToAd(createOrUpdateAd, IMAGE);
 
         //then
         assertThat(ad).isNotNull();
