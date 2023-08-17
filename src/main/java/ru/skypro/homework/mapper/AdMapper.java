@@ -2,12 +2,15 @@ package ru.skypro.homework.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
 import ru.skypro.homework.dto.AdDto;
+import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.User;
+
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface AdMapper {
@@ -15,14 +18,23 @@ public interface AdMapper {
     AdDto adToAdDto(Ad ad);
 
     /** ToDo : define source based on User-data-members */
-    //ToDo @Mapping(target = "authorFirstName")
-    //ToDo @Mapping(target = "authorLastName")
-    //ToDo @Mapping(target = "email")
-    //ToDo @Mapping(target = "phone")
+    @Mapping(source="author.firstName", target = "authorFirstName")
+    @Mapping(source="author.lastName", target = "authorLastName")
+    @Mapping(source="author.email", target = "email")
+    @Mapping(source="author.phone", target = "phone")
     ExtendedAd adToExtendedAd(Ad ad);
 
 
-    Ad CreateOrUpdateAdToAd(CreateOrUpdateAd createOrUpdateAd);
+    Ad createOrUpdateAdToAd(CreateOrUpdateAd createOrUpdateAd);
 
-
+    default Ads adsToAdsDto(Collection<Ad> ads) {
+        Ads result = new Ads();
+        result.setResults(
+            ads.stream()
+                    .map(this::adToAdDto)
+                    .collect(Collectors.toList())
+        );
+        result.setCount(ads.size());
+        return result;
+    }
 }
