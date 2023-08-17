@@ -25,5 +25,4 @@ public class CreateOrUpdateAd {
     @NotNull
     @Size(min = 4, max = 64)
     private String description;
-
 }
