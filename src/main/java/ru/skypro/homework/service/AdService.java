@@ -10,6 +10,7 @@ import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.mapper.AdMapper;
+import ru.skypro.homework.repository.AdRepository;
 
 import java.util.Collections;
 
@@ -18,6 +19,7 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class AdService {
 
+    private final AdRepository adRepository;
     private static final  Ad emptyAd = new Ad();
     private static final User author = new User();
 
@@ -29,7 +31,7 @@ public class AdService {
     private final AdMapper adMapper;
     public Ads getAll() {
         log.debug("getAll");
-        return adMapper.adsToAdsDto(Collections.emptyList());
+        return adMapper.adsToAdsDto(adRepository.findAll());
     }
 
     public Ads getAllByUser() {
