@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
 import ru.skypro.homework.dto.UpdateUser;
-import ru.skypro.homework.dto.User;
+import ru.skypro.homework.dto.UserDto;
 
 import javax.validation.Valid;
 
@@ -29,8 +29,8 @@ public class UsersController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<User> getUser() {
-        return ResponseEntity.ok(new User());
+    public ResponseEntity<UserDto> getUser() {
+        return ResponseEntity.ok(new UserDto());
     }
 
     @PatchMapping("/me")
