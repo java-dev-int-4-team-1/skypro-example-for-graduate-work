@@ -1,6 +1,7 @@
 package ru.skypro.homework.dto;
 
 import lombok.Data;
+import ru.skypro.homework.entity.Ad;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -26,4 +27,11 @@ public class CreateOrUpdateAd {
     @Size(min = 4, max = 64)
     private String description;
 
+    public void updateAd(Ad ad) {
+
+        ad.setDescription(description);
+        ad.setPrice(price);
+        ad.setTitle(title);
+
+    }
 }
