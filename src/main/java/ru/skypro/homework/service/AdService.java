@@ -8,11 +8,12 @@ import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.entity.Ad;
-import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.util.ImageManager;
 
+import java.io.IOException;
 import java.util.Collections;
 
 @Slf4j
@@ -21,12 +22,8 @@ import java.util.Collections;
 public class AdService {
 
     private final AdRepository adRepository;
-    private static final  Ad emptyAd = new Ad();
-    private static final User author = new User();
 
-    static {
-        emptyAd.setAuthor(author);
-    }
+    private final ImageManager imageManager;
 
 
     private final AdMapper adMapper;
@@ -53,11 +50,18 @@ public class AdService {
 
         log.debug("create({}, {})", properties, image);
 
-        return adMapper.adToAdDto(
-                adRepository.save(
-                        adMapper.createOrUpdateAdToAd(properties, image.getName())
-                )
+        Ad ad = adRepository.save(
+                adMapper.createOrUpdateAdToAd(properties, image.getName())
         );
+        try {
+            imageManager.uploadAdImg(ad, image);
+        } catch (IOException e)  {
+            log.error("create({}, image.name={}): IOException was in ImageManager.uploadImage() thrown",
+                    properties, image.getName(), e
+            );
+        }
+
+        return adMapper.adToAdDto(ad);
     }
 
     /**
@@ -71,12 +75,12 @@ public class AdService {
 
     public AdDto patchProperties(Integer id, CreateOrUpdateAd updateAd) {
         log.debug("patch({}, {})", id, updateAd);
-        return adMapper.adToAdDto(emptyAd);
+        return adMapper.adToAdDto(new Ad());
     }
 
     public AdDto patchImage(Integer id, MultipartFile image) {
         log.debug("patch({}, {})", id, image);
-        return adMapper.adToAdDto(emptyAd);
+        return adMapper.adToAdDto(new Ad());
     }
 
 }
