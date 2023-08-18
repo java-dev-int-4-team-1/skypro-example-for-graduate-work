@@ -20,7 +20,7 @@
 
   <properties>
     <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
-    <org.projectlombok.version>1.18.28</org.projectlombok.version>
+    <!--org.projectlombok.version>1.18.28</org.projectlombok.version-->
     <java.version>11</java.version>
   </properties>
 
@@ -47,7 +47,7 @@
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
-      <version>${org.projectlombok.version}</version>
+      <version>${lombok.version}</version>
       <optional>true</optional>
     </dependency>
     <dependency>
@@ -107,7 +107,7 @@
             <path>
               <groupId>org.projectlombok</groupId>
               <artifactId>lombok</artifactId>
-              <version>${org.projectlombok.version}</version>
+              <version>${lombok.version}</version>
             </path>
             <!-- This is needed when using Lombok 1.18.16 and above -->
             <path>
