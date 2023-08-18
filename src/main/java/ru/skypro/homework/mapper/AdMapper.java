@@ -2,6 +2,7 @@ package ru.skypro.homework.mapper;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
@@ -24,8 +25,8 @@ public interface AdMapper {
     @Mapping(source="author.phone", target = "phone")
     ExtendedAd adToExtendedAd(Ad ad);
 
-
-    Ad createOrUpdateAdToAd(CreateOrUpdateAd createOrUpdateAd, String image);
+    @Mapping(source="image.name", target = "image")
+    Ad createOrUpdateAdToAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image);
 
     default Ads adsToAdsDto(Collection<Ad> ads) {
         Ads result = new Ads();

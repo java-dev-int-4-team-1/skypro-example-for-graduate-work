@@ -2,23 +2,16 @@ package ru.skypro.homework.testutil;
 
 import org.junit.jupiter.params.provider.Arguments;
 import org.mapstruct.factory.Mappers;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.mapper.AdMapper;
 
-import javax.persistence.MappedSuperclass;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-@MappedSuperclass
-@Component
 public class AdTestUtil {
-
-    @Autowired
-    protected AdMapper adMapper;
     protected final static int PK = 111;
     protected final static String TITLE = "title";
     protected final static String DESCRIPTION = "description";
@@ -29,11 +22,11 @@ public class AdTestUtil {
 
     protected static final Ad AD = new Ad();
 
-    public static void fillTheAd(Ad ad) {
+    protected static void fillTheAd(Ad ad) {
         fillTheAd(ad, AUTHOR);
     }
 
-    public static void fillTheAd(Ad ad, User author) {
+    protected static void fillTheAd(Ad ad, User author) {
         ad.setPk(PK);
         ad.setTitle(TITLE);
         ad.setDescription(DESCRIPTION);
@@ -48,26 +41,35 @@ public class AdTestUtil {
     }
 
 
-    public static void initAd() {
+    protected static void initAd() {
         fillTheAd(AD);
     }
 
-    public static Ad createAdWithTheTitle(String title) {
+    protected static Ad generateAdWithTheTitle(String title) {
         Ad ad = new Ad();
         fillTheAd(ad);
         ad.setTitle(title);
         return ad;
     }
 
+    protected static CreateOrUpdateAd generateCreateOrUpdateAd() {
+        CreateOrUpdateAd createOrUpdateAd = new CreateOrUpdateAd();
+        createOrUpdateAd.setPk(PK);
+        createOrUpdateAd.setDescription(DESCRIPTION);
+        createOrUpdateAd.setPrice(PRICE);
+        createOrUpdateAd.setTitle(TITLE);
+        return createOrUpdateAd;
+    }
+
     //given
     public static Stream<List<Ad>> streamAds() {
         return Stream.of(
                 new ArrayList<>(0),
-                List.of(createAdWithTheTitle(TITLE + 0)),
+                List.of(generateAdWithTheTitle(TITLE + 0)),
                 List.of(
-                        createAdWithTheTitle(TITLE + 0),
-                        createAdWithTheTitle(TITLE + 1),
-                        createAdWithTheTitle(TITLE + 2)
+                        generateAdWithTheTitle(TITLE + 0),
+                        generateAdWithTheTitle(TITLE + 1),
+                        generateAdWithTheTitle(TITLE + 2)
                 )
         );
     }

@@ -3,7 +3,10 @@ package ru.skypro.homework.mapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
@@ -16,8 +19,11 @@ import java.util.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@AutoConfigureMockMvc
 class AdMapperTest extends AdTestUtil {
 
+    @Autowired
+    private AdMapper adMapper;
 
     @Test
     void adToAdDto() {
@@ -63,14 +69,12 @@ class AdMapperTest extends AdTestUtil {
     @Test
     void createOrUpdateAdToAd() {
         //given
-        CreateOrUpdateAd createOrUpdateAd = new CreateOrUpdateAd();
-        createOrUpdateAd.setPk(PK);
-        createOrUpdateAd.setDescription(DESCRIPTION);
-        createOrUpdateAd.setPrice(PRICE);
-        createOrUpdateAd.setTitle(TITLE);
+        CreateOrUpdateAd createOrUpdateAd = generateCreateOrUpdateAd();
 
         //when
-        Ad ad =  adMapper.createOrUpdateAdToAd(createOrUpdateAd, IMAGE);
+        Ad ad =  adMapper.createOrUpdateAdToAd(
+                createOrUpdateAd,
+                new MockMultipartFile(IMAGE, IMAGE.getBytes()));
 
         //then
         assertThat(ad).isNotNull();
@@ -79,6 +83,8 @@ class AdMapperTest extends AdTestUtil {
         assertThat(ad.getPrice()).isEqualTo(PRICE);
         assertThat(ad.getTitle()).isEqualTo(TITLE);
     }
+
+
 
 
     @ParameterizedTest()
