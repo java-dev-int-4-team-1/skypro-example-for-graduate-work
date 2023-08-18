@@ -14,6 +14,7 @@ import javax.validation.constraints.Size;
  */
 @Data
 public class CreateOrUpdateAd {
+    private int pk;
 
     @NotNull
     @Size(min = 4, max = 32)
@@ -27,6 +28,7 @@ public class CreateOrUpdateAd {
     @Size(min = 4, max = 64)
     private String description;
 
+    /** Used to modify existing ad entry which is retrieved from the db with the updated properties. **/
     public void updateAd(Ad ad) {
 
         ad.setDescription(description);

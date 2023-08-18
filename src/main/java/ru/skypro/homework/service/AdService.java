@@ -27,18 +27,8 @@ public class AdService {
 
 
     private final AdMapper adMapper;
-    public Ads getAll() {
-        log.debug("getAll");
-        return adMapper.adsToAdsDto(adRepository.findAll());
-    }
-
-    public Ads getAllByUser() {
-        log.debug("getAllByUser");
-        return adMapper.adsToAdsDto(Collections.emptyList());
-    }
-
     /**
-     * throws AdNotFoundException if there is no ad entry with the id in the db 
+     * throws AdNotFoundException if there is no ad entry with the id in the db
      */
     private Ad getAd(Integer id) {
         return adRepository.findById(id)
@@ -54,6 +44,18 @@ public class AdService {
                     ad, image.getName(), e
             );
         }
+    }
+
+    public Ads getAll() {
+        log.debug("getAll");
+        return adMapper.adsToAdsDto(adRepository.findAll());
+    }
+
+    /** ToDo: Nont yet implemented */
+    public Ads getAllByUser() {
+        log.error("ToDO: NOT YET IMPLEMENTED");
+        log.debug("getAllByUser");
+        return adMapper.adsToAdsDto(Collections.emptyList());
     }
 
     public AdDto getById(Integer id) {
@@ -90,6 +92,7 @@ public class AdService {
 
     public AdDto patchImage(int id, MultipartFile image) {
         log.debug("patchImage({}, {})", id, image);
+
         Ad ad = getAd(id);
         ad.setImage(image.getName());
         uploadImg(ad, image);

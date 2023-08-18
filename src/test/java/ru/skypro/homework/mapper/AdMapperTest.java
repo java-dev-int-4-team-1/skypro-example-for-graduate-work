@@ -46,6 +46,7 @@ class AdMapperTest extends AdTestUtil {
 
         //then
         assertThat(extendedAd).isNotNull();
+        assertThat(extendedAd.getPk()).isEqualTo(PK);
         assertThat(extendedAd.getTitle()).isEqualTo(TITLE);
         assertThat(extendedAd.getImage()).isEqualTo(IMAGE);
         assertThat(extendedAd.getPrice()).isEqualTo(PRICE);
@@ -63,6 +64,7 @@ class AdMapperTest extends AdTestUtil {
     void createOrUpdateAdToAd() {
         //given
         CreateOrUpdateAd createOrUpdateAd = new CreateOrUpdateAd();
+        createOrUpdateAd.setPk(PK);
         createOrUpdateAd.setDescription(DESCRIPTION);
         createOrUpdateAd.setPrice(PRICE);
         createOrUpdateAd.setTitle(TITLE);
@@ -72,6 +74,7 @@ class AdMapperTest extends AdTestUtil {
 
         //then
         assertThat(ad).isNotNull();
+        assertThat(ad.getPk()).isEqualTo(PK);
         assertThat(ad.getDescription()).isEqualTo(DESCRIPTION);
         assertThat(ad.getPrice()).isEqualTo(PRICE);
         assertThat(ad.getTitle()).isEqualTo(TITLE);
@@ -90,6 +93,7 @@ class AdMapperTest extends AdTestUtil {
         adsDto.getResults()
                         .forEach(adDto -> {
                             assertThat(adDto).isNotNull();
+                            assertThat(adDto.getPk()).isEqualTo(PK);
                             assertThat(adDto.getTitle()).startsWith(TITLE);
                             assertThat(adDto.getImage()).isEqualTo(IMAGE);
                             assertThat(adDto.getPrice()).isEqualTo(PRICE);
