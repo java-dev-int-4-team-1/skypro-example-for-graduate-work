@@ -3,12 +3,16 @@ package ru.skypro.homework.mapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.entity.Ad;
+import ru.skypro.homework.entity.User;
 import ru.skypro.homework.testutil.AdTestUtil;
 
 import java.util.*;
@@ -16,16 +20,20 @@ import java.util.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@AutoConfigureMockMvc
 class AdMapperTest extends AdTestUtil {
 
+    @Autowired
+    private AdMapper adMapper;
 
     @Test
     void adToAdDto() {
         //given
-        initAd();
+        User author = new User();
+        Ad ad = generateAd(author);
 
         //when
-        AdDto adDto = adMapper.adToAdDto(AD);
+        AdDto adDto = adMapper.adToAdDto(ad);
 
         //then
         assertThat(adDto).isNotNull();
@@ -33,16 +41,17 @@ class AdMapperTest extends AdTestUtil {
         assertThat(adDto.getImage()).isEqualTo(IMAGE);
         assertThat(adDto.getPrice()).isEqualTo(PRICE);
         assertThat(adDto.getAuthor())
-                .isEqualTo(AUTHOR.getId());
+                .isEqualTo(author.getId());
     }
 
     @Test
     void adToExtendedAd() {
         //given
-        initAd();
+        User author = new User();
+        Ad ad = generateAd(author);
 
         //when
-        ExtendedAd extendedAd = adMapper.adToExtendedAd(AD);
+        ExtendedAd extendedAd = adMapper.adToExtendedAd(ad);
 
         //then
         assertThat(extendedAd).isNotNull();
@@ -51,26 +60,24 @@ class AdMapperTest extends AdTestUtil {
         assertThat(extendedAd.getImage()).isEqualTo(IMAGE);
         assertThat(extendedAd.getPrice()).isEqualTo(PRICE);
         assertThat(extendedAd.getAuthorFirstName())
-                .isEqualTo(AUTHOR.getFirstName());
+                .isEqualTo(author.getFirstName());
         assertThat(extendedAd.getAuthorLastName())
-                .isEqualTo(AUTHOR.getLastName());
+                .isEqualTo(author.getLastName());
         assertThat(extendedAd.getEmail())
-                .isEqualTo(AUTHOR.getEmail());
+                .isEqualTo(author.getEmail());
         assertThat(extendedAd.getPhone())
-                .isEqualTo(AUTHOR.getPhone());
+                .isEqualTo(author.getPhone());
     }
 
     @Test
     void createOrUpdateAdToAd() {
         //given
-        CreateOrUpdateAd createOrUpdateAd = new CreateOrUpdateAd();
-        createOrUpdateAd.setPk(PK);
-        createOrUpdateAd.setDescription(DESCRIPTION);
-        createOrUpdateAd.setPrice(PRICE);
-        createOrUpdateAd.setTitle(TITLE);
+        CreateOrUpdateAd createOrUpdateAd = generateCreateOrUpdateAd();
 
         //when
-        Ad ad =  adMapper.createOrUpdateAdToAd(createOrUpdateAd, IMAGE);
+        Ad ad =  adMapper.createOrUpdateAdToAd(
+                createOrUpdateAd,
+                new MockMultipartFile(IMAGE, IMAGE.getBytes()));
 
         //then
         assertThat(ad).isNotNull();
@@ -81,11 +88,15 @@ class AdMapperTest extends AdTestUtil {
     }
 
 
+
+
     @ParameterizedTest()
     @MethodSource("streamAds")
     void adsToAdsDto(Collection<Ad> ads) {
         //when
+        User author = new User();
         Ads adsDto =  adMapper.adsToAdsDto(ads);
+
 
         //then
         assertThat(adsDto).isNotNull();
@@ -98,7 +109,7 @@ class AdMapperTest extends AdTestUtil {
                             assertThat(adDto.getImage()).isEqualTo(IMAGE);
                             assertThat(adDto.getPrice()).isEqualTo(PRICE);
                             assertThat(adDto.getAuthor())
-                                    .isEqualTo(AUTHOR.getId());
+                                    .isEqualTo(author.getId());
                         });
     }
 }

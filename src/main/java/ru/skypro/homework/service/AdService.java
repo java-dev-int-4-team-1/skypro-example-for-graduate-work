@@ -25,7 +25,6 @@ public class AdService {
 
     private final ImageManager imageManager;
 
-
     private final AdMapper adMapper;
     /**
      * throws AdNotFoundException if there is no ad entry with the id in the db
@@ -68,7 +67,7 @@ public class AdService {
         log.debug("create({}, {})", properties, image);
 
         Ad ad = adRepository.save(
-                adMapper.createOrUpdateAdToAd(properties, image.getName())
+                adMapper.createOrUpdateAdToAd(properties, image)
         );
         uploadImg(ad, image);
 
