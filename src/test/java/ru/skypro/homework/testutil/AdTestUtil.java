@@ -7,10 +7,12 @@ import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.mapper.AdMapper;
 
+import javax.persistence.MappedSuperclass;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+@MappedSuperclass
 public class AdTestUtil {
     protected final static int PK = 111;
     protected final static String TITLE = "title";
@@ -18,15 +20,7 @@ public class AdTestUtil {
     protected static String IMAGE = "image";
     protected final static int PRICE = 1_000;
 
-    protected final static User AUTHOR = new User();
-
-    protected static final Ad AD = new Ad();
-
-    protected static void fillTheAd(Ad ad) {
-        fillTheAd(ad, AUTHOR);
-    }
-
-    protected static void fillTheAd(Ad ad, User author) {
+       protected static Ad initAd(Ad ad, User author) {
         ad.setPk(PK);
         ad.setTitle(TITLE);
         ad.setDescription(DESCRIPTION);
@@ -38,16 +32,17 @@ public class AdTestUtil {
         author.setLastName("Smith");
         author.setEmail("e@mail.org");
         author.setPhone("88001002030");
+
+        return ad;
     }
 
-
-    protected static void initAd() {
-        fillTheAd(AD);
+    protected static Ad generateAd(User author) {
+        return  initAd(new Ad(), author);
     }
 
-    protected static Ad generateAdWithTheTitle(String title) {
+    protected static Ad generateAd(User author, String title) {
         Ad ad = new Ad();
-        fillTheAd(ad);
+        initAd(ad, author);
         ad.setTitle(title);
         return ad;
     }
@@ -63,13 +58,14 @@ public class AdTestUtil {
 
     //given
     public static Stream<List<Ad>> streamAds() {
+        User author = new User();
         return Stream.of(
                 new ArrayList<>(0),
-                List.of(generateAdWithTheTitle(TITLE + 0)),
+                List.of(generateAd(author,TITLE + 0)),
                 List.of(
-                        generateAdWithTheTitle(TITLE + 0),
-                        generateAdWithTheTitle(TITLE + 1),
-                        generateAdWithTheTitle(TITLE + 2)
+                        generateAd(author,TITLE + 0),
+                        generateAd(author,TITLE + 1),
+                        generateAd(author,TITLE + 2)
                 )
         );
     }

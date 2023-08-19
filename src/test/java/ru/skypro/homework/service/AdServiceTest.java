@@ -12,6 +12,7 @@ import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.entity.Ad;
+import ru.skypro.homework.entity.User;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.testutil.AdTestUtil;
@@ -41,6 +42,8 @@ class AdServiceTest extends AdTestUtil {
     @ParameterizedTest
     @MethodSource("streamAdsDto")
     void getAll(Ads ads, List<Ad> adList) {
+        //given
+        User author = new User();
         //when
         when(adRepository.findAll()).thenReturn(adList);
         Ads adsDto =  adService.getAll();
@@ -56,7 +59,7 @@ class AdServiceTest extends AdTestUtil {
                     assertThat(adDto.getImage()).isEqualTo(IMAGE);
                     assertThat(adDto.getPrice()).isEqualTo(PRICE);
                     assertThat(adDto.getAuthor())
-                            .isEqualTo(AUTHOR.getId());
+                            .isEqualTo(author.getId());
                 });
     }
 
