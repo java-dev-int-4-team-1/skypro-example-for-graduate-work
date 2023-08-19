@@ -29,4 +29,5 @@ public class Ad {
      * link to the ad's image
      */
     private String image;
+
 }
