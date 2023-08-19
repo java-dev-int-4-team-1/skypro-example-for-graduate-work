@@ -8,11 +8,12 @@ import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.entity.Ad;
-import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
+import ru.skypro.homework.util.ImageManager;
 
+import java.io.IOException;
 import java.util.Collections;
 
 @Slf4j
@@ -21,56 +22,81 @@ import java.util.Collections;
 public class AdService {
 
     private final AdRepository adRepository;
-    private static final  Ad emptyAd = new Ad();
-    private static final User author = new User();
 
-    static {
-        emptyAd.setAuthor(author);
-    }
-
+    private final ImageManager imageManager;
 
     private final AdMapper adMapper;
+    /**
+     * throws AdNotFoundException if there is no ad entry with the id in the db
+     */
+    private Ad getAd(Integer id) {
+        return adRepository.findById(id)
+                .orElseThrow(() -> new AdNotFoundException(id)
+                );
+    }
+
+    private void uploadImg(Ad ad, MultipartFile image) {
+        try {
+            imageManager.uploadAdImg(ad, image);
+        } catch (IOException e)  {
+            log.error("uploadImg({}, image.name={}): IOException was thrown",
+                    ad, image.getName(), e
+            );
+        }
+    }
+
     public Ads getAll() {
         log.debug("getAll");
         return adMapper.adsToAdsDto(adRepository.findAll());
     }
 
+    /** ToDo: Nont yet implemented */
     public Ads getAllByUser() {
+        log.error("ToDO: NOT YET IMPLEMENTED");
         log.debug("getAllByUser");
         return adMapper.adsToAdsDto(Collections.emptyList());
     }
 
     public AdDto getById(Integer id) {
         log.debug("getById({})", id);
-        return adMapper.adToAdDto(
-                adRepository.findById(id)
-                        .orElseThrow(() -> new AdNotFoundException(id)
-                        )
-        );
+        return adMapper.adToAdDto(getAd(id));
     }
 
     public AdDto create(CreateOrUpdateAd properties, MultipartFile image) {
+
         log.debug("create({}, {})", properties, image);
-        return adMapper.adToAdDto(emptyAd);
+
+        Ad ad = adRepository.save(
+                adMapper.createOrUpdateAdToAd(properties, image)
+        );
+        uploadImg(ad, image);
+
+        return adMapper.adToAdDto(ad);
     }
 
-    /**
-     *
-     * @return true if the entry with the specified id was listed in the db, otherwise - false.
-     */
-    public boolean delete(Integer id) {
-        log.debug("create({})", id);
-        return false;
+    public void delete(int id) {
+        log.debug("delete({})", id);
+
+        adRepository.delete(getAd(id));
     }
 
-    public AdDto patchProperties(Integer id, CreateOrUpdateAd updateAd) {
-        log.debug("patch({}, {})", id, updateAd);
-        return adMapper.adToAdDto(emptyAd);
+    public AdDto patchProperties(int id, CreateOrUpdateAd updateAd) {
+        log.debug("patchProperties({}, {})", id, updateAd);
+
+        Ad ad = getAd(id);
+        updateAd.updateAd(ad);
+        adRepository.save(ad);        
+        return adMapper.adToAdDto(new Ad());
     }
 
-    public AdDto patchImage(Integer id, MultipartFile image) {
-        log.debug("patch({}, {})", id, image);
-        return adMapper.adToAdDto(emptyAd);
+    public AdDto patchImage(int id, MultipartFile image) {
+        log.debug("patchImage({}, {})", id, image);
+
+        Ad ad = getAd(id);
+        ad.setImage(image.getName());
+        uploadImg(ad, image);
+        adRepository.save(ad);
+        return adMapper.adToAdDto(new Ad());
     }
 
 }

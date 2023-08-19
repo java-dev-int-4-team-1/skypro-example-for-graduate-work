@@ -2,7 +2,7 @@ package ru.skypro.homework.dto;
 
 import lombok.Data;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * DTO container for results returned with the method AdController.getAll()
@@ -11,5 +11,5 @@ import java.util.Collection;
 public class Ads {
 
     private int count;
-    private Collection <AdDto> results;
+    private List <AdDto> results;
 }

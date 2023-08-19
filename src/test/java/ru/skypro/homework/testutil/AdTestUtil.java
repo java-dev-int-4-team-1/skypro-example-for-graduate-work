@@ -1,38 +1,27 @@
 package ru.skypro.homework.testutil;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import ru.skypro.homework.dto.Ads;
+import org.junit.jupiter.params.provider.Arguments;
+import org.mapstruct.factory.Mappers;
+import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.mapper.AdMapper;
 
 import javax.persistence.MappedSuperclass;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
 @MappedSuperclass
-@Component
 public class AdTestUtil {
-
-    @Autowired
-    protected AdMapper adMapper;
+    protected final static int PK = 111;
     protected final static String TITLE = "title";
     protected final static String DESCRIPTION = "description";
     protected static String IMAGE = "image";
     protected final static int PRICE = 1_000;
 
-    protected final static User AUTHOR = new User();
-
-    protected static final Ad AD = new Ad();
-
-    public static void fillTheAd(Ad ad) {
-        fillTheAd(ad, AUTHOR);
-    }
-
-    public static void fillTheAd(Ad ad, User author) {
+       protected static Ad initAd(Ad ad, User author) {
+        ad.setPk(PK);
         ad.setTitle(TITLE);
         ad.setDescription(DESCRIPTION);
         ad.setAuthor(author);
@@ -43,37 +32,52 @@ public class AdTestUtil {
         author.setLastName("Smith");
         author.setEmail("e@mail.org");
         author.setPhone("88001002030");
+
+        return ad;
     }
 
-
-    public static void initAd() {
-        fillTheAd(AD);
+    protected static Ad generateAd(User author) {
+        return  initAd(new Ad(), author);
     }
 
-    public static Ad createAdWithTheTitle(String title) {
+    protected static Ad generateAd(User author, String title) {
         Ad ad = new Ad();
-        fillTheAd(ad);
+        initAd(ad, author);
         ad.setTitle(title);
         return ad;
     }
 
+    protected static CreateOrUpdateAd generateCreateOrUpdateAd() {
+        CreateOrUpdateAd createOrUpdateAd = new CreateOrUpdateAd();
+        createOrUpdateAd.setPk(PK);
+        createOrUpdateAd.setDescription(DESCRIPTION);
+        createOrUpdateAd.setPrice(PRICE);
+        createOrUpdateAd.setTitle(TITLE);
+        return createOrUpdateAd;
+    }
+
     //given
-    public static Stream<Collection<Ad>> streamAds() {
+    public static Stream<List<Ad>> streamAds() {
+        User author = new User();
         return Stream.of(
                 new ArrayList<>(0),
-                List.of(createAdWithTheTitle(TITLE + 0)),
+                List.of(generateAd(author,TITLE + 0)),
                 List.of(
-                        createAdWithTheTitle(TITLE + 0),
-                        createAdWithTheTitle(TITLE + 1),
-                        createAdWithTheTitle(TITLE + 2)
+                        generateAd(author,TITLE + 0),
+                        generateAd(author,TITLE + 1),
+                        generateAd(author,TITLE + 2)
                 )
         );
     }
 
-    public static Stream<Ads> streamAdsDto() {
+    public static Stream<Arguments> streamAdsDto() {
 
-        return Stream.of(new Ads());
-        /*return streamAds()
-                .map(ads->Mappers.getMapper(AdMapper.class).adsToAdsDto(ads));*/
+       // return Stream.of(Arguments.of(new Ads(), Collections.EMPTY_LIST));
+
+        return streamAds()
+                .map(ads-> Arguments.of(
+                        Mappers.getMapper(AdMapper.class).adsToAdsDto(ads),
+                        ads)
+                );
     }
 }
