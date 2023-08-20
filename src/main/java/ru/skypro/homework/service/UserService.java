@@ -49,7 +49,7 @@ public class UserService {
     }
 
 
-    private User getCurrentUser() {
+    public User getCurrentUser() {
         org.springframework.security.core.Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
