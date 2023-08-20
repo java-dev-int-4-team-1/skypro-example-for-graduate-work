@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.HomeworkEntity;
 import ru.skypro.homework.exception.BadImageException;
 
@@ -23,13 +24,20 @@ public class ImageManager {
     private String IMG_DIR;
 
     private final String AD_IMG_DIR = IMG_DIR + "/ads";
+    private final String USER_IMG_DIR = IMG_DIR + "/users";
 
-    public Path getAdImgPath() throws IOException {
-        log.trace("getAdImgPath, ADM_IMG_DIR={}", AD_IMG_DIR);
+    public Path getImgPath(Class entityClass) throws IOException {
+        log.trace("getImgPath(class={})", entityClass.getSimpleName());
 
-        return validatePath(Path.of(AD_IMG_DIR));
+        if(entityClass.equals(Ad.class)) {
+            return validatePath(Path.of(AD_IMG_DIR));
+        }
+
+        String error = "Try to get image path for not listed class" +
+            entityClass.getSimpleName();
+        log.error(error);
+        throw new BadImageException(error);
     }
-
 
     private Path validatePath(Path path) throws IOException {
         log.trace("validatePath(path={})", path);
@@ -48,7 +56,7 @@ public class ImageManager {
 
         try {
             Files.write(
-                    Paths.get(getAdImgPath().toString(), getLocalFilename(entity, img)),
+                    Paths.get(getImgPath(entity.getClass()).toString(), getLocalFilename(entity, img)),
                     img.getBytes()
             );
         }
