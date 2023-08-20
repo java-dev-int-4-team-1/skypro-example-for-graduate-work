@@ -3,7 +3,6 @@ package ru.skypro.homework.service;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,6 +14,7 @@ import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exception.AdNotFoundException;
+import ru.skypro.homework.exception.BadImageException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.testutil.AdTestUtil;
@@ -25,7 +25,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -41,7 +41,7 @@ class AdServiceTest extends AdTestUtil {
     private AdRepository adRepository;
 
     @MockBean
-    private ImageManager imageMapper;
+    private ImageManager imageManager;
 
     @ParameterizedTest
     @MethodSource("streamAdsDto")
@@ -67,6 +67,42 @@ class AdServiceTest extends AdTestUtil {
                 });
     }
 
+    /* ToDo when the target method is implemented */
+    @Test
+    void getAllByCurrentUser() {
+    }
+
+    @Test
+    void getById() {
+        //given
+        Ad ad = generateAd();
+        AdDto expected = adMapper.adToAdDto(ad);
+        int pk = ad.getPk();
+
+        //when
+        when(adRepository.findById(pk)).thenReturn(Optional.of(ad));
+        AdDto actual = adService.getById(pk);
+
+        //then
+        assertThat(actual)
+                .isNotNull()
+                .isEqualTo(expected);
+
+    }
+
+    @Test
+    void getById_whenNotFound() {
+        //given
+        Ad ad = generateAd();
+        int pk = ad.getPk();
+
+        //then
+        assertThrows(
+                AdNotFoundException.class,
+                () -> adService.getById(pk));
+
+    }
+
 
     @Test
     void create() {
@@ -88,7 +124,7 @@ class AdServiceTest extends AdTestUtil {
     @Test
     void delete() {
         //given
-        Ad ad = generateAd(generateAuthor());
+        Ad ad = generateAd();
         int pk = ad.getPk();
         when(adRepository.findById(pk)).thenReturn(Optional.of(ad));
 
@@ -96,15 +132,15 @@ class AdServiceTest extends AdTestUtil {
         adService.delete(pk);
 
         //then
-        Mockito.verify(adRepository).findById(pk);
-        Mockito.verify(adRepository).delete(ad);
+        verify(adRepository).findById(pk);
+        verify(adRepository).delete(ad);
     }
 
 
     @Test
     void delete_whenNotFound() {
         //given
-        Ad ad = generateAd(new User());
+        Ad ad = generateAd();
 
         //then
         assertThrows(AdNotFoundException.class, () -> adService.delete(ad.getPk()));
@@ -127,8 +163,8 @@ class AdServiceTest extends AdTestUtil {
         AdDto result = adService.patchProperties(pk, properties);
 
         //then
-        Mockito.verify(adRepository).findById(pk);
-        Mockito.verify(adRepository).save(ad);
+        verify(adRepository).findById(pk);
+        verify(adRepository).save(ad);
         assertThat(result)
                 .isNotNull()
                 .isEqualTo(dtoExpected);
@@ -148,6 +184,42 @@ class AdServiceTest extends AdTestUtil {
 
     @Test
     void patchImage() {
+        //given
+        Ad ad = generateAd();
+        ad.setImage("former " + IMAGE);
+        int pk = ad.getPk();
+
+        MockMultipartFile image = new MockMultipartFile(IMAGE, IMAGE.getBytes());
+        Ad expected = generateAd();
+        AdDto expectedDto = adMapper.adToAdDto(expected);
+
+        //when
+        when(adRepository.findById(pk)).thenReturn(Optional.of(ad));
+        when(adRepository.save(ad)).thenReturn(ad);
+        AdDto result = adService.patchImage(pk, image);
+
+        //then
+        verify(imageManager).uploadImg(ad, image);
+
+        assertThat(result)
+                .isNotNull()
+                .isEqualTo(expectedDto);
+    }
+
+    @Test
+    void patchImage_whenBadImageExceptionIsThrown() {
+        //given
+        Ad ad = generateAd();
+        int pk = ad.getPk();
+        MockMultipartFile image = new MockMultipartFile(IMAGE, IMAGE.getBytes());
+
+        //when
+        when(adRepository.findById(pk)).thenReturn(Optional.of(ad));
+        when(imageManager.uploadImg(ad, image)).thenThrow(BadImageException.class);
+
+        //then
+        assertThrows(BadImageException.class,
+                () -> adService.patchImage(pk, image));
     }
 
     @Test

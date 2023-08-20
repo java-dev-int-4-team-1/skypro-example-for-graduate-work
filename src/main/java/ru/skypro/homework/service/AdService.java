@@ -9,11 +9,11 @@ import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.exception.AdNotFoundException;
+import ru.skypro.homework.exception.BadImageException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.util.ImageManager;
 
-import java.io.IOException;
 import java.util.Collections;
 
 @Slf4j
@@ -33,16 +33,6 @@ public class AdService {
         return adRepository.findById(pk)
                 .orElseThrow(() -> new AdNotFoundException(pk)
                 );
-    }
-
-    private void uploadImg(Ad ad, MultipartFile image) {
-        try {
-            imageManager.uploadAdImg(ad, image);
-        } catch (IOException e)  {
-            log.error("uploadImg({}, image.name={}): IOException was thrown",
-                    ad, image.getName(), e
-            );
-        }
     }
 
     public Ads getAll() {
@@ -66,12 +56,24 @@ public class AdService {
 
         log.debug("create({}, {})", properties, image);
 
+
         Ad ad = adRepository.save(
                 adMapper.createOrUpdateAdToAd(properties, image)
         );
-        uploadImg(ad, image);
 
+        uploadImg(ad, image);
         return adMapper.adToAdDto(ad);
+    }
+
+    private void uploadImg(Ad ad, MultipartFile image) {
+        try {
+            imageManager.uploadImg(ad, image);
+
+        } catch (BadImageException e) {
+            ad.setImage(null);
+            adRepository.save(ad);
+            throw  e;
+        }
     }
 
     public void delete(int pk) {

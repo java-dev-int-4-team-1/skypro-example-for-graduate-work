@@ -29,6 +29,10 @@ public class AdTestUtil {
 
         return author;
     }
+
+    protected static Ad generateAd() {
+        return generateAd(generateAuthor(), TITLE, DESCRIPTION, PRICE);
+    }
     protected static Ad generateAd(User author) {
         return generateAd(author, TITLE, DESCRIPTION, PRICE);
     }
