@@ -15,7 +15,9 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface AdMapper {
+
     default int map(User user) { return (user!=null)? user.getId() : -1 ; }
+
     AdDto adToAdDto(Ad ad);
 
     /** ToDo : define source based on User-data-members */
