@@ -3,6 +3,7 @@ package ru.skypro.homework.service;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,14 +14,17 @@ import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.User;
+import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.testutil.AdTestUtil;
 import ru.skypro.homework.util.ImageManager;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -83,6 +87,27 @@ class AdServiceTest extends AdTestUtil {
 
     @Test
     void delete() {
+        //given
+        Ad ad = generateAd(new User());
+        int pk = ad.getPk();
+        when(adRepository.findById(pk)).thenReturn(Optional.of(ad));
+
+        //when
+        adService.delete(pk);
+
+        //then
+        Mockito.verify(adRepository).findById(pk);
+        Mockito.verify(adRepository).delete(ad);
+    }
+
+
+    @Test
+    void delete_whenNotFound() {
+        //given
+        Ad ad = generateAd(new User());
+
+        //then
+        assertThrows(AdNotFoundException.class, () -> adService.delete(ad.getPk()));
     }
 
     @Test
