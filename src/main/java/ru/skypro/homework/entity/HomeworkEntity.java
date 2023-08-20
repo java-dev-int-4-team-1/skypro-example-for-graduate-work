@@ -15,7 +15,7 @@ public abstract class HomeworkEntity {
     private int pk;
 
     /**
-     * unique part of link to the image
+     * name-part of the link to the image
      */
     private String image;
 
