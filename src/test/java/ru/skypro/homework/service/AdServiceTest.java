@@ -47,7 +47,7 @@ class AdServiceTest extends AdTestUtil {
     @MethodSource("streamAdsDto")
     void getAll(Ads ads, List<Ad> adList) {
         //given
-        User author = new User();
+        User author = generateAuthor();
         //when
         when(adRepository.findAll()).thenReturn(adList);
         Ads adsDto =  adService.getAll();
@@ -88,7 +88,7 @@ class AdServiceTest extends AdTestUtil {
     @Test
     void delete() {
         //given
-        Ad ad = generateAd(new User());
+        Ad ad = generateAd(generateAuthor());
         int pk = ad.getPk();
         when(adRepository.findById(pk)).thenReturn(Optional.of(ad));
 
@@ -112,9 +112,52 @@ class AdServiceTest extends AdTestUtil {
 
     @Test
     void patchProperties() {
+        //given
+        User author = generateAuthor();
+        Ad ad = generateAd(author, "Former Title", "Former Description", PRICE-1);
+        CreateOrUpdateAd properties = generateCreateOrUpdateAd();
+        Ad expected = generateAd(author);
+        AdDto dtoExpected = adMapper.adToAdDto(expected);
+        final int pk = ad.getPk();
+
+        when(adRepository.findById(pk)).thenReturn(Optional.of(ad));
+        when(adRepository.save(ad)).thenReturn(ad);
+
+        //when
+        AdDto result = adService.patchProperties(pk, properties);
+
+        //then
+        Mockito.verify(adRepository).findById(pk);
+        Mockito.verify(adRepository).save(ad);
+        assertThat(result)
+                .isNotNull()
+                .isEqualTo(dtoExpected);
+    }
+
+
+    @Test
+    void patchProperties_whenNotFound() {
+        //given
+        CreateOrUpdateAd properties = generateCreateOrUpdateAd();
+        int pk = 0;
+
+        //then
+        assertThrows(AdNotFoundException.class,
+                () -> adService.patchProperties(pk, properties));
     }
 
     @Test
     void patchImage() {
+    }
+
+    @Test
+    void patchImage_whenNotFound() {
+        //given
+        MockMultipartFile image = new MockMultipartFile(IMAGE, IMAGE.getBytes());
+        int pk = 0;
+
+        //then
+        assertThrows(AdNotFoundException.class,
+                () -> adService.patchImage(pk, image));
     }
 }
