@@ -31,7 +31,7 @@ public class AdController {
 
     @GetMapping("/me")
     public ResponseEntity<Ads> getMyAds() {
-        return new ResponseEntity<>(adService.getAllByUser(), HttpStatus.OK);
+        return new ResponseEntity<>(adService.getAllByCurrentUser(), HttpStatus.OK);
     }
 
     @GetMapping
