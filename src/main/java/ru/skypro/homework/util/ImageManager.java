@@ -6,7 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.entity.Ad;
+import ru.skypro.homework.entity.ImageEntity;
+import ru.skypro.homework.exception.BadImageException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -21,14 +22,13 @@ public class ImageManager {
     @Value("${img.path}")
     private String IMG_DIR;
 
-    private final String AD_IMG_DIR = IMG_DIR + "/ads";
 
-    public Path getAdImgPath() throws IOException {
-        log.trace("getAdImgPath, ADM_IMG_DIR={}", AD_IMG_DIR);
+    public Path getImgPath(ImageEntity entity) throws IOException {
 
-        return validatePath(Path.of(AD_IMG_DIR));
+        String className = entity.getClass().getSimpleName();
+        log.trace("getImgPath(class={})", className);
+            return validatePath(Path.of(IMG_DIR + "/" + className));
     }
-
 
     private Path validatePath(Path path) throws IOException {
         log.trace("validatePath(path={})", path);
@@ -39,23 +39,39 @@ public class ImageManager {
         return Files.createDirectories(path);
     }
 
-    public void uploadAdImg(Ad ad, MultipartFile img) throws IOException {
+    /** If there are any faults during the attempt of writing image file then BadImageException is thrown.
+     * @return  img.name()
+     */
+    public String uploadImg(ImageEntity entity, MultipartFile img) {
         log.trace("uploadImg(ad, img");
 
-        Files.write(
-                Paths.get(getAdImgPath().toString(), getLocalFilename(ad, img)),
-                img.getBytes()
-        );
+        try {
+            Files.write(
+                    Paths.get(
+                            getImgPath(entity).toString(),
+                            getLocalFilename(entity, img)),
+                    img.getBytes()
+            );
+        }
+        catch (IOException e)  {
+            log.error("uploadImg({}, image.name={}): IOException was thrown",
+                    entity, img.getOriginalFilename(), e
+            );
+            throw new BadImageException(img.getOriginalFilename());
+        }
+        return img.getName();
     }
 
-    private static String getLocalFilename(Ad ad, MultipartFile img) {
+    private static String getLocalFilename(ImageEntity entity, MultipartFile img) {
         String filename = String.format(
                 "%s-%d.%s",
                 img.getName(),
-                ad.getPk(),
+                entity.getPk(),
                 StringUtils.getFilenameExtension(img.getOriginalFilename())
         );
-        log.trace("getLocalFilename(ad.pk={}, img.name={})={}", ad.getPk(), img.getName(), filename);
+        log.trace("getLocalFilename({}.pk={}, img.name={})={}",
+                entity.getClass().getSimpleName(),
+                entity.getPk(), img.getName(), filename);
         return filename;
     }
 }

@@ -1,19 +1,15 @@
 package ru.skypro.homework.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Table(name ="ads")
-public class Ad {
-    /**
-     * ad's id
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int pk;
+public class Ad extends ImageEntity {
 
     @JoinColumn(name="user_id")
     @ManyToOne
@@ -24,10 +20,5 @@ public class Ad {
     private String description;
 
     private int price;
-
-    /**
-     * link to the ad's image
-     */
-    private String image;
 
 }

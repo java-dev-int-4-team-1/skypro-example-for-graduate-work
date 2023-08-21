@@ -20,39 +20,51 @@ public class AdTestUtil {
     protected static String IMAGE = "image";
     protected final static int PRICE = 1_000;
 
-       protected static Ad initAd(Ad ad, User author) {
-        ad.setPk(PK);
-        ad.setTitle(TITLE);
-        ad.setDescription(DESCRIPTION);
-        ad.setAuthor(author);
-        ad.setImage(IMAGE);
-        ad.setPrice(PRICE);
-
+    protected static User generateAuthor() {
+        User author = new User();
         author.setFirstName("John");
         author.setLastName("Smith");
         author.setEmail("e@mail.org");
         author.setPhone("88001002030");
 
-        return ad;
+        return author;
     }
 
+    protected static Ad generateAd() {
+        return generateAd(generateAuthor(), TITLE, DESCRIPTION, PRICE);
+    }
     protected static Ad generateAd(User author) {
-        return  initAd(new Ad(), author);
+        return generateAd(author, TITLE, DESCRIPTION, PRICE);
     }
 
     protected static Ad generateAd(User author, String title) {
+        return generateAd(author, title, DESCRIPTION, PRICE);
+    }
+    protected static Ad generateAd(User author,
+                                   String title,
+                                   String description, int price) {
         Ad ad = new Ad();
-        initAd(ad, author);
+        ad.setPk(PK);
         ad.setTitle(title);
+        ad.setDescription(description);
+        ad.setAuthor(author);
+        ad.setPrice(price);
+        ad.setImage(IMAGE);
+
         return ad;
     }
 
     protected static CreateOrUpdateAd generateCreateOrUpdateAd() {
+        return generateCreateOrUpdateAd(TITLE, DESCRIPTION, PRICE);
+    }
+
+    protected static CreateOrUpdateAd generateCreateOrUpdateAd(
+            String title, String description, int price) {
         CreateOrUpdateAd createOrUpdateAd = new CreateOrUpdateAd();
         createOrUpdateAd.setPk(PK);
-        createOrUpdateAd.setDescription(DESCRIPTION);
-        createOrUpdateAd.setPrice(PRICE);
-        createOrUpdateAd.setTitle(TITLE);
+        createOrUpdateAd.setDescription(description);
+        createOrUpdateAd.setPrice(price);
+        createOrUpdateAd.setTitle(title);
         return createOrUpdateAd;
     }
 
@@ -61,21 +73,19 @@ public class AdTestUtil {
         User author = new User();
         return Stream.of(
                 new ArrayList<>(0),
-                List.of(generateAd(author,TITLE + 0)),
+                List.of(generateAd(author, TITLE + 0)),
                 List.of(
-                        generateAd(author,TITLE + 0),
-                        generateAd(author,TITLE + 1),
-                        generateAd(author,TITLE + 2)
+                        generateAd(author, TITLE + 0),
+                        generateAd(author, TITLE + 1),
+                        generateAd(author, TITLE + 2)
                 )
         );
     }
 
     public static Stream<Arguments> streamAdsDto() {
 
-       // return Stream.of(Arguments.of(new Ads(), Collections.EMPTY_LIST));
-
         return streamAds()
-                .map(ads-> Arguments.of(
+                .map(ads -> Arguments.of(
                         Mappers.getMapper(AdMapper.class).adsToAdsDto(ads),
                         ads)
                 );
