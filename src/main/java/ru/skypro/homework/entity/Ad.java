@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table(name ="ads")
-public class Ad extends HomeworkEntity {
+public class Ad extends ImageEntity {
 
     @JoinColumn(name="user_id")
     @ManyToOne

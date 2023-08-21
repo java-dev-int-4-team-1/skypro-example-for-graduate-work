@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @MappedSuperclass
 @Data
-public abstract class HomeworkEntity {
+public abstract class ImageEntity {
     /**
      * id
      */
