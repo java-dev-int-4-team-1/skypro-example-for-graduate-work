@@ -1,18 +1,14 @@
 package ru.skypro.homework.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 
 @MappedSuperclass
+@EqualsAndHashCode(callSuper = true)
 @Data
-public abstract class ImageEntity {
-    /**
-     * id
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int pk;
+public abstract class ImageEntity extends AbstractEntity {
 
     /**
      * name-part of the link to the image
