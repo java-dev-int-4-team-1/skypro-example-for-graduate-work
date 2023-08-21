@@ -25,18 +25,18 @@ public class AdController {
     private final AdService adService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<AdDto> get(@PathVariable Integer id) {
-        return new ResponseEntity<>(adService.getById(id), HttpStatus.OK);
+    public AdDto get(@PathVariable Integer id) {
+        return adService.getById(id);
     }
 
     @GetMapping("/me")
-    public ResponseEntity<Ads> getMyAds() {
-        return new ResponseEntity<>(adService.getAllByCurrentUser(), HttpStatus.OK);
+    public Ads getMyAds() {
+        return adService.getAllByCurrentUser();
     }
 
     @GetMapping
-    public ResponseEntity<Ads> getAll() {
-        return new ResponseEntity<>(adService.getAll(), HttpStatus.OK);
+    public Ads getAll() {
+        return adService.getAll();
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -54,16 +54,16 @@ public class AdController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<AdDto> patchProperties(
+    public AdDto patchProperties(
             @NotNull @PathVariable Integer id,
             @Valid @RequestBody CreateOrUpdateAd updateAd) {
-        return new ResponseEntity<>(adService.patchProperties(id, updateAd), HttpStatus.OK);
+        return adService.patchProperties(id, updateAd);
     }
 
     @PatchMapping(path="/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<AdDto>patchImg(
+    public AdDto patchImg(
             @NotNull @PathVariable Integer id,
             @RequestPart MultipartFile image) {
-        return new ResponseEntity<>(adService.patchImage(id, image), HttpStatus.OK);
+        return adService.patchImage(id, image);
     }
 }
