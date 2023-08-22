@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd"
+>
+    <changeSet id="create-table-users" author="s">
+        <preConditions>
+            <not>
+                <tableExists tableName="users"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="users">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="username" type="TEXT">
+            </column>
+            <column name="password" type="TEXT">
+            </column>
+            <column name="email" type="TEXT">
+            </column>
+            <column name="firstName" type="TEXT">
+            </column>
+            <column name="lastName" type="TEXT">
+            </column>
+            <column name="phone" type="TEXT">
+            </column>
+            <column name="role" type="TEXT">
+            </column>
+            <column name="image" type="TEXT">
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
