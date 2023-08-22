@@ -17,22 +17,27 @@ import java.io.IOException;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements GetCurrentUser {
 
     private final UserRepository userRepository;
 
     private final UserMapper userMapper;
 
+
     public boolean setPasswordService(NewPassword newPassword) {
         if (newPassword.getCurrentPassword().equals(getCurrentUser().getPassword())) {
-            userMapper.updateNewPassword(newPassword, getCurrentUser());
+            User user = getCurrentUser();
+            userMapper.updateNewPassword(newPassword, user);
+            userRepository.save(user);
             return true;
         }
         return false;
     }
 
     public boolean updateUser(UpdateUser updateUser) {
-        userMapper.updateUser(updateUser, getCurrentUser());
+        User user = getCurrentUser();
+        userMapper.updateUser(updateUser, user);
+        userRepository.save(user);
         return true;
     }
 
@@ -42,18 +47,20 @@ public class UserService {
 
     public boolean updateImage(MultipartFile multipartFile) throws IOException {
         if (multipartFile != null) {
-            userMapper.updateImage(multipartFile.getBytes().toString(), getCurrentUser());
+            User user = getCurrentUser();
+            userMapper.updateImage(multipartFile.getBytes().toString(), user);
+            userRepository.save(user);
             return true;
         }
         return false;
     }
 
-
-    private User getCurrentUser() {
+    @Override
+    public User getCurrentUser() {
         org.springframework.security.core.Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) authentication.getPrincipal();
-        User currentUserFromRepository = userRepository.findById(currentUser.getId());
+        String currentUser = authentication.getName();
+        User currentUserFromRepository = userRepository.findByEmail(currentUser);
         return currentUserFromRepository;
     }
 

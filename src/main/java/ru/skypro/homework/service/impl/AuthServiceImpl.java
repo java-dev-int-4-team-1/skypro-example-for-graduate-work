@@ -51,7 +51,8 @@ public class AuthServiceImpl implements AuthService {
                         .username(register.getUsername())
                         .roles(register.getRole().name())
                         .build());
-        userRepository.save(userMapper.registerFromRegisterDto(register));
+        ru.skypro.homework.entity.User user = userMapper.registerFromRegisterDto(register);
+        userRepository.save(user);
         return true;
     }
 
