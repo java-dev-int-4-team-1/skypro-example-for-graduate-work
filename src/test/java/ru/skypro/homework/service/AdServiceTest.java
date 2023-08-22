@@ -77,7 +77,7 @@ class AdServiceTest extends AdTestUtil {
         //given
         Ad ad = generateAd();
         AdDto expected = adMapper.adToAdDto(ad);
-        int pk = ad.getPk();
+        int pk = ad.getId();
 
         //when
         when(adRepository.findById(pk)).thenReturn(Optional.of(ad));
@@ -94,7 +94,7 @@ class AdServiceTest extends AdTestUtil {
     void getById_whenNotFound() {
         //given
         Ad ad = generateAd();
-        int pk = ad.getPk();
+        int pk = ad.getId();
 
         //then
         assertThrows(
@@ -125,7 +125,7 @@ class AdServiceTest extends AdTestUtil {
     void delete() {
         //given
         Ad ad = generateAd();
-        int pk = ad.getPk();
+        int pk = ad.getId();
         when(adRepository.findById(pk)).thenReturn(Optional.of(ad));
 
         //when
@@ -143,7 +143,7 @@ class AdServiceTest extends AdTestUtil {
         Ad ad = generateAd();
 
         //then
-        assertThrows(AdNotFoundException.class, () -> adService.delete(ad.getPk()));
+        assertThrows(AdNotFoundException.class, () -> adService.delete(ad.getId()));
     }
 
     @Test
@@ -154,7 +154,7 @@ class AdServiceTest extends AdTestUtil {
         CreateOrUpdateAd properties = generateCreateOrUpdateAd();
         Ad expected = generateAd(author);
         AdDto dtoExpected = adMapper.adToAdDto(expected);
-        final int pk = ad.getPk();
+        final int pk = ad.getId();
 
         when(adRepository.findById(pk)).thenReturn(Optional.of(ad));
         when(adRepository.save(ad)).thenReturn(ad);
@@ -187,7 +187,7 @@ class AdServiceTest extends AdTestUtil {
         //given
         Ad ad = generateAd();
         ad.setImage("former " + IMAGE);
-        int pk = ad.getPk();
+        int pk = ad.getId();
 
         MockMultipartFile image = new MockMultipartFile(IMAGE, IMAGE.getBytes());
         Ad expected = generateAd();
@@ -210,7 +210,7 @@ class AdServiceTest extends AdTestUtil {
     void patchImage_whenBadImageExceptionIsThrown() {
         //given
         Ad ad = generateAd();
-        int pk = ad.getPk();
+        int pk = ad.getId();
         MockMultipartFile image = new MockMultipartFile(IMAGE, IMAGE.getBytes());
 
         //when

@@ -18,6 +18,7 @@ public interface AdMapper {
 
     default int map(User user) { return (user!=null)? user.getId() : -1 ; }
 
+    @Mapping(source="id", target = "pk")
     AdDto adToAdDto(Ad ad);
 
     /** ToDo : define source based on User-data-members */
@@ -25,9 +26,11 @@ public interface AdMapper {
     @Mapping(source="author.lastName", target = "authorLastName")
     @Mapping(source="author.email", target = "email")
     @Mapping(source="author.phone", target = "phone")
+    @Mapping(source="id", target = "pk")
     ExtendedAd adToExtendedAd(Ad ad);
 
     @Mapping(source="image.name", target = "image")
+    @Mapping(source="createOrUpdateAd.pk", target = "id")
     Ad createOrUpdateAdToAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image);
 
     default Ads adsToAdsDto(Collection<Ad> ads) {

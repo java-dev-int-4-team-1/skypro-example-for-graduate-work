@@ -66,12 +66,12 @@ public class ImageManager {
         String filename = String.format(
                 "%s-%d.%s",
                 img.getName(),
-                entity.getPk(),
+                entity.getId(),
                 StringUtils.getFilenameExtension(img.getOriginalFilename())
         );
         log.trace("getLocalFilename({}.pk={}, img.name={})={}",
                 entity.getClass().getSimpleName(),
-                entity.getPk(), img.getName(), filename);
+                entity.getId(), img.getName(), filename);
         return filename;
     }
 }
