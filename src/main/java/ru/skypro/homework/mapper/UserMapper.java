@@ -29,7 +29,7 @@ public interface UserMapper {
     @Mapping(source = "phone", target = "phone")
     void updateUser(UpdateUser updateUser, @MappingTarget User currentUser);
 
-    @Mapping(source = "username", target = "username")
+    @Mapping(source = "username", target = "email")
     @Mapping(source = "password", target = "password")
     @Mapping(source = "firstName", target = "firstName")
     @Mapping(source = "lastName", target = "lastName")
