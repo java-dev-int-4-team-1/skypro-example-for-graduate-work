@@ -44,7 +44,7 @@ public class AdTestUtil {
                                    String title,
                                    String description, int price) {
         Ad ad = new Ad();
-        ad.setPk(PK);
+        ad.setId(PK);
         ad.setTitle(title);
         ad.setDescription(description);
         ad.setAuthor(author);

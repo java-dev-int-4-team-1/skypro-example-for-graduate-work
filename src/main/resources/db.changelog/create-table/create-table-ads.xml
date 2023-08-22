@@ -13,9 +13,32 @@
         </preConditions>
 
         <createTable tableName="ads">
-            <column name="pk" type="BIGINT" autoIncrement="true">
+            <column name="id" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
+            <column name="image" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR">
+                <constraints nullable="true"/>
+            </column>
+            <column name="price" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="fk_ads_user_id"
+                baseTableName="ads"
+                baseColumnNames="user_id"
+                referencedTableName="users"
+                referencedColumnNames="id"/>
+
     </changeSet>
 </databaseChangeLog>

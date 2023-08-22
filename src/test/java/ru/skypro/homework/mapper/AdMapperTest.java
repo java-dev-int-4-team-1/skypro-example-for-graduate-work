@@ -81,7 +81,7 @@ class AdMapperTest extends AdTestUtil {
 
         //then
         assertThat(ad).isNotNull();
-        assertThat(ad.getPk()).isEqualTo(PK);
+        assertThat(ad.getId()).isEqualTo(PK);
         assertThat(ad.getDescription()).isEqualTo(DESCRIPTION);
         assertThat(ad.getPrice()).isEqualTo(PRICE);
         assertThat(ad.getTitle()).isEqualTo(TITLE);
