@@ -13,8 +13,6 @@ import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.util.ImageManager;
 
-import java.util.Collections;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -25,6 +23,9 @@ public class AdService {
     private final ImageManager imageManager;
 
     private final AdMapper adMapper;
+    
+    private final CurrentUserService currentUserService;
+    
     /**
      * throws AdNotFoundException if there is no ad entry with the pk in the db
      */
@@ -41,9 +42,8 @@ public class AdService {
 
     /** ToDo: Not yet implemented */
     public Ads getAllByCurrentUser() {
-        log.error("ToDO: NOT YET IMPLEMENTED");
         log.debug("getAllByCurrentUser");
-        return adMapper.adsToAdsDto(Collections.emptyList());
+        return adMapper.adsToAdsDto(adRepository.findByAuthor(currentUserService.getCurrentUser()));
     }
 
     public AdDto getById(Integer pk) {
