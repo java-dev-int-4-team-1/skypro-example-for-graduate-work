@@ -47,7 +47,7 @@ Content-Type: application/json
 Content-Disposition: form-data; name="image"; filename="Big_Ben_small_with_Labour_Party_(UK)_colour.png"
 Content-Type: image/jpeg
 
-< ../data/img-ads/Big_Ben_small_with_Labour_Party_(UK)_colour.png
+< ../data/img/ads/Big_Ben_small_with_Labour_Party_(UK)_colour.png
 --PartBoundary
 
 ###
@@ -107,5 +107,5 @@ Content-Type: multipart/form-data; boundary=PartBoundary
 Content-Disposition: form-data; name="image"; filename="bender.jpg"
 Content-Type: image/jpeg
 
-< ../data/img-ads/bender.jpg
+< ../data/img/ads/bender.jpg
 --PartBoundary
