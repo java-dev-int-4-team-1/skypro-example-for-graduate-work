@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd"
+>
+    <changeSet id="insert-into-users-the-first-user" author="s">
+        <insert tableName="users">
+            <column name="id"           valueNumeric="1"/>
+            <column name="username"     value="user@gmail.com"/>
+            <column name="password"     value="password"/>
+            <column name="first_name"   value="Philip J."/>
+            <column name="last_name"    value="Fry"/>
+            <column name="image"        value="Character_Fry-1.webp"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
