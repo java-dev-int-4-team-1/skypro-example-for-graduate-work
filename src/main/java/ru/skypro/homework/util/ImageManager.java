@@ -40,16 +40,17 @@ public class ImageManager {
     }
 
     /** If there are any faults during the attempt of writing image file then BadImageException is thrown.
-     * @return  img.name()
+     * @return  local filename with extension
      */
     public String uploadImg(ImageEntity entity, MultipartFile img) {
         log.trace("uploadImg(ad, img");
 
+        String localImageName = getLocalFilename(entity, img);
         try {
             Files.write(
                     Paths.get(
                             getImgPath(entity).toString(),
-                            getLocalFilename(entity, img)),
+                            localImageName),
                     img.getBytes()
             );
         }
@@ -59,7 +60,7 @@ public class ImageManager {
             );
             throw new BadImageException(img.getOriginalFilename());
         }
-        return img.getName();
+        return localImageName;
     }
 
     private static String getLocalFilename(ImageEntity entity, MultipartFile img) {

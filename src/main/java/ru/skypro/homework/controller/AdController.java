@@ -16,7 +16,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @Slf4j
-@CrossOrigin(value = "http://localhost:3000")
+@CrossOrigin(value = "${cross-origin.value}")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/ads")
