@@ -1,3 +1,3 @@
-databaseChangeLog:
+databaseChangelog:
   - include:
-      file: db.changelog/create-table/create-table-users.xml
+      file: /db/changelog/create-table/create-table-ads.xml
