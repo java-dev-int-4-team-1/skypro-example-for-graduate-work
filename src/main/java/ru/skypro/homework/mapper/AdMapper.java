@@ -21,7 +21,6 @@ public interface AdMapper {
     @Mapping(source="id", target = "pk")
     AdDto adToAdDto(Ad ad);
 
-    /** ToDo : define source based on User-data-members */
     @Mapping(source="author.firstName", target = "authorFirstName")
     @Mapping(source="author.lastName", target = "authorLastName")
     @Mapping(source="author.email", target = "email")
@@ -36,9 +35,9 @@ public interface AdMapper {
     default Ads adsToAdsDto(Collection<Ad> ads) {
         Ads result = new Ads();
         result.setResults(
-            ads.stream()
-                    .map(this::adToAdDto)
-                    .collect(Collectors.toList())
+                ads.stream()
+                        .map(this::adToAdDto)
+                        .collect(Collectors.toList())
         );
         result.setCount(ads.size());
         return result;
