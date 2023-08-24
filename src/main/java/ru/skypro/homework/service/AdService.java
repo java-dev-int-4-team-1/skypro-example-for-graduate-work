@@ -9,7 +9,6 @@ import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.exception.AdNotFoundException;
-import ru.skypro.homework.exception.BadImageException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.util.ImageManager;
@@ -66,14 +65,8 @@ public class AdService {
     }
 
     private void uploadImg(Ad ad, MultipartFile image) {
-        try {
-            imageManager.uploadImg(ad, image);
-
-        } catch (BadImageException e) {
-            ad.setImage(null);
-            adRepository.save(ad);
-            throw  e;
-        }
+        ad.setImage(imageManager.uploadImg(ad, image));
+        adRepository.save(ad);
     }
 
     public void delete(int pk) {
