@@ -18,7 +18,7 @@ import java.io.IOException;
 
 
 @Slf4j
-@CrossOrigin(value = "http://localhost:3000")
+@CrossOrigin(value = "${cross-origin.value}")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")

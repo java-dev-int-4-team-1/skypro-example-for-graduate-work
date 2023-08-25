@@ -22,10 +22,13 @@ public class ImageManager {
     @Value("${img.path}")
     private String IMG_DIR;
 
+    public Path getImgPath(ImageEntity imageEntity) throws IOException {
+        return getImgPath(imageEntity.getClass());
+    }
 
-    public Path getImgPath(ImageEntity entity) throws IOException {
+    public Path getImgPath(Class<? extends ImageEntity> imageEntityClass) throws IOException {
 
-        String className = entity.getClass().getSimpleName();
+        String className = imageEntityClass.getSimpleName();
         log.trace("getImgPath(class={})", className);
             return validatePath(Path.of(IMG_DIR + "/" + className));
     }
@@ -78,16 +81,21 @@ public class ImageManager {
         return localImageName;
     }
 
-    private static String getLocalFilename(ImageEntity entity, MultipartFile img) {
-        String filename = String.format(
-                "%s-%d.%s",
-                img.getOriginalFilename(),
-                entity.getId(),
-                StringUtils.getFilenameExtension(img.getOriginalFilename())
-        );
-        log.trace("getLocalFilename({}.pk={}, img.name={})={}",
-                entity.getClass().getSimpleName(),
-                entity.getId(), img.getName(), filename);
-        return filename;
+    public byte[] getImage(Class <? extends ImageEntity> imageEntityClass, String filename) {
+        log.trace("getImg(Class={}, filename={})", imageEntityClass, filename);
+
+        try {
+            return Files.readAllBytes(
+                    Paths.get(
+                            getImgPath(imageEntityClass).toString(),
+                            filename)
+            );
+        }
+        catch (IOException e)  {
+            log.error("getImg(filename={}): IOException was thrown",
+                    filename, e
+            );
+            throw new BadImageException(filename);
+        }
     }
 }
