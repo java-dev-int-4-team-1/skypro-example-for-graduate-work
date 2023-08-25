@@ -66,7 +66,7 @@ public class ImageManager {
     private static String getLocalFilename(ImageEntity entity, MultipartFile img) {
         String filename = String.format(
                 "%s-%d.%s",
-                img.getName(),
+                img.getOriginalFilename(),
                 entity.getId(),
                 StringUtils.getFilenameExtension(img.getOriginalFilename())
         );
