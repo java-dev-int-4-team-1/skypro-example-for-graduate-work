@@ -55,16 +55,15 @@ public class AdService {
 
         log.debug("create({}, {})", properties, image);
 
+        Ad ad = adMapper.createOrUpdateAdToAd(properties, image);
+        ad.setAuthor(currentUserService.getCurrentUser());
+        adRepository.save(ad);
+        setImage(image, ad);
 
-        Ad ad = adRepository.save(
-                adMapper.createOrUpdateAdToAd(properties, image)
-        );
-
-        uploadImg(ad, image);
         return adMapper.adToAdDto(ad);
     }
 
-    private void uploadImg(Ad ad, MultipartFile image) {
+    private void setImage(MultipartFile image, Ad ad) {
         ad.setImage(imageManager.uploadImg(ad, image));
         adRepository.save(ad);
     }
@@ -87,8 +86,8 @@ public class AdService {
         log.debug("patchImage({}, {})", pk, image);
 
         Ad ad = getAd(pk);
-        ad.setImage(image.getName());
-        uploadImg(ad, image);
+        setImage(image, ad);
+
         return adMapper.adToAdDto(adRepository.save(ad));
     }
 

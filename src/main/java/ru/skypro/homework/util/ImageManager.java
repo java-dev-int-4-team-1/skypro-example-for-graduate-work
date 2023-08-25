@@ -39,13 +39,28 @@ public class ImageManager {
         return Files.createDirectories(path);
     }
 
-    /** If there are any faults during the attempt of writing image file then BadImageException is thrown.
-     * @return  local filename with extension
+    /** Saves the image to the local directory. The local filename will consist of the
+     * original filename and the entity's id
+     * @return the local filename
      */
     public String uploadImg(ImageEntity entity, MultipartFile img) {
-        log.trace("uploadImg(ad, img");
+        return uploadImg(
+                entity,
+                img,
+                img.getOriginalFilename() + "-" + entity.getId());
+    }
 
-        String localImageName = getLocalFilename(entity, img);
+    /** Saves the image to the local directory.
+     * If there are any faults during the writing image file
+     * then BadImageException is thrown.
+     * @param filename supposed local filename without extension
+     * @return  local filename with the extension
+     */
+    public String uploadImg(ImageEntity entity, MultipartFile img, String filename) {
+        log.trace("uploadImg(entity, img");
+
+        String localImageName = filename + "." +
+                StringUtils.getFilenameExtension(img.getOriginalFilename()) ;
         try {
             Files.write(
                     Paths.get(
@@ -66,7 +81,7 @@ public class ImageManager {
     private static String getLocalFilename(ImageEntity entity, MultipartFile img) {
         String filename = String.format(
                 "%s-%d.%s",
-                img.getName(),
+                img.getOriginalFilename(),
                 entity.getId(),
                 StringUtils.getFilenameExtension(img.getOriginalFilename())
         );
