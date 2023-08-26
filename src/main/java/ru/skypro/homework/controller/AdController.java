@@ -48,7 +48,7 @@ public class AdController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@NotNull @PathVariable Integer id) {
+    public ResponseEntity<Void> delete(@NotNull @PathVariable Integer id) {
         adService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

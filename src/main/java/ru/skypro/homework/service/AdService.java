@@ -16,7 +16,7 @@ import ru.skypro.homework.util.ImageManager;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AdService {
+public class AdService implements AdGetter {
 
     private final AdRepository adRepository;
 
@@ -27,11 +27,11 @@ public class AdService {
     private final CurrentUserService currentUserService;
     
     /**
-     * throws AdNotFoundException if there is no ad entry with the pk in the db
+     * throws AdNotFoundException if there is no ad entry with the id in the db
      */
-    private Ad getAd(Integer pk) {
-        return adRepository.findById(pk)
-                .orElseThrow(() -> new AdNotFoundException(pk)
+    public Ad getAd(Integer id) {
+        return adRepository.findById(id)
+                .orElseThrow(() -> new AdNotFoundException(id)
                 );
     }
 
@@ -40,15 +40,14 @@ public class AdService {
         return adMapper.adsToAdsDto(adRepository.findAll());
     }
 
-    /** ToDo: Not yet implemented */
     public Ads getAllByCurrentUser() {
         log.debug("getAllByCurrentUser");
         return adMapper.adsToAdsDto(adRepository.findByAuthor(currentUserService.getCurrentUser()));
     }
 
-    public AdDto getById(Integer pk) {
-        log.debug("getById({})", pk);
-        return adMapper.adToAdDto(getAd(pk));
+    public AdDto getById(Integer id) {
+        log.debug("getById({})", id);
+        return adMapper.adToAdDto(getAd(id));
     }
 
     public AdDto create(CreateOrUpdateAd properties, MultipartFile image) {
@@ -68,24 +67,24 @@ public class AdService {
         adRepository.save(ad);
     }
 
-    public void delete(int pk) {
-        log.debug("delete({})", pk);
+    public void delete(int id) {
+        log.debug("delete({})", id);
 
-        adRepository.delete(getAd(pk));
+        adRepository.delete(getAd(id));
     }
 
-    public AdDto patchProperties(int pk, CreateOrUpdateAd properties) {
-        log.debug("patchProperties({}, {})", pk, properties);
+    public AdDto patchProperties(int id, CreateOrUpdateAd properties) {
+        log.debug("patchProperties({}, {})", id, properties);
 
-        Ad ad = getAd(pk);
+        Ad ad = getAd(id);
         properties.updateAd(ad);
         return adMapper.adToAdDto(adRepository.save(ad));
     }
 
-    public AdDto patchImage(int pk, MultipartFile image) {
-        log.debug("patchImage({}, {})", pk, image);
+    public AdDto patchImage(int id, MultipartFile image) {
+        log.debug("patchImage({}, {})", id, image);
 
-        Ad ad = getAd(pk);
+        Ad ad = getAd(id);
         setImage(image, ad);
 
         return adMapper.adToAdDto(adRepository.save(ad));
