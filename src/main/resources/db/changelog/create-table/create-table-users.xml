@@ -16,8 +16,6 @@
             <column name="id" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="username" type="TEXT">
-            </column>
             <column name="password" type="TEXT">
             </column>
             <column name="email" type="TEXT">
