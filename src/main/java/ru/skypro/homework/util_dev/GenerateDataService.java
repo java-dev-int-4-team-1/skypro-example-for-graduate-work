@@ -1,4 +1,4 @@
-package ru.skypro.homework.dev_util;
+package ru.skypro.homework.util_dev;
 
 import com.github.javafaker.service.FakeValuesService;
 import com.github.javafaker.service.RandomService;

@@ -7,8 +7,6 @@
 >
     <changeSet id="insert-into-users-the-first-user" author="s">
         <insert tableName="users">
-            <column name="id"           valueNumeric="1"/>
-            <column name="username"     value="user@gmail.com"/>
             <column name="password"     value="password"/>
             <column name="first_name"   value="Philip J."/>
             <column name="last_name"    value="Fry"/>

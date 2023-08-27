@@ -1,4 +1,4 @@
-package ru.skypro.homework.dev_util;
+package ru.skypro.homework.util_dev;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
