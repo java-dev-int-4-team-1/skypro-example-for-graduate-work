@@ -50,19 +50,6 @@ Content-Type: image/jpeg
 < ../data/img/test-sources/Big_Ben_small_with_Labour_Party_(UK)_colour.png
 --PartBoundary
 
-###
-PATCH http://localhost:8080/hogwarts/faculty/
-Authorization: Basic user@gmail.com password
-Content-Type: application/json
-
-{
-  "name"  : "Gryffindor",
-  "color" : "red",
-  "title": "Bender",
-  "price": 105,
-  "description": "explicitly useful tool and good friend"
-}
-
 ### Patch the ad by its ID=1 : does not work
 PATCH http://localhost:8080/ads/1
 Authorization: Basic user@gmail.com password

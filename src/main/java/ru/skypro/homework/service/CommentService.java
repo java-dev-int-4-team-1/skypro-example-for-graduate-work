@@ -27,6 +27,8 @@ public class CommentService {
 
     private final AdGetter adGetter;
 
+    private final CurrentUserService currentUserService;
+
     public Comments getAllByAdId(int adId) {
         return commentMapper.commentsToDto(commentRepository.findByAdId(adId));
     }
@@ -50,6 +52,7 @@ public class CommentService {
 
         Comment comment = commentMapper.createOrUpdateCommentToComment(createOrUpdateComment);
         comment.setAd(ad);
+        comment.setAuthor(currentUserService.getCurrentUser());
         comment.setCreatedAt(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
         commentRepository.save(comment);
 
