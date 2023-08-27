@@ -76,7 +76,7 @@ class AdServiceTest extends AdTestUtil {
     void getById() {
         //given
         Ad ad = generateAd();
-        AdDto expected = adMapper.adToAdDto(ad);
+        AdDto expected = adMapper.adToDto(ad);
         int pk = ad.getId();
 
         //when
@@ -112,7 +112,7 @@ class AdServiceTest extends AdTestUtil {
 
         //when
         Ad ad = adMapper.createOrUpdateAdToAd(properties, image);
-        AdDto adDto = adMapper.adToAdDto(ad);
+        AdDto adDto = adMapper.adToDto(ad);
         when(adRepository.save(ad)).thenReturn(ad);
 
         //then
@@ -153,7 +153,7 @@ class AdServiceTest extends AdTestUtil {
         Ad ad = generateAd(author, "Former Title", "Former Description", PRICE-1);
         CreateOrUpdateAd properties = generateCreateOrUpdateAd();
         Ad expected = generateAd(author);
-        AdDto dtoExpected = adMapper.adToAdDto(expected);
+        AdDto dtoExpected = adMapper.adToDto(expected);
         final int pk = ad.getId();
 
         when(adRepository.findById(pk)).thenReturn(Optional.of(ad));
@@ -191,7 +191,7 @@ class AdServiceTest extends AdTestUtil {
 
         MockMultipartFile image = new MockMultipartFile(IMAGE, IMAGE.getBytes());
         Ad expected = generateAd();
-        AdDto expectedDto = adMapper.adToAdDto(expected);
+        AdDto expectedDto = adMapper.adToDto(expected);
 
         //when
         when(adRepository.findById(pk)).thenReturn(Optional.of(ad));

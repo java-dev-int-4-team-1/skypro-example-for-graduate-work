@@ -19,7 +19,7 @@ public interface AdMapper {
     default int map(User user) { return (user!=null)? user.getId() : -1 ; }
 
     @Mapping(source="id", target = "pk")
-    AdDto adToAdDto(Ad ad);
+    AdDto adToDto(Ad ad);
 
     @Mapping(source="author.firstName", target = "authorFirstName")
     @Mapping(source="author.lastName", target = "authorLastName")
@@ -32,16 +32,16 @@ public interface AdMapper {
     @Mapping(source="createOrUpdateAd.pk", target = "id")
     Ad createOrUpdateAdToAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image);
 
-    default Ads adsToAdsDto(Collection<Ad> ads) {
+    default Ads adsToDto(Collection<Ad> ads) {
         Ads result = new Ads();
         result.setResults(
                 ads.stream()
-                        .map(this::adToAdDto)
+                        .map(this::adToDto)
                         .collect(Collectors.toList())
         );
         result.setCount(ads.size());
         return result;
     }
 
-    AdDto createOrUpdateAdToAdDto(CreateOrUpdateAd createOrUpdateAd, String image);
+    AdDto createOrUpdateAdToDto(CreateOrUpdateAd createOrUpdateAd, String image);
 }

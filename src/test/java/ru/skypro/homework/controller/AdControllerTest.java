@@ -1,6 +1,5 @@
 package ru.skypro.homework.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -12,22 +11,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.*;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.service.AdService;
 import ru.skypro.homework.testutil.AdTestUtil;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.stream.Stream;
@@ -97,7 +90,7 @@ class AdControllerTest extends AdTestUtil {
     public void givenCreate_whenCorrectInput_thenCreated(CreateOrUpdateAd correctCreateAd) throws Exception {
         log.trace("givenCreate_whenCorrectInput_thenCreated");
 
-        AdDto expected = adMapper.createOrUpdateAdToAdDto(correctCreateAd, IMAGE);
+        AdDto expected = adMapper.createOrUpdateAdToDto(correctCreateAd, IMAGE);
         when(adService.create(any(CreateOrUpdateAd.class), any(MockMultipartFile.class))).thenReturn(expected);
 
         performCreate(correctCreateAd)
@@ -164,7 +157,7 @@ class AdControllerTest extends AdTestUtil {
     public void patchProperties() throws Exception {
         //given
         CreateOrUpdateAd properties = generateCreateOrUpdateAd();
-        AdDto expected = adMapper.createOrUpdateAdToAdDto(properties, IMAGE);
+        AdDto expected = adMapper.createOrUpdateAdToDto(properties, IMAGE);
 
         //when
         when(adService.patchProperties(PK, properties)).thenReturn(expected);

@@ -33,7 +33,7 @@ class AdMapperTest extends AdTestUtil {
         Ad ad = generateAd(author);
 
         //when
-        AdDto adDto = adMapper.adToAdDto(ad);
+        AdDto adDto = adMapper.adToDto(ad);
 
         //then
         assertThat(adDto).isNotNull();
@@ -95,7 +95,7 @@ class AdMapperTest extends AdTestUtil {
     void adsToAdsDto(Collection<Ad> ads) {
         //when
         User author = new User();
-        Ads adsDto =  adMapper.adsToAdsDto(ads);
+        Ads adsDto =  adMapper.adsToDto(ads);
 
 
         //then

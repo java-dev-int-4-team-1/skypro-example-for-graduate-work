@@ -15,6 +15,8 @@ import java.util.stream.Stream;
 @MappedSuperclass
 public class AdTestUtil {
     protected final static int PK = 111;
+
+    protected final static String SOME_TEXT = "Lorem Ipsum";
     protected final static String TITLE = "title";
     protected final static String DESCRIPTION = "description";
     protected static String IMAGE = "image";
@@ -86,7 +88,7 @@ public class AdTestUtil {
 
         return streamAds()
                 .map(ads -> Arguments.of(
-                        Mappers.getMapper(AdMapper.class).adsToAdsDto(ads),
+                        Mappers.getMapper(AdMapper.class).adsToDto(ads),
                         ads)
                 );
     }
