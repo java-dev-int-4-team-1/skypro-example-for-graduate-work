@@ -37,17 +37,17 @@ public class AdService implements AdGetter {
 
     public Ads getAll() {
         log.debug("getAll");
-        return adMapper.adsToAdsDto(adRepository.findAll());
+        return adMapper.adsToDto(adRepository.findAll());
     }
 
     public Ads getAllByCurrentUser() {
         log.debug("getAllByCurrentUser");
-        return adMapper.adsToAdsDto(adRepository.findByAuthor(currentUserService.getCurrentUser()));
+        return adMapper.adsToDto(adRepository.findByAuthor(currentUserService.getCurrentUser()));
     }
 
     public AdDto getById(Integer id) {
         log.debug("getById({})", id);
-        return adMapper.adToAdDto(getAd(id));
+        return adMapper.adToDto(getAd(id));
     }
 
     public AdDto create(CreateOrUpdateAd properties, MultipartFile image) {
@@ -59,7 +59,7 @@ public class AdService implements AdGetter {
         adRepository.save(ad);
         setImage(image, ad);
 
-        return adMapper.adToAdDto(ad);
+        return adMapper.adToDto(ad);
     }
 
     private void setImage(MultipartFile image, Ad ad) {
@@ -78,7 +78,7 @@ public class AdService implements AdGetter {
 
         Ad ad = getAd(id);
         properties.updateAd(ad);
-        return adMapper.adToAdDto(adRepository.save(ad));
+        return adMapper.adToDto(adRepository.save(ad));
     }
 
     public AdDto patchImage(int id, MultipartFile image) {
@@ -87,7 +87,7 @@ public class AdService implements AdGetter {
         Ad ad = getAd(id);
         setImage(image, ad);
 
-        return adMapper.adToAdDto(adRepository.save(ad));
+        return adMapper.adToDto(adRepository.save(ad));
     }
 
 }

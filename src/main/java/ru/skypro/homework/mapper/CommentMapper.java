@@ -14,9 +14,12 @@ import java.util.stream.Collectors;
 public interface CommentMapper {
     Comment createOrUpdateCommentToComment(CreateOrUpdateComment createOrUpdateComment);
 
+    @Mapping(source="id", target="pk")
+    @Mapping(source="ad.author.id", target="author")
+    @Mapping(source="ad.author.firstName", target="authorFirstName")
+    @Mapping(source="ad.author.image", target="authorImage")
     CommentDto commentToDto(Comment comment);
 
-    @Mapping(source="comments.size()", target="count")
     default Comments commentsToDto(Collection<Comment> comments) {
         Comments result = new Comments();
         result.setResults(
@@ -24,6 +27,7 @@ public interface CommentMapper {
                         .map(this::commentToDto)
                         .collect(Collectors.toList())
         );
+        result.setCount(comments.size());
         return result;
     }
 
