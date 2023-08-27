@@ -25,6 +25,9 @@
             <column name="ad_id" type="INT">
                 <constraints nullable="false"/>
             </column>
+            <column name="user_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
         <addForeignKeyConstraint
@@ -32,6 +35,13 @@
                 baseTableName="comments"
                 baseColumnNames="ad_id"
                 referencedTableName="ads"
+                referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint
+                constraintName="fk_comments_author_id"
+                baseTableName="comments"
+                baseColumnNames="user_id"
+                referencedTableName="users"
                 referencedColumnNames="id"/>
 
     </changeSet>

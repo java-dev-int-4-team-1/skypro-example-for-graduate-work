@@ -47,12 +47,6 @@ public class AdController {
         return new ResponseEntity<>(adService.create(properties, image), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@NotNull @PathVariable Integer id) {
-        adService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
     @PatchMapping("/{id}")
     public AdDto patchProperties(
             @NotNull @PathVariable Integer id,
@@ -65,5 +59,11 @@ public class AdController {
             @NotNull @PathVariable Integer id,
             @RequestPart MultipartFile image) {
         return adService.patchImage(id, image);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@NotNull @PathVariable Integer id) {
+        adService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

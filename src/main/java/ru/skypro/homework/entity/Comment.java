@@ -16,6 +16,10 @@ public class Comment extends AbstractEntity {
     @ManyToOne
     Ad ad;
 
+    @JoinColumn(name = "user_id")
+    @ManyToOne
+    User author;
+
     long createdAt;
 
     String text;

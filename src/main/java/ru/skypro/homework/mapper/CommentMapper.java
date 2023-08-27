@@ -15,9 +15,9 @@ public interface CommentMapper {
     Comment createOrUpdateCommentToComment(CreateOrUpdateComment createOrUpdateComment);
 
     @Mapping(source="id", target="pk")
-    @Mapping(source="ad.author.id", target="author")
-    @Mapping(source="ad.author.firstName", target="authorFirstName")
-    @Mapping(source="ad.author.image", target="authorImage")
+    @Mapping(source="author.id", target="author")
+    @Mapping(source="author.firstName", target="authorFirstName")
+    @Mapping(source="author.image", target="authorImage")
     CommentDto commentToDto(Comment comment);
 
     default Comments commentsToDto(Collection<Comment> comments) {
