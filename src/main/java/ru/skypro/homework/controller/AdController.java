@@ -26,16 +26,21 @@ public class AdController {
 
     @GetMapping("/{id}")
     public AdDto get(@PathVariable Integer id) {
+        log.trace("get(id={}", id);
+
         return adService.getById(id);
     }
 
     @GetMapping("/me")
     public Ads getMyAds() {
+        log.trace("getMyAds");
+
         return adService.getAllByCurrentUser();
     }
 
     @GetMapping
     public Ads getAll() {
+        log.trace("getAll");
         return adService.getAll();
     }
 
@@ -43,7 +48,10 @@ public class AdController {
      public ResponseEntity<AdDto> create(
              @Valid @RequestPart CreateOrUpdateAd properties,
              @RequestPart MultipartFile image) {
-        log.trace("create(properties={}, image={}))", properties, image);
+        log.trace("create(properties={}, image.filename={}))",
+                properties,
+                image.getOriginalFilename());
+
         return new ResponseEntity<>(adService.create(properties, image), HttpStatus.CREATED);
     }
 

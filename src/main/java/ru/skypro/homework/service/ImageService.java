@@ -15,10 +15,12 @@ public class ImageService {
     private final ImageManager imageManager;
 
     public byte[] getUserImage(String filename) {
+        log.trace("getUserImage(filename={})", filename);
         return imageManager.getImage(User.class, filename);
     }
 
     public byte[] getAdImage(String filename) {
+        log.trace("getAdImage(filename={})", filename);
         return imageManager.getImage(Ad.class, filename);
     }
 }

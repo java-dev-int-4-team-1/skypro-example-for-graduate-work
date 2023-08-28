@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Locale;
 
 @Component
 @Slf4j
@@ -22,14 +23,14 @@ public class ImageManager {
     @Value("${img.path}")
     private String IMG_DIR;
 
-    public Path getImgPath(ImageEntity imageEntity) throws IOException {
-        return getImgPath(imageEntity.getClass());
+    public Path getImagePath(ImageEntity imageEntity) throws IOException {
+        return getImagePath(imageEntity.getClass());
     }
 
-    public Path getImgPath(Class<? extends ImageEntity> imageEntityClass) throws IOException {
+    public Path getImagePath(Class<? extends ImageEntity> imageEntityClass) throws IOException {
 
-        String className = imageEntityClass.getSimpleName();
-        log.trace("getImgPath(class={})", className);
+        String className = imageEntityClass.getSimpleName().toLowerCase();
+        log.trace("getIamgPath(class={})", className);
             return validatePath(Path.of(IMG_DIR + "/" + className));
     }
 
@@ -46,8 +47,8 @@ public class ImageManager {
      * original filename and the entity's id
      * @return the local filename
      */
-    public String uploadImg(ImageEntity entity, MultipartFile img) {
-        return uploadImg(
+    public String uploadImage(ImageEntity entity, MultipartFile img) {
+        return uploadImage(
                 entity,
                 img,
                 img.getOriginalFilename() + "-" + entity.getId());
@@ -59,15 +60,19 @@ public class ImageManager {
      * @param filename supposed local filename without extension
      * @return  local filename with the extension
      */
-    public String uploadImg(ImageEntity entity, MultipartFile img, String filename) {
-        log.trace("uploadImg(entity, img");
+    public String uploadImage(ImageEntity entity, MultipartFile img, String filename) {
+        log.trace(
+                "uploadImg(entity.id={}, img.filename={}",
+                entity.getId(),
+                img.getOriginalFilename()
+        );
 
         String localImageName = filename + "." +
                 StringUtils.getFilenameExtension(img.getOriginalFilename()) ;
         try {
             Files.write(
                     Paths.get(
-                            getImgPath(entity).toString(),
+                            getImagePath(entity).toString(),
                             localImageName),
                     img.getBytes()
             );
@@ -82,12 +87,15 @@ public class ImageManager {
     }
 
     public byte[] getImage(Class <? extends ImageEntity> imageEntityClass, String filename) {
-        log.trace("getImg(Class={}, filename={})", imageEntityClass, filename);
+        log.trace("getImg(Class={}, filename={})",
+                imageEntityClass.getSimpleName(),
+                filename
+        );
 
         try {
             return Files.readAllBytes(
                     Paths.get(
-                            getImgPath(imageEntityClass).toString(),
+                            getImagePath(imageEntityClass).toString(),
                             filename)
             );
         }

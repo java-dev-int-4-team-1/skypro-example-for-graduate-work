@@ -17,7 +17,7 @@
                 <constraints primaryKey="true"/>
             </column>
             <column name="image" type="VARCHAR">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
             <column name="title" type="VARCHAR">
                 <constraints nullable="false"/>
