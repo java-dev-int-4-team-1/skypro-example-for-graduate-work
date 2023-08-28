@@ -28,7 +28,7 @@ public interface AdMapper {
     @Mapping(source="id", target = "pk")
     ExtendedAd adToExtendedAd(Ad ad);
 
-    @Mapping(source="image.name", target = "image")
+    @Mapping(source="image.originalFilename", target = "image")
     @Mapping(source="createOrUpdateAd.pk", target = "id")
     Ad createOrUpdateAdToAd(CreateOrUpdateAd createOrUpdateAd, MultipartFile image);
 

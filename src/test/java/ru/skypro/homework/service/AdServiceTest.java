@@ -199,7 +199,7 @@ class AdServiceTest extends AdTestUtil {
         AdDto result = adService.patchImage(pk, image);
 
         //then
-        verify(imageManager).uploadImg(ad, image);
+        verify(imageManager).uploadImage(ad, image);
 
         assertThat(result)
                 .isNotNull()
@@ -215,7 +215,7 @@ class AdServiceTest extends AdTestUtil {
 
         //when
         when(adRepository.findById(pk)).thenReturn(Optional.of(ad));
-        when(imageManager.uploadImg(ad, image)).thenThrow(BadImageException.class);
+        when(imageManager.uploadImage(ad, image)).thenThrow(BadImageException.class);
 
         //then
         assertThrows(BadImageException.class,

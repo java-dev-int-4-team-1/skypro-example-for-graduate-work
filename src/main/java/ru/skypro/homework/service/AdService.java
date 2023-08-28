@@ -36,45 +36,49 @@ public class AdService implements AdGetter {
     }
 
     public Ads getAll() {
-        log.debug("getAll");
+        log.trace("getAll");
         return adMapper.adsToDto(adRepository.findAll());
     }
 
     public Ads getAllByCurrentUser() {
-        log.debug("getAllByCurrentUser");
+        log.trace("getAllByCurrentUser");
         return adMapper.adsToDto(adRepository.findByAuthor(currentUserService.getCurrentUser()));
     }
 
     public AdDto getById(Integer id) {
-        log.debug("getById({})", id);
+        log.trace("getById({})", id);
         return adMapper.adToDto(getAd(id));
     }
 
     public AdDto create(CreateOrUpdateAd properties, MultipartFile image) {
 
-        log.debug("create({}, {})", properties, image);
+        log.trace("create(properties={}, image.filename={})", properties, image.getOriginalFilename());
 
         Ad ad = adMapper.createOrUpdateAdToAd(properties, image);
         ad.setAuthor(currentUserService.getCurrentUser());
-        adRepository.save(ad);
+        ad = adRepository.save(ad);
         setImage(image, ad);
 
         return adMapper.adToDto(ad);
     }
 
     private void setImage(MultipartFile image, Ad ad) {
-        ad.setImage(imageManager.uploadImg(ad, image));
+        log.trace("setImage(image.filename={}, ad.id={})",
+                image.getOriginalFilename(),
+                ad.getId());
+
+        ad.setImage(imageManager.uploadImage(ad, image));
         adRepository.save(ad);
     }
 
     public void delete(int id) {
-        log.debug("delete({})", id);
+        log.trace("delete({})", id);
 
         adRepository.delete(getAd(id));
     }
 
     public AdDto patchProperties(int id, CreateOrUpdateAd properties) {
-        log.debug("patchProperties({}, {})", id, properties);
+        log.trace("patchProperties({}, {})", id, properties);
 
         Ad ad = getAd(id);
         properties.updateAd(ad);
@@ -82,7 +86,7 @@ public class AdService implements AdGetter {
     }
 
     public AdDto patchImage(int id, MultipartFile image) {
-        log.debug("patchImage({}, {})", id, image);
+        log.trace("patchImage({}, {})", id, image);
 
         Ad ad = getAd(id);
         setImage(image, ad);

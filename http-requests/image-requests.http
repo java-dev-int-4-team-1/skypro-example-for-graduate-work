@@ -1,0 +1,7 @@
+### Get the ad's image 'bender.jpg'
+GET http://localhost:8080/img/ads/bender.jpg
+Authorization: Basic user@gmail.com password
+
+### Get the user's image for Fry
+GET http://localhost:8080/img/users/Character_Fry-1.webp
+Authorization: Basic user@gmail.com password
