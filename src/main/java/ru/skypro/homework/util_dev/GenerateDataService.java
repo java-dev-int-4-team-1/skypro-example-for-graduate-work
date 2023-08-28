@@ -29,8 +29,6 @@ public class GenerateDataService implements AdAppConstants {
     private final AdRepository adRepository;
     private final CommentRepository commentRepository;
 
-
-    
     private final Faker faker = new Faker();
     private final FakeValuesService fakeValuesService = new FakeValuesService(
             new Locale("en-GB"), new RandomService());
