@@ -16,19 +16,19 @@
             <column name="id" type="INT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="password" type="TEXT">
+            <column name="password" type="VARCHAR">
             </column>
-            <column name="email" type="TEXT">
+            <column name="email" type="VARCHAR">
             </column>
-            <column name="first_name" type="TEXT">
+            <column name="first_name" type="VARCHAR">
             </column>
-            <column name="last_name" type="TEXT">
+            <column name="last_name" type="VARCHAR">
             </column>
-            <column name="phone" type="TEXT">
+            <column name="phone" type="VARCHAR">
             </column>
-            <column name="role" type="TEXT">
+            <column name="role" type="VARCHAR">
             </column>
-            <column name="image" type="TEXT">
+            <column name="image" type="VARCHAR">
             </column>
         </createTable>
     </changeSet>
