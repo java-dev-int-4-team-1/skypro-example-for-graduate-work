@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.ImageEntity;
+import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exception.BadImageException;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,15 +26,26 @@ public class ImageManager {
     @Value("${img.path}")
     private String IMG_DIR;
 
+    @Value("${img.subdir.users}")
+    private String USERS_SUBDIR;
+
+    @Value("${img.subdir.ads}")
+    private String ADS_SUBDIR;
+
     public Path getImagePath(ImageEntity imageEntity) throws IOException {
-        return getImagePath(imageEntity.getClass());
+        if (imageEntity instanceof Ad)
+            return getImagePath(ADS_SUBDIR);
+        if (imageEntity instanceof User)
+            return getImagePath(USERS_SUBDIR);
+        log.error("There is no directory defined for images of {}",
+                imageEntity.getClass());
+        throw new FileNotFoundException();
     }
 
-    public Path getImagePath(Class<? extends ImageEntity> imageEntityClass) throws IOException {
+    public Path getImagePath(String subdir) throws IOException {
+        log.trace("getImagPath(subdir={})", subdir);
 
-        String className = imageEntityClass.getSimpleName().toLowerCase();
-        log.trace("getIamgPath(class={})", className);
-            return validatePath(Path.of(IMG_DIR + "/" + className));
+        return validatePath(Path.of(IMG_DIR + "/" + subdir));
     }
 
     private Path validatePath(Path path) throws IOException {
@@ -51,51 +65,50 @@ public class ImageManager {
         return uploadImage(
                 entity,
                 img,
-                img.getOriginalFilename() + "-" + entity.getId());
+                entity.getId() + "-" + img.getOriginalFilename() );
     }
 
     /** Saves the image to the local directory.
      * If there are any faults during the writing image file
      * then BadImageException is thrown.
-     * @param filename supposed local filename without extension
+     * @param targetFilename supposed local filename without extension
      * @return  local filename with the extension
      */
-    public String uploadImage(ImageEntity entity, MultipartFile img, String filename) {
+    public String uploadImage(ImageEntity entity, MultipartFile img, String targetFilename) {
         log.trace(
-                "uploadImg(entity.id={}, img.filename={}",
+                "uploadImg(entity.id={}, img.filename={}, targetFilename={}",
                 entity.getId(),
-                img.getOriginalFilename()
+                img.getOriginalFilename(),
+                targetFilename
         );
 
-        String localImageName = filename + "." +
-                StringUtils.getFilenameExtension(img.getOriginalFilename()) ;
         try {
             Files.write(
                     Paths.get(
                             getImagePath(entity).toString(),
-                            localImageName),
+                            targetFilename),
                     img.getBytes()
             );
         }
         catch (IOException e)  {
-            log.error("uploadImg({}, image.name={}): IOException was thrown",
-                    entity, img.getOriginalFilename(), e
+            log.error("uploadImg({}, target filename={}): IOException was thrown",
+                    entity, targetFilename, e
             );
             throw new BadImageException(img.getOriginalFilename());
         }
-        return localImageName;
+        return targetFilename;
     }
 
-    public byte[] getImage(Class <? extends ImageEntity> imageEntityClass, String filename) {
-        log.trace("getImg(Class={}, filename={})",
-                imageEntityClass.getSimpleName(),
+    public byte[] getImage(String subdir, String filename) {
+        log.trace("getImg(subdir={}, filename={})",
+                subdir,
                 filename
         );
 
         try {
             return Files.readAllBytes(
                     Paths.get(
-                            getImagePath(imageEntityClass).toString(),
+                            getImagePath(subdir).toString(),
                             filename)
             );
         }

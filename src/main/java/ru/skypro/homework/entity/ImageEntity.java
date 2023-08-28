@@ -16,8 +16,32 @@ public abstract class ImageEntity extends AbstractEntity {
      */
     private String image;
 
-    public String getImage() {
-        return  IMG_REALM + this.getClass().getSimpleName().toLowerCase() + "/" + image;
+    /**
+     *  @return the name of the subdirectory, which
+     * is specified to store the images
+     * of  entity's instances
+     */
+    public String getEntityImageSubdirName() {
+        return this.getClass().getSimpleName().toLowerCase();
+
+    }
+
+    /**
+     *  @return the name of the directory, which
+     * is specified to store the images
+     * of  entity's instances
+     */
+    public String getEntityImageDirName() {
+        return IMG_REALM + getEntityImageSubdirName();
+
+    }
+
+    /**
+     *  @return the path to the image consisting of
+     *  the directory path and the filename.
+     */
+    public String getImageFullPath() {
+        return  getEntityImageDirName()+ "/" + image;
     }
 
 }
