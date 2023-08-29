@@ -42,6 +42,7 @@ public abstract class AdMapper {
     }
 
     @Mapping(source="id", target = "pk")
+    @Mapping(target = "image",  expression = "java( mapImage(ad) )")
     public abstract AdDto map(Ad ad);
 
     @Mapping(target = "authorFirstName", source="author.firstName")
