@@ -1,7 +1,5 @@
 package ru.skypro.homework.util_dev;
 
-import com.github.javafaker.service.FakeValuesService;
-import com.github.javafaker.service.RandomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +16,6 @@ import ru.skypro.homework.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Locale;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -30,8 +27,6 @@ public class GenerateDataService implements AdAppConstants {
     private final CommentRepository commentRepository;
 
     private final Faker faker = new Faker();
-    private final FakeValuesService fakeValuesService = new FakeValuesService(
-            new Locale("en-GB"), new RandomService());
 
     private final String IMAGE_SAMPLE = "bender.jpg";
 
@@ -59,7 +54,7 @@ public class GenerateDataService implements AdAppConstants {
 
         user.setFirstName(faker.harryPotter().character());
         user.setLastName(faker.lebowski().character());
-        user.setEmail(fakeValuesService.bothify("??????##@gmail.com"));
+        user.setEmail(faker.internet().emailAddress());
         user.setPassword(faker.bothify("???????#####????????##"));
         user.setRole(generateRole());
         user.setPhone(faker.numerify("############"));

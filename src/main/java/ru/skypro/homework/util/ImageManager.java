@@ -27,15 +27,28 @@ public class ImageManager {
     @Value("${realm.ads}")
     private String adsSubdir;
 
+    private String getImageRealm(ImageEntity imageEntity) {
+        switch(imageEntity.getRealm()) {
+            case USER:  return usersSubdir;
+            case AD:    return adsSubdir;
+        }
+        throw new IllegalStateException("No such enum for ImageEntity class "
+                + imageEntity.getClass());
+    }
+
+    private String getImageSubdirFullName(String subdir) {
+        return imgDir + "/" + subdir;
+    }
+
     public Path getImagePath(ImageEntity imageEntity) throws IOException {
-        log.trace("getImagPath(imageEntity.image={})", imageEntity.getImage());
-        return getImagePath(imageEntity.getImageSubdirFullName());
+        log.trace("getImagePath(imageEntity.image={})", imageEntity.getImage());
+        return getImagePath(getImageRealm(imageEntity));
     }
 
     public Path getImagePath(String subdir) throws IOException {
-        log.trace("getImagPath(subdir={})", subdir);
+        log.trace("getImagePath(subdir={})", subdir);
 
-        return validatePath(Path.of(ImageEntity.getImageSubdirFullName(subdir)));
+        return validatePath(Path.of(getImageSubdirFullName((subdir))));
     }
 
     private Path validatePath(Path path) throws IOException {

@@ -33,7 +33,7 @@ class AdMapperTest extends AdTestUtil {
         Ad ad = generateAd(author);
 
         //when
-        AdDto adDto = adMapper.adToDto(ad);
+        AdDto adDto = adMapper.map(ad);
 
         //then
         assertThat(adDto).isNotNull();
@@ -51,11 +51,11 @@ class AdMapperTest extends AdTestUtil {
         Ad ad = generateAd(author);
 
         //when
-        ExtendedAd extendedAd = adMapper.adToExtendedAd(ad);
+        ExtendedAd extendedAd = adMapper.mapToExtended(ad);
 
         //then
         assertThat(extendedAd).isNotNull();
-        assertThat(extendedAd.getPk()).isEqualTo(PK);
+        assertThat(extendedAd.getPk()).isEqualTo(ID);
         assertThat(extendedAd.getTitle()).isEqualTo(TITLE);
         assertThat(extendedAd.getImage()).isEqualTo(IMAGE);
         assertThat(extendedAd.getPrice()).isEqualTo(PRICE);
@@ -75,13 +75,13 @@ class AdMapperTest extends AdTestUtil {
         CreateOrUpdateAd createOrUpdateAd = generateCreateOrUpdateAd();
 
         //when
-        Ad ad =  adMapper.createOrUpdateAdToAd(
+        Ad ad =  adMapper.map(
                 createOrUpdateAd,
                 new MockMultipartFile(IMAGE, IMAGE.getBytes()));
 
         //then
         assertThat(ad).isNotNull();
-        assertThat(ad.getId()).isEqualTo(PK);
+        assertThat(ad.getId()).isEqualTo(ID);
         assertThat(ad.getDescription()).isEqualTo(DESCRIPTION);
         assertThat(ad.getPrice()).isEqualTo(PRICE);
         assertThat(ad.getTitle()).isEqualTo(TITLE);
@@ -95,7 +95,7 @@ class AdMapperTest extends AdTestUtil {
     void adsToAdsDto(Collection<Ad> ads) {
         //when
         User author = new User();
-        Ads adsDto =  adMapper.adsToDto(ads);
+        Ads adsDto =  adMapper.map(ads);
 
 
         //then
@@ -104,7 +104,7 @@ class AdMapperTest extends AdTestUtil {
         adsDto.getResults()
                         .forEach(adDto -> {
                             assertThat(adDto).isNotNull();
-                            assertThat(adDto.getPk()).isEqualTo(PK);
+                            assertThat(adDto.getPk()).isEqualTo(ID);
                             assertThat(adDto.getTitle()).startsWith(TITLE);
                             assertThat(adDto.getImage()).isEqualTo(IMAGE);
                             assertThat(adDto.getPrice()).isEqualTo(PRICE);

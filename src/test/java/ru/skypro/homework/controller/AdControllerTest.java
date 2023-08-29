@@ -90,7 +90,15 @@ class AdControllerTest extends AdTestUtil {
     public void givenCreate_whenCorrectInput_thenCreated(CreateOrUpdateAd correctCreateAd) throws Exception {
         log.trace("givenCreate_whenCorrectInput_thenCreated");
 
-        AdDto expected = adMapper.createOrUpdateAdToDto(correctCreateAd, IMAGE);
+
+        MockMultipartFile imageMockMultipartFile = new MockMultipartFile(IMAGE, "some-image.png",
+                "image/png", "an-image".getBytes());
+
+        AdDto expected = adMapper.map(
+                adMapper.map(correctCreateAd, imageMockMultipartFile)
+        );
+
+
         when(adService.create(any(CreateOrUpdateAd.class), any(MockMultipartFile.class))).thenReturn(expected);
 
         performCreate(correctCreateAd)
@@ -157,13 +165,19 @@ class AdControllerTest extends AdTestUtil {
     public void patchProperties() throws Exception {
         //given
         CreateOrUpdateAd properties = generateCreateOrUpdateAd();
-        AdDto expected = adMapper.createOrUpdateAdToDto(properties, IMAGE);
+
+        MockMultipartFile imageMockMultipartFile = new MockMultipartFile(IMAGE, "some-image.png",
+                "image/png", "an-image".getBytes());
+
+        AdDto expected = adMapper.map(
+                adMapper.map(properties, imageMockMultipartFile)
+        );
 
         //when
-        when(adService.patchProperties(PK, properties)).thenReturn(expected);
+        when(adService.patchProperties(ID, properties)).thenReturn(expected);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .patch("/ads/{id}", Integer.toString(PK))
+                .patch("/ads/{id}", Integer.toString(ID))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsBytes(properties))
                 .header(HttpHeaders.AUTHORIZATION,
