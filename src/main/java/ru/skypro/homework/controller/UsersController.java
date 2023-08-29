@@ -29,10 +29,10 @@ public class UsersController {
     @PostMapping("/set_password")
     public ResponseEntity<?> setPassword(@Valid @RequestBody NewPassword newPassword) {
         if(userService.setPasswordService(newPassword)){
-            ResponseEntity.status(HttpStatus.OK);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
     }
 
     @GetMapping("/me")
