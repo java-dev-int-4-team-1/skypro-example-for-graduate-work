@@ -1,12 +1,14 @@
 package ru.skypro.homework.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import ru.skypro.homework.dto.Role;
 
 import javax.persistence.*;
 
-@Entity
 @Data
+@Entity
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "users")
 public class User extends ImageEntity{
 
@@ -24,7 +26,7 @@ public class User extends ImageEntity{
     private Role role;
 
     @Override
-    protected String getImageSubdirName() {
-        return realmUsers;
+    public Realm getRealm() {
+        return Realm.USER;
     }
 }

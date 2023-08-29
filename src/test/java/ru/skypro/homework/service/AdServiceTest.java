@@ -41,6 +41,9 @@ class AdServiceTest extends AdTestUtil {
     private AdRepository adRepository;
 
     @MockBean
+    private CurrentUserService currentUserService;
+
+    @MockBean
     private ImageManager imageManager;
 
     @ParameterizedTest
@@ -58,7 +61,7 @@ class AdServiceTest extends AdTestUtil {
         adsDto.getResults()
                 .forEach(adDto -> {
                     assertThat(adDto).isNotNull();
-                    assertThat(adDto.getPk()).isEqualTo(PK);
+                    assertThat(adDto.getPk()).isEqualTo(ID);
                     assertThat(adDto.getTitle()).startsWith(TITLE);
                     assertThat(adDto.getImage()).isEqualTo(IMAGE);
                     assertThat(adDto.getPrice()).isEqualTo(PRICE);
@@ -76,12 +79,12 @@ class AdServiceTest extends AdTestUtil {
     void getById() {
         //given
         Ad ad = generateAd();
-        AdDto expected = adMapper.adToDto(ad);
-        int pk = ad.getId();
+        AdDto expected = adMapper.map(ad);
+        int id = ad.getId();
 
         //when
-        when(adRepository.findById(pk)).thenReturn(Optional.of(ad));
-        AdDto actual = adService.getById(pk);
+        when(adRepository.findById(id)).thenReturn(Optional.of(ad));
+        AdDto actual = adService.getById(id);
 
         //then
         assertThat(actual)
@@ -94,12 +97,12 @@ class AdServiceTest extends AdTestUtil {
     void getById_whenNotFound() {
         //given
         Ad ad = generateAd();
-        int pk = ad.getId();
+        int id = ad.getId();
 
         //then
         assertThrows(
                 AdNotFoundException.class,
-                () -> adService.getById(pk));
+                () -> adService.getById(id));
 
     }
 
@@ -111,9 +114,10 @@ class AdServiceTest extends AdTestUtil {
         MockMultipartFile image = new MockMultipartFile(IMAGE, IMAGE.getBytes());
 
         //when
-        Ad ad = adMapper.createOrUpdateAdToAd(properties, image);
-        AdDto adDto = adMapper.adToDto(ad);
+        Ad ad = adMapper.map(properties, image);
+        AdDto adDto = adMapper.map(ad);
         when(adRepository.save(ad)).thenReturn(ad);
+        when(currentUserService.getCurrentUser()).thenReturn(generateAuthor());
 
         //then
         assertThat(adService.create(properties, image))
@@ -125,14 +129,14 @@ class AdServiceTest extends AdTestUtil {
     void delete() {
         //given
         Ad ad = generateAd();
-        int pk = ad.getId();
-        when(adRepository.findById(pk)).thenReturn(Optional.of(ad));
+        int id = ad.getId();
+        when(adRepository.findById(id)).thenReturn(Optional.of(ad));
 
         //when
-        adService.delete(pk);
+        adService.delete(id);
 
         //then
-        verify(adRepository).findById(pk);
+        verify(adRepository).findById(id);
         verify(adRepository).delete(ad);
     }
 
@@ -153,17 +157,17 @@ class AdServiceTest extends AdTestUtil {
         Ad ad = generateAd(author, "Former Title", "Former Description", PRICE-1);
         CreateOrUpdateAd properties = generateCreateOrUpdateAd();
         Ad expected = generateAd(author);
-        AdDto dtoExpected = adMapper.adToDto(expected);
-        final int pk = ad.getId();
+        AdDto dtoExpected = adMapper.map(expected);
+        final int id = ad.getId();
 
-        when(adRepository.findById(pk)).thenReturn(Optional.of(ad));
+        when(adRepository.findById(id)).thenReturn(Optional.of(ad));
         when(adRepository.save(ad)).thenReturn(ad);
 
         //when
-        AdDto result = adService.patchProperties(pk, properties);
+        AdDto result = adService.patchProperties(id, properties);
 
         //then
-        verify(adRepository).findById(pk);
+        verify(adRepository).findById(id);
         verify(adRepository).save(ad);
         assertThat(result)
                 .isNotNull()
@@ -175,11 +179,11 @@ class AdServiceTest extends AdTestUtil {
     void patchProperties_whenNotFound() {
         //given
         CreateOrUpdateAd properties = generateCreateOrUpdateAd();
-        int pk = 0;
+        int id = 0;
 
         //then
         assertThrows(AdNotFoundException.class,
-                () -> adService.patchProperties(pk, properties));
+                () -> adService.patchProperties(id, properties));
     }
 
     @Test
@@ -187,16 +191,16 @@ class AdServiceTest extends AdTestUtil {
         //given
         Ad ad = generateAd();
         ad.setImage("former " + IMAGE);
-        int pk = ad.getId();
+        int id = ad.getId();
 
         MockMultipartFile image = new MockMultipartFile(IMAGE, IMAGE.getBytes());
         Ad expected = generateAd();
-        AdDto expectedDto = adMapper.adToDto(expected);
+        AdDto expectedDto = adMapper.map(expected);
 
         //when
-        when(adRepository.findById(pk)).thenReturn(Optional.of(ad));
+        when(adRepository.findById(id)).thenReturn(Optional.of(ad));
         when(adRepository.save(ad)).thenReturn(ad);
-        AdDto result = adService.patchImage(pk, image);
+        AdDto result = adService.patchImage(id, image);
 
         //then
         verify(imageManager).uploadImage(ad, image);
@@ -210,26 +214,26 @@ class AdServiceTest extends AdTestUtil {
     void patchImage_whenBadImageExceptionIsThrown() {
         //given
         Ad ad = generateAd();
-        int pk = ad.getId();
+        int id = ad.getId();
         MockMultipartFile image = new MockMultipartFile(IMAGE, IMAGE.getBytes());
 
         //when
-        when(adRepository.findById(pk)).thenReturn(Optional.of(ad));
+        when(adRepository.findById(id)).thenReturn(Optional.of(ad));
         when(imageManager.uploadImage(ad, image)).thenThrow(BadImageException.class);
 
         //then
         assertThrows(BadImageException.class,
-                () -> adService.patchImage(pk, image));
+                () -> adService.patchImage(id, image));
     }
 
     @Test
     void patchImage_whenNotFound() {
         //given
         MockMultipartFile image = new MockMultipartFile(IMAGE, IMAGE.getBytes());
-        int pk = 0;
+        int id = 0;
 
         //then
         assertThrows(AdNotFoundException.class,
-                () -> adService.patchImage(pk, image));
+                () -> adService.patchImage(id, image));
     }
 }

@@ -8,6 +8,7 @@ import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.entity.Ad;
+import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exception.AdNotFoundException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
@@ -37,29 +38,30 @@ public class AdService implements AdGetter {
 
     public Ads getAll() {
         log.trace("getAll");
-        return adMapper.adsToDto(adRepository.findAll());
+        return adMapper.map(adRepository.findAll());
     }
 
     public Ads getAllByCurrentUser() {
-        log.trace("getAllByCurrentUser");
-        return adMapper.adsToDto(adRepository.findByAuthor(currentUserService.getCurrentUser()));
+        User currentUser = currentUserService.getCurrentUser();
+        log.trace("getAllByCurrentUser: user.id={}", currentUser.getId());
+        return adMapper.map(adRepository.findByAuthor(currentUser));
     }
 
     public AdDto getById(Integer id) {
         log.trace("getById({})", id);
-        return adMapper.adToDto(getAd(id));
+        return adMapper.map(getAd(id));
     }
 
     public AdDto create(CreateOrUpdateAd properties, MultipartFile image) {
 
         log.trace("create(properties={}, image.filename={})", properties, image.getOriginalFilename());
 
-        Ad ad = adMapper.createOrUpdateAdToAd(properties, image);
+        Ad ad = adMapper.map(properties, image);
         ad.setAuthor(currentUserService.getCurrentUser());
         ad = adRepository.save(ad);
         setImage(image, ad);
 
-        return adMapper.adToDto(ad);
+        return adMapper.map(ad);
     }
 
     private void setImage(MultipartFile image, Ad ad) {
@@ -82,7 +84,7 @@ public class AdService implements AdGetter {
 
         Ad ad = getAd(id);
         properties.updateAd(ad);
-        return adMapper.adToDto(adRepository.save(ad));
+        return adMapper.map(adRepository.save(ad));
     }
 
     public AdDto patchImage(int id, MultipartFile image) {
@@ -91,7 +93,7 @@ public class AdService implements AdGetter {
         Ad ad = getAd(id);
         setImage(image, ad);
 
-        return adMapper.adToDto(adRepository.save(ad));
+        return adMapper.map(adRepository.save(ad));
     }
 
 }

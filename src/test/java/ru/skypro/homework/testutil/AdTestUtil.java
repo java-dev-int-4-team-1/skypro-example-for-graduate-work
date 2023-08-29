@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 
 @MappedSuperclass
 public class AdTestUtil {
-    protected final static int PK = 111;
+    protected final static int ID = 111;
 
     protected final static String SOME_TEXT = "Lorem Ipsum";
     protected final static String TITLE = "title";
@@ -24,6 +24,7 @@ public class AdTestUtil {
 
     protected static User generateAuthor() {
         User author = new User();
+        author.setId(ID);
         author.setFirstName("John");
         author.setLastName("Smith");
         author.setEmail("e@mail.org");
@@ -46,7 +47,7 @@ public class AdTestUtil {
                                    String title,
                                    String description, int price) {
         Ad ad = new Ad();
-        ad.setId(PK);
+        ad.setId(ID);
         ad.setTitle(title);
         ad.setDescription(description);
         ad.setAuthor(author);
@@ -63,7 +64,7 @@ public class AdTestUtil {
     protected static CreateOrUpdateAd generateCreateOrUpdateAd(
             String title, String description, int price) {
         CreateOrUpdateAd createOrUpdateAd = new CreateOrUpdateAd();
-        createOrUpdateAd.setPk(PK);
+        createOrUpdateAd.setPk(ID);
         createOrUpdateAd.setDescription(description);
         createOrUpdateAd.setPrice(price);
         createOrUpdateAd.setTitle(title);
@@ -88,7 +89,7 @@ public class AdTestUtil {
 
         return streamAds()
                 .map(ads -> Arguments.of(
-                        Mappers.getMapper(AdMapper.class).adsToDto(ads),
+                        Mappers.getMapper(AdMapper.class).map(ads),
                         ads)
                 );
     }
