@@ -3,6 +3,7 @@ package ru.skypro.homework.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.NewPassword;
@@ -23,18 +24,22 @@ public class UserService implements CurrentUserService {
 
     private final ImageManager imageManager;
 
+    private final PasswordEncoder encoder;
+
     public UserService(UserRepository userRepository,
                        UserMapper userMapper,
-                       ImageManager imageManager) {
+                       ImageManager imageManager,
+                       PasswordEncoder encoder) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.imageManager = imageManager;
+        this.encoder = encoder;
     }
 
     public boolean setPasswordService(NewPassword newPassword) {
         User user = getCurrentUser();
-        if (newPassword.getCurrentPassword().equals(user.getPassword())) {
-            userMapper.updateNewPassword(newPassword, user);
+        if (encoder.matches(newPassword.getCurrentPassword(), user.getPassword())) {
+            user.setPassword(encoder.encode(newPassword.getNewPassword()));
             userRepository.save(user);
             return true;
         }

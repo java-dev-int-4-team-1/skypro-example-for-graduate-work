@@ -36,12 +36,8 @@ public class UsersController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserDto> getUser() {
-        if (userService.getUser() != null) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    public UserDto getUser() {
+        return userService.getUser();
     }
 
     @PatchMapping("/me")
