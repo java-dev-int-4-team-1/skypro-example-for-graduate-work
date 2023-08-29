@@ -55,7 +55,7 @@ public class UserService implements CurrentUserService {
     public boolean updateImage(MultipartFile image){
         if (image != null) {
             User user = getCurrentUser();
-            user.setImage(imageManager.uploadImg(user, image));
+            user.setImage(imageManager.uploadImage(user, image));
             userRepository.save(user);
             return true;
         }

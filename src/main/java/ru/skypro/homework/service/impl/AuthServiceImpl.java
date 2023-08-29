@@ -1,7 +1,6 @@
 package ru.skypro.homework.service.impl;
 
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Register;
@@ -13,16 +12,16 @@ import ru.skypro.homework.service.AuthService;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private final UserDetailsService userDetailsService;
+    private final UserDetailsServiceImpl userDetailsServiceImpl;
     private final PasswordEncoder encoder;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    public AuthServiceImpl(UserDetailsService userDetailsService,
+    public AuthServiceImpl(UserDetailsServiceImpl userDetailsServiceImpl,
                            PasswordEncoder passwordEncoder,
                            UserRepository userRepository,
                            UserMapper userMapper) {
-        this.userDetailsService = userDetailsService;
+        this.userDetailsServiceImpl = userDetailsServiceImpl;
         this.encoder = passwordEncoder;
         this.userRepository = userRepository;
         this.userMapper = userMapper;
@@ -33,7 +32,7 @@ public class AuthServiceImpl implements AuthService {
         if (userRepository.findByEmail(userName) == null) {
             return false;
         }
-        UserDetails principal = userDetailsService.loadUserByUsername(userName);
+        UserDetails principal = userDetailsServiceImpl.loadUserByUsername(userName);
         return encoder.matches(password, encoder.encode(principal.getPassword()));
     }
 
