@@ -21,4 +21,8 @@ public class Ad extends ImageEntity {
 
     private int price;
 
+    @Override
+    protected String getImageSubdirName() {
+        return realmAds;
+    }
 }
