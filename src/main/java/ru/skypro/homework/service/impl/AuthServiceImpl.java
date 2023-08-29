@@ -34,7 +34,7 @@ public class AuthServiceImpl implements AuthService {
             return false;
         }
         UserDetails principal = userDetailsService.loadUserByUsername(userName);
-        return encoder.matches(password, encoder.encode(principal.getPassword()));
+        return encoder.matches(password, principal.getPassword());
     }
 
     @Override
@@ -43,7 +43,7 @@ public class AuthServiceImpl implements AuthService {
             return false;
         }
         User user = userMapper.registerFromRegisterDto(register);
-        user.setPassword(register.getPassword());
+        user.setPassword(encoder.encode(register.getPassword()));
         userRepository.save(user);
         return true;
     }
