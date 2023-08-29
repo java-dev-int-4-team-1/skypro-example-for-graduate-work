@@ -4,19 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.ImageEntity;
-import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exception.BadImageException;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Locale;
 
 @Component
 @Slf4j
@@ -24,28 +19,23 @@ import java.util.Locale;
 public class ImageManager {
 
     @Value("${img.path}")
-    private String IMG_DIR;
+    private String imgDir;
 
-    @Value("${img.subdir.users}")
-    private String USERS_SUBDIR;
+    @Value("${realm.users}")
+    private String usersSubdir;
 
-    @Value("${img.subdir.ads}")
-    private String ADS_SUBDIR;
+    @Value("${realm.ads}")
+    private String adsSubdir;
 
     public Path getImagePath(ImageEntity imageEntity) throws IOException {
-        if (imageEntity instanceof Ad)
-            return getImagePath(ADS_SUBDIR);
-        if (imageEntity instanceof User)
-            return getImagePath(USERS_SUBDIR);
-        log.error("There is no directory defined for images of {}",
-                imageEntity.getClass());
-        throw new FileNotFoundException();
+        log.trace("getImagPath(imageEntity.image={})", imageEntity.getImage());
+        return getImagePath(imageEntity.getImageSubdirFullName());
     }
 
     public Path getImagePath(String subdir) throws IOException {
         log.trace("getImagPath(subdir={})", subdir);
 
-        return validatePath(Path.of(IMG_DIR + "/" + subdir));
+        return validatePath(Path.of(ImageEntity.getImageSubdirFullName(subdir)));
     }
 
     private Path validatePath(Path path) throws IOException {

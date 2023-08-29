@@ -2,6 +2,7 @@ package ru.skypro.homework.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 
@@ -9,39 +10,34 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public abstract class ImageEntity extends AbstractEntity {
-    public static final String IMG_REALM = "/img/";
+    @Value("${imp.path}")
+    protected static String imgPath;
+
+    @Transient
+    @Value("${realm.ads}")
+    protected static String realmAds;
+
+    @Transient
+    @Value("${realm.users}")
+    protected static String realmUsers;
 
     /**
      * name-part of the link to the image
      */
     private String image;
 
+    public static String getImageSubdirFullName(String subdir) {
+        return imgPath + "/" + subdir;
+    }
+
+    public String getImageSubdirFullName() {
+        return getImageSubdirFullName(getImageSubdirName());
+    }
     /**
      *  @return the name of the subdirectory, which
      * is specified to store the images
-     * of  entity's instances
+     * of the specific entity's instances
      */
-    public String getEntityImageSubdirName() {
-        return this.getClass().getSimpleName().toLowerCase();
-
-    }
-
-    /**
-     *  @return the name of the directory, which
-     * is specified to store the images
-     * of  entity's instances
-     */
-    public String getEntityImageDirName() {
-        return IMG_REALM + getEntityImageSubdirName();
-
-    }
-
-    /**
-     *  @return the path to the image consisting of
-     *  the directory path and the filename.
-     */
-    public String getImageFullPath() {
-        return  getEntityImageDirName()+ "/" + image;
-    }
+    protected abstract String getImageSubdirName();
 
 }

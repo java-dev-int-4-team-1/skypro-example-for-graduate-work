@@ -10,25 +10,25 @@ import ru.skypro.homework.service.ImageService;
 @RequiredArgsConstructor
 @RestController
 @CrossOrigin(value = "${cross-origin.value}")
-@RequestMapping("/img")
+@RequestMapping("/${realm.img}")
 public class ImageController {
 
-    @Value("${img.subdir.users}")
-    private String USERS_SUBDIR;
+    @Value("${realm.users}")
+    private String realmUsers;
 
-    @Value("${img.subdir.ads}")
-    private String ADS_SUBDIR;
+    @Value("${realm.ads}")
+    private String realmAds;
     private final ImageService imageService;
 
-    @GetMapping("/${img.subdir.users}/{filename}")
+    @GetMapping("/${realm.users}/{filename}")
     public byte[] getUserImage(@PathVariable String filename) {
 
-        return imageService.getImage(USERS_SUBDIR, filename);
+        return imageService.getImage(realmUsers, filename);
     }
 
-    @GetMapping("/${img.subdir.ads}/{filename}")
+    @GetMapping("/${realm.ads}/{filename}")
     public byte[] getAdImage(@PathVariable String filename) {
 
-        return imageService.getImage(ADS_SUBDIR, filename);
+        return imageService.getImage(realmAds, filename);
     }
 }

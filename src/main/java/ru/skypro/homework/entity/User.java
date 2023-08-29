@@ -22,4 +22,9 @@ public class User extends ImageEntity{
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Override
+    protected String getImageSubdirName() {
+        return realmUsers;
+    }
 }
