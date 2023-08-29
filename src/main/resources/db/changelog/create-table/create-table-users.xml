@@ -27,6 +27,7 @@
             <column name="phone" type="VARCHAR">
             </column>
             <column name="role" type="VARCHAR">
+                <constraints nullable="false"/>
             </column>
             <column name="image" type="VARCHAR">
             </column>
