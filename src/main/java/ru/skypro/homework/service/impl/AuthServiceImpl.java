@@ -1,10 +1,7 @@
 package ru.skypro.homework.service.impl;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.Register;
@@ -16,16 +13,16 @@ import ru.skypro.homework.service.AuthService;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private final UserDetailsServiceImpl userDetailsServiceImpl;
+    private final UserDetailsService userDetailsService;
     private final PasswordEncoder encoder;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    public AuthServiceImpl(UserDetailsServiceImpl userDetailsServiceImpl,
+    public AuthServiceImpl(UserDetailsService userDetailsService,
                            PasswordEncoder passwordEncoder,
                            UserRepository userRepository,
                            UserMapper userMapper) {
-        this.userDetailsServiceImpl = userDetailsServiceImpl;
+        this.userDetailsService = userDetailsService;
         this.encoder = passwordEncoder;
         this.userRepository = userRepository;
         this.userMapper = userMapper;
@@ -36,13 +33,7 @@ public class AuthServiceImpl implements AuthService {
         if (userRepository.findByEmail(userName) == null) {
             return false;
         }
-        UserDetails principal = userDetailsServiceImpl.loadUserByUsername(userName);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                principal,
-                principal.getPassword(),
-                principal.getAuthorities());
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        context.setAuthentication(authentication);
+        UserDetails principal = userDetailsService.loadUserByUsername(userName);
         return encoder.matches(password, encoder.encode(principal.getPassword()));
     }
 
