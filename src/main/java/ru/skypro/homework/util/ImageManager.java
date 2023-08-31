@@ -41,18 +41,18 @@ public class ImageManager {
     }
 
     public Path getImagePath(ImageEntity imageEntity) throws IOException {
-        log.trace("getImagePath(imageEntity.image={})", imageEntity.getImage());
+        log.trace("---getImagePath(imageEntity.image={})", imageEntity.getImage());
         return getImagePath(getImageRealm(imageEntity));
     }
 
     public Path getImagePath(String subdir) throws IOException {
-        log.trace("getImagePath(subdir={})", subdir);
+        log.trace("----getImagePath(subdir={})", subdir);
 
         return validatePath(Path.of(getImageSubdirFullName((subdir))));
     }
 
     private Path validatePath(Path path) throws IOException {
-        log.trace("validatePath(path={})", path);
+        log.trace("-----validatePath(path={})", path);
 
         if (Files.isDirectory(path)) {
             return path;
@@ -79,7 +79,7 @@ public class ImageManager {
      */
     public String uploadImage(ImageEntity entity, MultipartFile img, String targetFilename) {
         log.trace(
-                "uploadImg(entity.id={}, img.filename={}, targetFilename={}",
+                "--uploadImg(entity.id={}, img.filename={}, targetFilename={}",
                 entity.getId(),
                 img.getOriginalFilename(),
                 targetFilename
@@ -103,7 +103,7 @@ public class ImageManager {
     }
 
     public byte[] getImage(String subdir, String filename) {
-        log.trace("getImg(subdir={}, filename={})",
+        log.trace("--getImage(subdir={}, filename={})",
                 subdir,
                 filename
         );

@@ -11,6 +11,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
+import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exception.AdNotFoundException;
@@ -84,7 +85,7 @@ class AdServiceTest extends AdTestUtil {
 
         //when
         when(adRepository.findById(id)).thenReturn(Optional.of(ad));
-        AdDto actual = adService.getById(id);
+        ExtendedAd actual = adService.getById(id);
 
         //then
         assertThat(actual)

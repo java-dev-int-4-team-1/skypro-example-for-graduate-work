@@ -12,6 +12,7 @@
             <column name="first_name"   value="Philip J."/>
             <column name="last_name"    value="Fry"/>
             <column name="email"        value="user@gmail.com"/>
+            <column name="phone"        value="+79541234567"/>
             <column name="image"        value="1-Character_Fry.png"/>
         </insert>
     </changeSet>
@@ -23,6 +24,7 @@
             <column name="first_name"   value="Hermes"/>
             <column name="last_name"    value="Conrad"/>
             <column name="email"        value="hermes@planet-express.com"/>
+            <column name="phone"        value="+78008008080"/>
             <column name="image"        value="2-Hermes_Conrad.png"/>
         </insert>
     </changeSet>

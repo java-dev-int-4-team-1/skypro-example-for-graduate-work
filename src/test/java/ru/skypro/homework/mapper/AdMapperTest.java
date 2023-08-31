@@ -51,7 +51,7 @@ class AdMapperTest extends AdTestUtil {
         Ad ad = generateAd(author);
 
         //when
-        ExtendedAd extendedAd = adMapper.mapToExtended(ad);
+        ExtendedAd extendedAd = adMapper.mapToExtendedAd(ad);
 
         //then
         assertThat(extendedAd).isNotNull();
