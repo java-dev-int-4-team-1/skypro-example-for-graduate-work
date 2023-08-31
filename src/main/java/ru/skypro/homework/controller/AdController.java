@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
 import ru.skypro.homework.dto.Ads;
+import ru.skypro.homework.dto.ExtendedAd;
 import ru.skypro.homework.service.AdService;
 
 import javax.validation.Valid;
@@ -25,8 +26,8 @@ public class AdController {
     private final AdService adService;
 
     @GetMapping("/{id}")
-    public AdDto get(@PathVariable Integer id) {
-        log.trace("get(id={}", id);
+    public ExtendedAd get(@PathVariable Integer id) {
+        log.trace("get(id={})", id);
 
         return adService.getById(id);
     }
@@ -58,20 +59,30 @@ public class AdController {
     @PatchMapping("/{id}")
     public AdDto patchProperties(
             @NotNull @PathVariable Integer id,
-            @Valid @RequestBody CreateOrUpdateAd updateAd) {
-        return adService.patchProperties(id, updateAd);
+            @Valid @RequestBody CreateOrUpdateAd properties) {
+
+        log.trace("patchProperties(id={}, properties={}", id, properties);
+
+        return adService.patchProperties(id, properties);
     }
 
     @PatchMapping(path="/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public AdDto patchImg(
             @NotNull @PathVariable Integer id,
             @RequestPart MultipartFile image) {
+
+        log.trace("patchImage(id={}, image.originalFilename={}", id, image.getOriginalFilename());
+
         return adService.patchImage(id, image);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@NotNull @PathVariable Integer id) {
+
+        log.trace("delete(id={}", id);
+
         adService.delete(id);
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

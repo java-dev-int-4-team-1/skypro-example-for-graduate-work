@@ -23,12 +23,18 @@ public class ImageController {
     @GetMapping("/${realm.users}/{filename}")
     public byte[] getUserImage(@PathVariable String filename) {
 
+        log.trace("getUserImage(filename={})", filename);
+
         return imageService.getImage(realmUsers, filename);
+
     }
 
     @GetMapping("/${realm.ads}/{filename}")
     public byte[] getAdImage(@PathVariable String filename) {
 
+        log.trace("getAdImage(filename={})", filename);
+
         return imageService.getImage(realmAds, filename);
+
     }
 }

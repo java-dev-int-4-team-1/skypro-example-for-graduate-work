@@ -51,7 +51,7 @@ public abstract class AdMapper {
     @Mapping(target = "phone", source = "author.phone")
     @Mapping(target = "pk", source = "id")
     @Mapping(target = "image",  expression = "java( mapImage(ad) )")
-    abstract ExtendedAd mapToExtended(Ad ad);
+    public abstract ExtendedAd mapToExtendedAd(Ad ad);
 
     @Mapping(source="image.originalFilename", target = "image")
     @Mapping(source="createOrUpdateAd.pk", target = "id")
