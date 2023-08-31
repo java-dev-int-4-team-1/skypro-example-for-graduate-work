@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd"
+>
+
+    <changeSet id="insert-into-ads-the-nibbler" author="s">
+        <insert tableName="ads">
+            <column name="title"        value="Зубастик"/>
+            <column name="description"  value="Ест всё подряд"/>
+            <column name="image"        value="1-nibbler.png"/>
+            <column name="price"        valueNumeric="10"/>
+            <column name="user_id"      valueNumeric="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert-into-ads-the-bender" author="s">
+        <insert tableName="ads">
+            <column name="title"        value="Bender"/>
+            <column name="description"  value="Полезный металлолом"/>
+            <column name="image"        value="2-bender.jpg"/>
+            <column name="price"        valueNumeric="10000000"/>
+            <column name="user_id"      valueNumeric="2"/>
+        </insert>
+    </changeSet>
+
+
+</databaseChangeLog>
