@@ -54,6 +54,26 @@ public class AdService implements AdGetter {
         return adMapper.map(getAd(id));
     }
 
+    private void verifyEditPermission(Ad ad) {
+
+        User currentUser = currentUserService.getCurrentUser();
+        int currentUserId = currentUser.getId();
+        int authorId = ad.getAuthor().getId();
+
+        log.trace("verifyEditPermission(ad.author.id={}, current-user.id={})",
+                authorId,
+                currentUserId);
+
+        if(currentUser.getRole() == Role.ADMIN) {
+            return;
+        }
+
+        if(currentUserId != authorId) {
+            throw new EditForbiddenException(currentUser, authorId);
+        }
+
+    }
+
     public AdDto create(CreateOrUpdateAd properties, MultipartFile image) {
 
         log.trace("create(properties={}, image.filename={})", properties, image.getOriginalFilename());
@@ -106,6 +126,8 @@ public class AdService implements AdGetter {
         log.trace("patchProperties({}, {})", id, properties);
 
         Ad ad = getAd(id);
+        verifyEditPermission(ad);
+
         properties.updateAd(ad);
         return adMapper.map(adRepository.save(ad));
     }
@@ -114,6 +136,8 @@ public class AdService implements AdGetter {
         log.trace("patchImage({}, {})", id, image);
 
         Ad ad = getAd(id);
+        verifyEditPermission(ad);
+
         setImage(image, ad);
 
         return adMapper.map(adRepository.save(ad));
