@@ -7,9 +7,11 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
+import ru.skypro.homework.dto.Role;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exception.AdNotFoundException;
+import ru.skypro.homework.exception.EditForbiddenException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.util.ImageManager;
@@ -75,8 +77,29 @@ public class AdService implements AdGetter {
 
     public void delete(int id) {
         log.trace("delete({})", id);
-
+        Ad ad = getAd(id);
+        verifyEditPermission(ad);
         adRepository.delete(getAd(id));
+    }
+
+    private void verifyEditPermission(Ad ad) {
+
+        User currentUser = currentUserService.getCurrentUser();
+        int currentUserId = currentUser.getId();
+        int authorId = ad.getAuthor().getId();
+
+        log.trace("verifyEditPermission(ad.author.id={}, current-user.id={})",
+                authorId,
+                currentUserId);
+
+        if(currentUser.getRole() == Role.ADMIN) {
+            return;
+        }
+
+        if(currentUserId != authorId) {
+            throw new EditForbiddenException(currentUser, authorId);
+        }
+
     }
 
     public AdDto patchProperties(int id, CreateOrUpdateAd properties) {
