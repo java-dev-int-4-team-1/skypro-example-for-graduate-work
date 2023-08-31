@@ -102,26 +102,6 @@ public class AdService implements AdGetter {
         adRepository.delete(getAd(id));
     }
 
-    private void verifyEditPermission(Ad ad) {
-
-        User currentUser = currentUserService.getCurrentUser();
-        int currentUserId = currentUser.getId();
-        int authorId = ad.getAuthor().getId();
-
-        log.trace("verifyEditPermission(ad.author.id={}, current-user.id={})",
-                authorId,
-                currentUserId);
-
-        if(currentUser.getRole() == Role.ADMIN) {
-            return;
-        }
-
-        if(currentUserId != authorId) {
-            throw new EditForbiddenException(currentUser, authorId);
-        }
-
-    }
-
     public AdDto patchProperties(int id, CreateOrUpdateAd properties) {
         log.trace("patchProperties({}, {})", id, properties);
 
