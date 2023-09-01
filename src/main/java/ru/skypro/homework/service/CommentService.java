@@ -37,7 +37,7 @@ public class CommentService {
      * is not listed in the db
      */
     private Comment getComment(int adId, int commentId) {
-        log.trace("getComment(adId={}, commentId={})", adId, commentId);
+        log.trace("-getComment(adId={}, commentId={})", adId, commentId);
         Collection<Comment> commentCollection = commentRepository.findByIdAndAdId(commentId, adId);
         if(commentCollection.isEmpty()) {
             throw new CommentNotFoundException(adId, commentId);
@@ -46,7 +46,7 @@ public class CommentService {
     }
 
     public CommentDto create(int adId, CreateOrUpdateComment createOrUpdateComment) {
-        log.trace("create(adId={}, createOrUpdateComment={})", adId, createOrUpdateComment);
+        log.trace("-create(adId={}, createOrUpdateComment={})", adId, createOrUpdateComment);
 
         Ad ad = adGetter.getAd(adId);
 
@@ -60,7 +60,7 @@ public class CommentService {
     }
 
     public CommentDto edit(int adId, int commentId, CreateOrUpdateComment createOrUpdateComment) {
-        log.trace("edit(adId={}, commentId={}, createOrUpdateComment={})", adId, commentId, createOrUpdateComment);
+        log.trace("-edit(adId={}, commentId={}, createOrUpdateComment={})", adId, commentId, createOrUpdateComment);
 
         Comment comment = getComment(adId, commentId);
         comment.setText(createOrUpdateComment.getText());
@@ -71,7 +71,7 @@ public class CommentService {
     }
 
     public void delete(int adId, int commentId) {
-        log.trace("delete(adId={}, commentId={})", adId, commentId);
+        log.trace("-delete(adId={}, commentId={})", adId, commentId);
 
         commentRepository.delete(getComment(adId, commentId));
     }

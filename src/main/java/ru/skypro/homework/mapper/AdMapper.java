@@ -27,6 +27,7 @@ public abstract class AdMapper {
 
 
     public int map(User user) {
+
         if (user == null) {
             return -1;
         }
