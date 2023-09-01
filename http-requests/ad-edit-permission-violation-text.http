@@ -1,0 +1,30 @@
+### Create a new ad: correct data. Should return: '201/CREATED'
+POST http://localhost:8080/ads/
+Authorization: Basic hermes@planet-express.com password
+Content-Type: multipart/form-data; boundary=PartBoundary
+
+--PartBoundary
+Content-Disposition: form-data; name="properties"
+Content-Type: application/json
+
+{
+  "title": "Philip J. Fry",
+  "price": 100,
+  "description": "Delivery boy"
+}
+
+--PartBoundary
+Content-Disposition: form-data; name="image"; filename="1-Character_Fry.png"
+Content-Type: image/jpeg
+
+< ../data/img/users/1-Character_Fry.png
+--PartBoundary
+
+
+### Try to delete the ad created above (Check the ad's id before executing). Should return: '403/FORBIDDEN'
+DELETE http://localhost:8080/ads/3
+Authorization: Basic user@gmail.com password
+
+### Delete the ad created above. (Check the ad's id before executing). Should return: '204/NO_CONTENT'
+DELETE http://localhost:8080/ads/3
+Authorization: Basic hermes@planet-express.com password

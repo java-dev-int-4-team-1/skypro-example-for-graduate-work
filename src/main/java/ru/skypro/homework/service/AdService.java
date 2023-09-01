@@ -8,7 +8,6 @@ import ru.skypro.homework.dto.*;
 import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.entity.User;
 import ru.skypro.homework.exception.AdNotFoundException;
-import ru.skypro.homework.exception.EditForbiddenException;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.repository.AdRepository;
 import ru.skypro.homework.util.ImageManager;
@@ -51,25 +50,7 @@ public class AdService implements AdGetter {
         return adMapper.mapToExtendedAd(getAd(id));
     }
 
-    private void verifyEditPermission(Ad ad) {
 
-        User currentUser = currentUserService.getCurrentUser();
-        int currentUserId = currentUser.getId();
-        int authorId = ad.getAuthor().getId();
-
-        log.trace("--verifyEditPermission(ad.author.id={}, current-user.id={})",
-                authorId,
-                currentUserId);
-
-        if(currentUser.getRole() == Role.ADMIN) {
-            return;
-        }
-
-        if(currentUserId != authorId) {
-            throw new EditForbiddenException(currentUser, authorId);
-        }
-
-    }
 
     public AdDto create(CreateOrUpdateAd properties, MultipartFile image) {
 
@@ -95,7 +76,7 @@ public class AdService implements AdGetter {
     public void delete(int id) {
         log.trace("-delete({})", id);
         Ad ad = getAd(id);
-        verifyEditPermission(ad);
+        currentUserService.checkEditPermission(ad);
         adRepository.delete(getAd(id));
     }
 
@@ -103,7 +84,7 @@ public class AdService implements AdGetter {
         log.trace("-patchProperties(id={}, properties={})", id, properties);
 
         Ad ad = getAd(id);
-        verifyEditPermission(ad);
+        currentUserService.checkEditPermission(ad);
 
         properties.updateAd(ad);
         return adMapper.map(adRepository.save(ad));
@@ -113,7 +94,7 @@ public class AdService implements AdGetter {
         log.trace("-patchImage(id={}, image.originalFilename={})", id, image.getOriginalFilename());
 
         Ad ad = getAd(id);
-        verifyEditPermission(ad);
+        currentUserService.checkEditPermission(ad);
 
         setImage(image, ad);
 
