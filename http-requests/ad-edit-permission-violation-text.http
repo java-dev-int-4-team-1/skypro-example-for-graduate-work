@@ -22,9 +22,9 @@ Content-Type: image/jpeg
 
 
 ### Try to delete the ad created above (Check the ad's id before executing). Should return: '403/FORBIDDEN'
-DELETE http://localhost:8080/ads/4
+DELETE http://localhost:8080/ads/3
 Authorization: Basic user@gmail.com password
 
 ### Delete the ad created above. (Check the ad's id before executing). Should return: '204/NO_CONTENT'
-DELETE http://localhost:8080/ads/4
+DELETE http://localhost:8080/ads/3
 Authorization: Basic hermes@planet-express.com password
