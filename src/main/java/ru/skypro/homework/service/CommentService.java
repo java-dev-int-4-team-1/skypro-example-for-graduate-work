@@ -13,6 +13,7 @@ import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.repository.CommentRepository;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.Collection;
 
@@ -53,7 +54,18 @@ public class CommentService {
         Comment comment = commentMapper.createOrUpdateCommentToComment(createOrUpdateComment);
         comment.setAd(ad);
         comment.setAuthor(currentUserService.getCurrentUser());
-        comment.setCreatedAt(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) * 1_000);
+
+        LocalDateTime now = LocalDateTime.now();
+        comment.setCreatedAt(
+                        now
+                        .toEpochSecond(
+                                ZoneId.of(ZoneOffset
+                                        .systemDefault()
+                                        .getId())
+                                    .getRules()
+                                    .getOffset(now)
+                        ) *
+                        1_000);
         commentRepository.save(comment);
 
         return commentMapper.commentToDto(comment);
