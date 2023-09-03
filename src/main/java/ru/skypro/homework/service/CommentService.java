@@ -53,7 +53,7 @@ public class CommentService {
         Comment comment = commentMapper.createOrUpdateCommentToComment(createOrUpdateComment);
         comment.setAd(ad);
         comment.setAuthor(currentUserService.getCurrentUser());
-        comment.setCreatedAt(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC));
+        comment.setCreatedAt(LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) * 1_000);
         commentRepository.save(comment);
 
         return commentMapper.commentToDto(comment);
