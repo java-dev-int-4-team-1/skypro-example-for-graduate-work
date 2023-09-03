@@ -51,7 +51,6 @@ public class AdService implements AdGetter {
     }
 
 
-
     public AdDto create(CreateOrUpdateAd properties, MultipartFile image) {
 
         log.trace("-create(properties={}, image.filename={})", properties, image.getOriginalFilename());
