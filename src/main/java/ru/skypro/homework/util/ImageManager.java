@@ -40,15 +40,17 @@ public class ImageManager {
         return imgDir + "/" + subdir;
     }
 
-    public Path getImagePath(ImageEntity imageEntity) throws IOException {
+    public String getImagePath(ImageEntity imageEntity) throws IOException {
         log.trace("---getImagePath(imageEntity.image={})", imageEntity.getImage());
         return getImagePath(getImageRealm(imageEntity));
     }
 
-    public Path getImagePath(String subdir) throws IOException {
+    public String getImagePath(String subdir) throws IOException {
         log.trace("----getImagePath(subdir={})", subdir);
-
-        return validatePath(Path.of(getImageSubdirFullName((subdir))));
+        return validatePath(
+                Path.of(
+                        getImageSubdirFullName((subdir)))
+        ).toString();
     }
 
     private Path validatePath(Path path) throws IOException {
@@ -88,7 +90,7 @@ public class ImageManager {
         try {
             Files.write(
                     Paths.get(
-                            getImagePath(entity).toString(),
+                            getImagePath(entity),
                             targetFilename),
                     img.getBytes()
             );
@@ -111,7 +113,7 @@ public class ImageManager {
         try {
             return Files.readAllBytes(
                     Paths.get(
-                            getImagePath(subdir).toString(),
+                            getImagePath(subdir),
                             filename)
             );
         }
@@ -120,6 +122,17 @@ public class ImageManager {
                     filename, e
             );
             throw new BadImageException(filename);
+        }
+    }
+
+    public void deleteImage(ImageEntity entity, String filename) {
+        log.trace("--deleteImage(entity.class={}, filename={}", entity.getClass(), filename);
+        try {
+            Files.deleteIfExists(Path.of(getImagePath(entity), filename));
+
+        } catch(IOException e) {
+            log.error("Error deleting image file {} of class {}",
+                    filename, entity.getClass(), e);
         }
     }
 }

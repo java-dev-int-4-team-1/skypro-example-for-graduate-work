@@ -68,14 +68,19 @@ public class AdService implements AdGetter {
                 image.getOriginalFilename(),
                 ad.getId());
 
+        String prevImage = ad.getImage();
         ad.setImage(imageManager.uploadImage(ad, image));
         adRepository.save(ad);
+
+        imageManager.deleteImage(ad, prevImage);
     }
 
     public void delete(int id) {
         log.trace("-delete({})", id);
         Ad ad = getAd(id);
         currentUserService.checkEditPermission(ad);
+
+        imageManager.deleteImage(ad, ad.getImage());
         adRepository.delete(getAd(id));
     }
 
