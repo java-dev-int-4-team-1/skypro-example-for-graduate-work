@@ -58,8 +58,9 @@ public abstract class AdMapper {
     @Mapping(source="createOrUpdateAd.pk", target = "id")
     public abstract Ad map(CreateOrUpdateAd createOrUpdateAd, MultipartFile image);
 
+
     public Ads map(Collection<Ad> ads) {
-        Ads result = new Ads();
+       Ads result = new Ads();
         result.setResults(
                 ads.stream()
                         .map(this::map)

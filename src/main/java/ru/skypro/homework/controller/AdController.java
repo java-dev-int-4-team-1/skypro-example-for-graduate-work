@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDto;
@@ -46,14 +45,15 @@ public class AdController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-     public ResponseEntity<AdDto> create(
+    @ResponseStatus(HttpStatus.CREATED)
+     public AdDto create(
              @Valid @RequestPart CreateOrUpdateAd properties,
              @RequestPart MultipartFile image) {
-        log.trace("create(properties={}, image.filename={}))",
+        log.trace("create(properties={}, image.originalFilename={}))",
                 properties,
                 image.getOriginalFilename());
 
-        return new ResponseEntity<>(adService.create(properties, image), HttpStatus.CREATED);
+        return adService.create(properties, image);
     }
 
     @PatchMapping("/{id}")
@@ -77,12 +77,11 @@ public class AdController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@NotNull @PathVariable Integer id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@NotNull @PathVariable Integer id) {
 
         log.trace("delete(id={}", id);
 
         adService.delete(id);
-
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

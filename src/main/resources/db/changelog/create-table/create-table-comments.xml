@@ -35,7 +35,8 @@
                 baseTableName="comments"
                 baseColumnNames="ad_id"
                 referencedTableName="ads"
-                referencedColumnNames="id"/>
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
 
         <addForeignKeyConstraint
                 constraintName="fk_comments_author_id"

@@ -3,8 +3,13 @@ package ru.skypro.homework.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.CacheControl;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.service.ImageService;
+
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -21,20 +26,30 @@ public class ImageController {
     private final ImageService imageService;
 
     @GetMapping("/${realm.users}/{filename}")
-    public byte[] getUserImage(@PathVariable String filename) {
+    public ResponseEntity<byte[]> getUserImage(@PathVariable String filename) {
 
         log.trace("getUserImage(filename={})", filename);
-
-        return imageService.getImage(realmUsers, filename);
-
+        return getImage(realmUsers, filename);
     }
 
     @GetMapping("/${realm.ads}/{filename}")
-    public byte[] getAdImage(@PathVariable String filename) {
+    public ResponseEntity<byte[]>  getAdImage(@PathVariable String filename) {
 
         log.trace("getAdImage(filename={})", filename);
-
-        return imageService.getImage(realmAds, filename);
+        return getImage(realmAds, filename);
 
     }
+
+    private ResponseEntity<byte[]> getImage(String realm, String filename) {
+
+        log.trace("getImage(realm={}, filename={})", realm, filename);
+        return  ResponseEntity
+                .ok()
+                .cacheControl(
+                        CacheControl.maxAge(
+                                Duration.of(
+                                        1, ChronoUnit.HOURS)))
+                .body(imageService.getImage(realm, filename));
+    }
+
 }
