@@ -75,6 +75,7 @@ public class CommentService {
         log.trace("-edit(adId={}, commentId={}, createOrUpdateComment={})", adId, commentId, createOrUpdateComment);
 
         Comment comment = getComment(adId, commentId);
+        currentUserService.checkEditPermission(comment);
         comment.setText(createOrUpdateComment.getText());
 
         commentRepository.save(comment);
@@ -84,7 +85,8 @@ public class CommentService {
 
     public void delete(int adId, int commentId) {
         log.trace("-delete(adId={}, commentId={})", adId, commentId);
-
+        Comment comment = getComment(adId, commentId);
+        currentUserService.checkEditPermission(comment);
         commentRepository.delete(getComment(adId, commentId));
     }
 }

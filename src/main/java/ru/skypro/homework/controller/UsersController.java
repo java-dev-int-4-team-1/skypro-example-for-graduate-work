@@ -26,12 +26,13 @@ public class UsersController {
     private final UserService userService;
 
     @PostMapping("/set_password")
-    public ResponseEntity<?> setPassword(@Valid @RequestBody NewPassword newPassword) {
-        if(userService.setNewPassword(newPassword)){
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    public ResponseEntity<Void> setPassword(@Valid @RequestBody NewPassword newPassword) {
+        return ResponseEntity.status(
+                userService.setNewPassword(newPassword) ?
+                        HttpStatus.OK :
+                        HttpStatus.UNAUTHORIZED
+        ).build();
+
     }
 
     @GetMapping("/me")
@@ -40,12 +41,8 @@ public class UsersController {
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<?> updateUser(@Valid @RequestBody UpdateUser updateUser) {
-        if (userService.updateUser(updateUser)) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    public void updateUser(@Valid @RequestBody UpdateUser updateUser) {
+        userService.updateUser(updateUser);
     }
 
     @PatchMapping(path = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

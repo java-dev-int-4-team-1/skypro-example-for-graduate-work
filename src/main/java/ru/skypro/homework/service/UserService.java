@@ -49,11 +49,10 @@ public class UserService implements CurrentUserService {
         return false;
     }
 
-    public boolean updateUser(UpdateUser updateUser) {
+    public void updateUser(UpdateUser updateUser) {
         User user = getCurrentUser();
         userMapper.updateUser(updateUser, user);
         userRepository.save(user);
-        return true;
     }
 
     public UserDto getUser() {

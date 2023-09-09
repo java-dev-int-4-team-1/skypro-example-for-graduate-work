@@ -11,19 +11,16 @@ public class AdAppExceptionHandler {
 
     @ExceptionHandler({EntityNotFoundException.class})
     public ResponseEntity<HttpStatus> handleNotFoundException() {
-
         return ResponseEntity.notFound().build();
     }
 
     @ExceptionHandler({BadImageException.class})
     public ResponseEntity<HttpStatus> handleBadImageException() {
-
         return ResponseEntity.badRequest().build();
     }
 
     @ExceptionHandler({EditForbiddenException.class})
     public ResponseEntity<HttpStatus> handleEditForbiddenException() {
-
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
