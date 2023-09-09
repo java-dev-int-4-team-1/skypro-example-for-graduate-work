@@ -14,7 +14,6 @@ import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.service.UserService;
 
 import javax.validation.Valid;
-import java.io.IOException;
 
 
 @Slf4j
@@ -28,7 +27,7 @@ public class UsersController {
 
     @PostMapping("/set_password")
     public ResponseEntity<?> setPassword(@Valid @RequestBody NewPassword newPassword) {
-        if(userService.setPasswordService(newPassword)){
+        if(userService.setNewPassword(newPassword)){
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

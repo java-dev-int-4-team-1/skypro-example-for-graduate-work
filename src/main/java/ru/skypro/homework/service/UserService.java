@@ -39,7 +39,7 @@ public class UserService implements CurrentUserService {
         this.encoder = encoder;
     }
 
-    public boolean setPasswordService(NewPassword newPassword) {
+    public boolean setNewPassword(NewPassword newPassword) {
         User user = getCurrentUser();
         if (encoder.matches(newPassword.getCurrentPassword(), user.getPassword())) {
             user.setPassword(encoder.encode(newPassword.getNewPassword()));
