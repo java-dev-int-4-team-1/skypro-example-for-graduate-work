@@ -18,7 +18,7 @@ import java.io.IOException;
 
 
 @Slf4j
-@CrossOrigin(value = "${cross-origin.value}")
+@CrossOrigin(value = "${crossorigin.url}")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
@@ -50,7 +50,7 @@ public class UsersController {
     }
 
     @PatchMapping(path = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateUserImage(@RequestParam() MultipartFile image) throws IOException {
+    public ResponseEntity<?> updateUserImage(@RequestParam() MultipartFile image)  {
         if (userService.updateImage(image)) {
             return ResponseEntity.ok().build();
         } else {
