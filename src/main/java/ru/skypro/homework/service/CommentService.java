@@ -2,6 +2,7 @@ package ru.skypro.homework.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.Comments;
@@ -75,7 +76,7 @@ public class CommentService {
         log.trace("-edit(adId={}, commentId={}, createOrUpdateComment={})", adId, commentId, createOrUpdateComment);
 
         Comment comment = getComment(adId, commentId);
-        currentUserService.checkEditPermission(comment);
+        currentUserService.checkPermission(comment);
         comment.setText(createOrUpdateComment.getText());
 
         commentRepository.save(comment);
@@ -83,10 +84,18 @@ public class CommentService {
         return commentMapper.commentToDto(comment);
     }
 
+    public boolean hasPermission(int adId, int commentId) {
+        return currentUserService.hasPermission(getComment(adId, commentId));
+    }
+
+    /*
+        This is an example how to use @PreAuthorize to check permission
+     */
+    @PreAuthorize("hasPermission(#adId, #commentId)")
     public void delete(int adId, int commentId) {
         log.trace("-delete(adId={}, commentId={})", adId, commentId);
         Comment comment = getComment(adId, commentId);
-        currentUserService.checkEditPermission(comment);
-        commentRepository.delete(getComment(adId, commentId));
+        //currentUserService.checkPermission(comment);
+        commentRepository.delete(comment);
     }
 }

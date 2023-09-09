@@ -76,19 +76,33 @@ public class UserService implements CurrentUserService {
     }
 
     @Override
-    public void checkEditPermission(CreatedByUser entity) {
+    public void checkPermission(CreatedByUser entity) {
 
         User currentUser = getCurrentUser();
         int currentUserId = currentUser.getId();
         int authorId = entity.getAuthor().getId();
 
-        log.trace("--verifyEditPermission(author.id={}, current-user.id={})",
+        log.trace("--checkPermission(author.id={}, current-user.id={})",
                 authorId,  currentUserId);
 
-        if(currentUser.getRole() != Role.ADMIN && currentUserId != authorId) {
+        if(currentUser.getRole() != Role.ADMIN &&
+                currentUserId != authorId) {
             throw new EditForbiddenException(currentUser, authorId);
         }
+    }
 
+    @Override
+    public boolean hasPermission(CreatedByUser entity) {
+
+        User currentUser = getCurrentUser();
+        int currentUserId = currentUser.getId();
+        int authorId = entity.getAuthor().getId();
+
+        log.trace("--hasPermission(author.id={}, current-user.id={})",
+                authorId,  currentUserId);
+
+        return currentUser.getRole() == Role.ADMIN ||
+            currentUserId == authorId;
     }
 
 }

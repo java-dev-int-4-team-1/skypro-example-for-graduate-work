@@ -24,3 +24,12 @@ Content-Type: application/json
 {
 "text": "This is a modified comment by Hermes"
 }
+
+
+### Try to delete the comment created above (Check the comment's id before executing). Should return: '403/FORBIDDEN'
+DELETE http://localhost:8080/ads/2/comments/1
+Authorization: Basic user@gmail.com password
+
+### Delete the comment created above (Check the comment's id before executing). Should return: '200/OK'
+DELETE http://localhost:8080/ads/2/comments/1
+Authorization: Basic hermes@planet-express.com password
