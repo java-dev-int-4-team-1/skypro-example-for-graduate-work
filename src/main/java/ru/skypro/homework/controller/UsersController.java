@@ -50,11 +50,7 @@ public class UsersController {
     }
 
     @PatchMapping(path = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateUserImage(@RequestParam() MultipartFile image)  {
-        if (userService.updateImage(image)) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    public void updateUserImage(@RequestParam() MultipartFile image)  {
+        userService.updateImage(image);
     }
 }

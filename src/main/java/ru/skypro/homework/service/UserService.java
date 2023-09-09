@@ -60,14 +60,12 @@ public class UserService implements CurrentUserService {
         return userMapper.userEntityToUserDTO(getCurrentUser());
     }
 
-    public boolean updateImage(MultipartFile image){
-        if (image != null) {
-            User user = getCurrentUser();
-            user.setImage(imageManager.uploadImage(user, image));
-            userRepository.save(user);
-            return true;
-        }
-        return false;
+    public void updateImage(MultipartFile image){
+        User user = getCurrentUser();
+        String prevImage = user.getImage();
+        user.setImage(imageManager.uploadImage(user, image));
+        userRepository.save(user);
+        imageManager.deleteImage(user, prevImage);
     }
 
     @Override
