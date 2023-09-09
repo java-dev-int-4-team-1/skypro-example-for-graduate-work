@@ -39,7 +39,7 @@ public class UserService implements CurrentUserService {
         this.encoder = encoder;
     }
 
-    public boolean setPasswordService(NewPassword newPassword) {
+    public boolean setNewPassword(NewPassword newPassword) {
         User user = getCurrentUser();
         if (encoder.matches(newPassword.getCurrentPassword(), user.getPassword())) {
             user.setPassword(encoder.encode(newPassword.getNewPassword()));
@@ -60,14 +60,12 @@ public class UserService implements CurrentUserService {
         return userMapper.userEntityToUserDTO(getCurrentUser());
     }
 
-    public boolean updateImage(MultipartFile image){
-        if (image != null) {
-            User user = getCurrentUser();
-            user.setImage(imageManager.uploadImage(user, image));
-            userRepository.save(user);
-            return true;
-        }
-        return false;
+    public void updateImage(MultipartFile image){
+        User user = getCurrentUser();
+        String prevImage = user.getImage();
+        user.setImage(imageManager.uploadImage(user, image));
+        userRepository.save(user);
+        imageManager.deleteImage(user, prevImage);
     }
 
     @Override

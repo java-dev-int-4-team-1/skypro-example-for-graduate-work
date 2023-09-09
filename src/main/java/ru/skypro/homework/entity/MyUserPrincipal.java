@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 public class MyUserPrincipal implements UserDetails {
-    private User user;
+    private final User user;
 
     public MyUserPrincipal(User user) {
         this.user = user;
@@ -22,17 +22,11 @@ public class MyUserPrincipal implements UserDetails {
 
     @Override
     public String getPassword() {
-        if (user.getPassword() == null) {
-            return null;
-        }
         return user.getPassword();
     }
 
     @Override
     public String getUsername() {
-        if (user.getEmail() == null) {
-            return null;
-        }
         return user.getEmail();
     }
 

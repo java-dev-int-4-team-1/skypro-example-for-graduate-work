@@ -14,11 +14,10 @@ import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.service.UserService;
 
 import javax.validation.Valid;
-import java.io.IOException;
 
 
 @Slf4j
-@CrossOrigin(value = "${cross-origin.value}")
+@CrossOrigin(value = "${crossorigin.url}")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
@@ -28,7 +27,7 @@ public class UsersController {
 
     @PostMapping("/set_password")
     public ResponseEntity<?> setPassword(@Valid @RequestBody NewPassword newPassword) {
-        if(userService.setPasswordService(newPassword)){
+        if(userService.setNewPassword(newPassword)){
             return ResponseEntity.ok().build();
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -50,11 +49,7 @@ public class UsersController {
     }
 
     @PatchMapping(path = "/me/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateUserImage(@RequestParam() MultipartFile image) throws IOException {
-        if (userService.updateImage(image)) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+    public void updateUserImage(@RequestParam() MultipartFile image)  {
+        userService.updateImage(image);
     }
 }

@@ -9,7 +9,7 @@ import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.service.CommentService;
 
 @Slf4j
-@CrossOrigin(value = "${cross-origin.value}")
+@CrossOrigin(value = "${crossorigin.url}")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/ads/{adId}/comments")
