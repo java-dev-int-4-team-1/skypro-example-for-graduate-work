@@ -18,27 +18,35 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping
-    public Comments getComments(    @PathVariable("adId") Integer adId) {
-
+    public Comments getComments(
+            @PathVariable("adId") Integer adId
+    ) {
+        log.trace("getComments(adId={})", adId);
         return commentService.getAllByAdId(adId);
     }
 
     @PostMapping
-    public CommentDto postComment(  @PathVariable("adId") Integer adId,
-                                    @RequestBody CreateOrUpdateComment createOrUpdateComment) {
-        return commentService.create(adId, createOrUpdateComment);
+    public CommentDto postComment(
+            @PathVariable("adId") Integer adId,
+            @RequestBody CreateOrUpdateComment createdComment) {
+        log.trace("postComment(adId={}, createdComment={})", adId, createdComment);
+        return commentService.create(adId, createdComment);
     }
 
     @PatchMapping("/{commentId}")
-    public CommentDto patchComment(@PathVariable("adId") Integer adId,
-                                   @PathVariable("commentId") Integer commentId,
-                                   @RequestBody CreateOrUpdateComment createOrUpdateComment) {
-        return commentService.edit(adId, commentId, createOrUpdateComment);
+    public CommentDto patchComment(
+            @PathVariable("adId") Integer adId,
+            @PathVariable("commentId") Integer commentId,
+            @RequestBody CreateOrUpdateComment updatedComment) {
+        log.trace("patchComment(adId={}, commentId={}, updatedComment={})",
+                adId, commentId, updatedComment);
+        return commentService.edit(adId, commentId, updatedComment);
     }
 
     @DeleteMapping("/{commentId}")
     public void deleteComment(@PathVariable("adId") Integer adId,
                                               @PathVariable("commentId") Integer commentId) {
+        log.trace("deleteComment(adId={}, commentId={})", adId, commentId);
         commentService.delete(adId, commentId);
     }
 

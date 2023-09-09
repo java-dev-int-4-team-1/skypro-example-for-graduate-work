@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity(name = "comments")
-public class Comment extends AbstractEntity {
+public class Comment extends AbstractEntity implements CreatedByUser {
 
     @JoinColumn(name = "ad_id")
     @ManyToOne
