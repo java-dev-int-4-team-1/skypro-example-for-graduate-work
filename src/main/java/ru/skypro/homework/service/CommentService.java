@@ -29,7 +29,7 @@ public class CommentService {
 
     private final AdGetter adGetter;
 
-    private final CurrentUserService currentUserService;
+    public final CurrentUserService currentUserService;
 
     public Comments getAllByAdId(int adId) {
         return commentMapper.commentsToDto(commentRepository.findByAdId(adId));
@@ -89,13 +89,16 @@ public class CommentService {
     }
 
     /*
-        This is an example how to use @PreAuthorize to check permission
+         There is an example
+         how to use @PreAuthorize to check permission.
+         It remains as a try, and so it's commented now.
+
      */
-    @PreAuthorize("hasPermission(#adId, #commentId)")
+    //@PreAuthorize("@UserService.hasPermission(#adId, #commentId)")
     public void delete(int adId, int commentId) {
         log.trace("-delete(adId={}, commentId={})", adId, commentId);
         Comment comment = getComment(adId, commentId);
-        //currentUserService.checkPermission(comment);
+        currentUserService.checkPermission(comment);
         commentRepository.delete(comment);
     }
 }
