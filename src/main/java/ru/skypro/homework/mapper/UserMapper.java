@@ -3,7 +3,6 @@ package ru.skypro.homework.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
-import org.springframework.beans.factory.annotation.Value;
 import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.UserDto;
@@ -12,16 +11,10 @@ import ru.skypro.homework.entity.User;
 @Mapper(componentModel = "spring")
 public abstract class UserMapper extends ImageMapper {
 
-    @Value("${realm.img}")
-    private String realmImg;
-
-    @Value("${realm.users}")
-    private String realmUsers;
-
     public String mapImage (User user) {
-        return buildImageMapping(realmImg, realmUsers, user);
+        return buildImageMapping(realmUsers, user);
     }
-    @Mapping(target = "image",  expression = "java( mapImage(currentUser) )")
+    @Mapping(target = "image",  expression = "java(mapImage(currentUser))")
     public abstract UserDto userEntityToUserDTO(User currentUser);
 
 
