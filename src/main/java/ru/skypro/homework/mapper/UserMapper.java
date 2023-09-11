@@ -10,7 +10,7 @@ import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.User;
 
 @Mapper(componentModel = "spring")
-public abstract class UserMapper {
+public abstract class UserMapper extends ImageMapper {
 
     @Value("${realm.img}")
     private String realmImg;
@@ -19,7 +19,7 @@ public abstract class UserMapper {
     private String realmUsers;
 
     public String mapImage (User user) {
-        return "/" + realmImg + "/" + realmUsers + "/" + user.getImage();
+        return buildImageMapping(realmImg, realmUsers, user);
     }
     @Mapping(target = "image",  expression = "java( mapImage(currentUser) )")
     public abstract UserDto userEntityToUserDTO(User currentUser);

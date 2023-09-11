@@ -36,7 +36,7 @@ class CommentMapperTest extends AdTestUtil {
         Comment comment = generateComment();
 
         //when
-        CommentDto commentDto = commentMapper.commentToDto(comment);
+        CommentDto commentDto = commentMapper.map(comment);
 
         //then
         assertEqual(comment, commentDto);
@@ -58,7 +58,7 @@ class CommentMapperTest extends AdTestUtil {
         Collection<Comment> commentsCollection = List.of(generateComment());
 
         //when
-        Comments comments = commentMapper.commentsToDto(commentsCollection);
+        Comments comments = commentMapper.map(commentsCollection);
 
         //then
         assertThat(comments).isNotNull();
@@ -78,7 +78,7 @@ class CommentMapperTest extends AdTestUtil {
         createOrUpdateComment.setText(SOME_TEXT);
 
         //when
-        Comment comment =  commentMapper.createOrUpdateCommentToComment(
+        Comment comment =  commentMapper.map(
                 createOrUpdateComment);
 
         //then
