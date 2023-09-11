@@ -2,7 +2,6 @@ package ru.skypro.homework.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.Comments;
@@ -32,7 +31,7 @@ public class CommentService {
     public final CurrentUserService currentUserService;
 
     public Comments getAllByAdId(int adId) {
-        return commentMapper.commentsToDto(commentRepository.findByAdId(adId));
+        return commentMapper.map(commentRepository.findByAdId(adId));
     }
 
     /** Throws CommentNotFoundException if the comment entry with the specified adId and commentId
@@ -52,7 +51,7 @@ public class CommentService {
 
         Ad ad = adGetter.getAd(adId);
 
-        Comment comment = commentMapper.createOrUpdateCommentToComment(createOrUpdateComment);
+        Comment comment = commentMapper.map(createOrUpdateComment);
         comment.setAd(ad);
         comment.setAuthor(currentUserService.getCurrentUser());
 
@@ -69,7 +68,7 @@ public class CommentService {
                         1_000);
         commentRepository.save(comment);
 
-        return commentMapper.commentToDto(comment);
+        return commentMapper.map(comment);
     }
 
     public boolean hasPermission(int adId, int commentId) {
@@ -83,7 +82,7 @@ public class CommentService {
         Comment comment = getComment(adId, commentId);
 
         comment.setText(createOrUpdateComment.getText());
-        return commentMapper.commentToDto(commentRepository.save(comment));
+        return commentMapper.map(commentRepository.save(comment));
     }
 
     public void delete(int adId, int commentId) {

@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 @RequiredArgsConstructor
-public abstract class AdMapper {
+public abstract class AdMapper extends ImageMapper {
 
     @Value("${realm.img}")
     private String realmImg;
@@ -39,7 +39,7 @@ public abstract class AdMapper {
     }
 
     public String mapImage (Ad ad) {
-        return "/" + realmImg + "/" + realmAds + "/" + ad.getImage();
+        return buildImageMapping(realmImg, realmAds, ad);
     }
 
     @Mapping(source="id", target = "pk")
