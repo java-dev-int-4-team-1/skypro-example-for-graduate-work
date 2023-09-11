@@ -8,7 +8,7 @@ Content-Type: application/json
 }
 
 ### Try to patch the comment created above (Check the comment's id before executing). Should return: '403/FORBIDDEN'
-PATCH http://localhost:8080/ads/2/comments/1
+PATCH http://localhost:8080/ads/2/comments/7
 Authorization: Basic user@gmail.com password
 Content-Type: application/json
 
@@ -17,7 +17,7 @@ Content-Type: application/json
 }
 
 ### Patch the comment created above (Check the comment's id before executing). Should return: '200/OK'
-PATCH http://localhost:8080/ads/2/comments/1
+PATCH http://localhost:8080/ads/2/comments/7
 Authorization: Basic hermes@planet-express.com password
 Content-Type: application/json
 
@@ -27,9 +27,9 @@ Content-Type: application/json
 
 
 ### Try to delete the comment created above (Check the comment's id before executing). Should return: '403/FORBIDDEN'
-DELETE http://localhost:8080/ads/2/comments/1
+DELETE http://localhost:8080/ads/2/comments/7
 Authorization: Basic user@gmail.com password
 
 ### Delete the comment created above (Check the comment's id before executing). Should return: '200/OK'
-DELETE http://localhost:8080/ads/2/comments/1
+DELETE http://localhost:8080/ads/2/comments/7
 Authorization: Basic hermes@planet-express.com password
