@@ -10,5 +10,6 @@ public interface CurrentUserService {
      * It occurs if the user is not the author of the entry and if they are not admin.
      * @param entity entity to check the ability to be modified by the current user
      */
-    void checkEditPermission(CreatedByUser entity);
+    void checkPermission(CreatedByUser entity);
+    boolean hasPermission(CreatedByUser entity);
 }

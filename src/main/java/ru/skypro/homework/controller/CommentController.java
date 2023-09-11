@@ -2,6 +2,7 @@ package ru.skypro.homework.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CommentDto;
@@ -9,7 +10,7 @@ import ru.skypro.homework.dto.CreateOrUpdateComment;
 import ru.skypro.homework.service.CommentService;
 
 @Slf4j
-@CrossOrigin(value = "${crossorigin.url}")
+@CrossOrigin(value = "${cross-origin.url}")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/ads/{adId}/comments")
@@ -34,16 +35,18 @@ public class CommentController {
     }
 
     @PatchMapping("/{commentId}")
+    @PreAuthorize("@commentService.hasPermission(#adId, #commentId)")
     public CommentDto patchComment(
             @PathVariable("adId") Integer adId,
             @PathVariable("commentId") Integer commentId,
             @RequestBody CreateOrUpdateComment updatedComment) {
         log.trace("patchComment(adId={}, commentId={}, updatedComment={})",
                 adId, commentId, updatedComment);
-        return commentService.edit(adId, commentId, updatedComment);
+        return commentService.patch(adId, commentId, updatedComment);
     }
 
     @DeleteMapping("/{commentId}")
+    @PreAuthorize("@commentService.hasPermission(#adId, #commentId)")
     public void deleteComment(@PathVariable("adId") Integer adId,
                                               @PathVariable("commentId") Integer commentId) {
         log.trace("deleteComment(adId={}, commentId={})", adId, commentId);

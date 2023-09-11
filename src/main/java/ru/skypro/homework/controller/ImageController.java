@@ -14,7 +14,7 @@ import java.time.temporal.ChronoUnit;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin(value = "${crossorigin.url}")
+@CrossOrigin(value = "${cross-origin.url}")
 @RequestMapping("/${realm.img}")
 public class ImageController {
 

@@ -2,6 +2,7 @@ package ru.skypro.homework.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.Comments;
@@ -28,7 +29,7 @@ public class CommentService {
 
     private final AdGetter adGetter;
 
-    private final CurrentUserService currentUserService;
+    public final CurrentUserService currentUserService;
 
     public Comments getAllByAdId(int adId) {
         return commentMapper.commentsToDto(commentRepository.findByAdId(adId));
@@ -71,22 +72,22 @@ public class CommentService {
         return commentMapper.commentToDto(comment);
     }
 
-    public CommentDto edit(int adId, int commentId, CreateOrUpdateComment createOrUpdateComment) {
-        log.trace("-edit(adId={}, commentId={}, createOrUpdateComment={})", adId, commentId, createOrUpdateComment);
+    public boolean hasPermission(int adId, int commentId) {
+        log.trace("-hasPermission(adId={}, commentId={})", adId, commentId);
+        return currentUserService.hasPermission(getComment(adId, commentId));
+    }
+
+    public CommentDto patch(int adId, int commentId, CreateOrUpdateComment createOrUpdateComment) {
+        log.trace("-patch(adId={}, commentId={}, createOrUpdateComment={})", adId, commentId, createOrUpdateComment);
 
         Comment comment = getComment(adId, commentId);
-        currentUserService.checkEditPermission(comment);
+
         comment.setText(createOrUpdateComment.getText());
-
-        commentRepository.save(comment);
-
-        return commentMapper.commentToDto(comment);
+        return commentMapper.commentToDto(commentRepository.save(comment));
     }
 
     public void delete(int adId, int commentId) {
         log.trace("-delete(adId={}, commentId={})", adId, commentId);
-        Comment comment = getComment(adId, commentId);
-        currentUserService.checkEditPermission(comment);
         commentRepository.delete(getComment(adId, commentId));
     }
 }

@@ -13,7 +13,7 @@ import ru.skypro.homework.dto.Register;
 import ru.skypro.homework.service.AuthService;
 
 @Slf4j
-@CrossOrigin(value = "${crossorigin.url}")
+@CrossOrigin(value = "${cross-origin.url}")
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
