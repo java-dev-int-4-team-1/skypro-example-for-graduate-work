@@ -12,6 +12,7 @@ import ru.skypro.homework.exception.CommentNotFoundException;
 import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.repository.CommentRepository;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -52,20 +53,11 @@ public class CommentService {
         Ad ad = adGetter.getAd(adId);
 
         Comment comment = commentMapper.map(createOrUpdateComment);
+
         comment.setAd(ad);
         comment.setAuthor(currentUserService.getCurrentUser());
+        comment.setCreatedAt(Instant.now().toEpochMilli());
 
-        LocalDateTime now = LocalDateTime.now();
-        comment.setCreatedAt(
-                        now
-                        .toEpochSecond(
-                                ZoneId.of(ZoneOffset
-                                        .systemDefault()
-                                        .getId())
-                                    .getRules()
-                                    .getOffset(now)
-                        ) *
-                        1_000);
         commentRepository.save(comment);
 
         return commentMapper.map(comment);
