@@ -72,33 +72,22 @@ public class CommentService {
         return commentMapper.commentToDto(comment);
     }
 
-    public CommentDto edit(int adId, int commentId, CreateOrUpdateComment createOrUpdateComment) {
-        log.trace("-edit(adId={}, commentId={}, createOrUpdateComment={})", adId, commentId, createOrUpdateComment);
-
-        Comment comment = getComment(adId, commentId);
-        currentUserService.checkPermission(comment);
-        comment.setText(createOrUpdateComment.getText());
-
-        commentRepository.save(comment);
-
-        return commentMapper.commentToDto(comment);
-    }
-
     public boolean hasPermission(int adId, int commentId) {
+        log.trace("-hasPermission(adId={}, commentId={})", adId, commentId);
         return currentUserService.hasPermission(getComment(adId, commentId));
     }
 
-    /*
-         There is an example
-         how to use @PreAuthorize to check permission.
-         It remains as a try, and so it's commented now.
+    public CommentDto patch(int adId, int commentId, CreateOrUpdateComment createOrUpdateComment) {
+        log.trace("-patch(adId={}, commentId={}, createOrUpdateComment={})", adId, commentId, createOrUpdateComment);
 
-     */
-    //@PreAuthorize("@UserService.hasPermission(#adId, #commentId)")
+        Comment comment = getComment(adId, commentId);
+
+        comment.setText(createOrUpdateComment.getText());
+        return commentMapper.commentToDto(commentRepository.save(comment));
+    }
+
     public void delete(int adId, int commentId) {
         log.trace("-delete(adId={}, commentId={})", adId, commentId);
-        Comment comment = getComment(adId, commentId);
-        currentUserService.checkPermission(comment);
-        commentRepository.delete(comment);
+        commentRepository.delete(getComment(adId, commentId));
     }
 }
