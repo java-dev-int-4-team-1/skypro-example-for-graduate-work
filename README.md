@@ -1,16 +1,15 @@
-# Skypro graduate work: Backend Ad Server routines Implementation
-<u>Backend ad server<u>
+# Skypro graduate work: Back-end Ad Server routines Implementation
 <br>
-<br>
-team work
-<br>authors: Stanislav Dudin, Katerina Petrova, Sergei Gots
-<br>
-Project is the backend part implementation for ad service site.
-The site  is represented with frontend part module running as a docker application.
+Team work.
+<br>Authors: Stanislav Dudin, Katerina Petrova, Sergei Gots
+<br><br>
+The Project is the backend part implementation for an ad service web application.
+The site, or front-end part is represented with the ready-to-use frontend part module running as a docker application.
+The interaction protocol between frontend and backend is specified with the <b>openapi.yaml</b>.  
 
 ## Project structure
 
-The backend application's architecture includes:
+The back-end application's architecture includes:
 <ul>
   <li><b>Controllers</b> to handle requests getting from frontend</li>
   <li><b>Services</b> implementing data manipulation level</li>
@@ -26,20 +25,24 @@ DTO and Response statuses are specified within <b>openapi.yaml</b>.
 
 ## Database scheme
 
-The data shceme is provided with liquibase change-log that describe creating the tables <b>users, ads, comments</b>
+The data shceme is provided with the liquibase change-log that describe creating the tables <b>users, ads, comments</b>
 and inserting some initial data in order to demonstrate application's functionality.
 Db-changelog is avaliable under <b>resources/db/changelog</b> 
 
 ## Authentification
 
 Authentification is configured with the <b>config.WebSecurityConfig</b> which provides the Application with
-the <b>@Bean</b> of a <b>Password Encoder</b> and <b>filterChain</b>-method
+the <b>@Bean</b> of a <b>Password Encoder</b> and <b>filterChain</b>-method.<br>
+A not authentificated user can view existing ads.
+An authentificated user can create ads and write comments and edit and delete created ads and comments.
+An authentificated user has their avatar image, ads also supposed to have their images.
+
 
 ## Authorization
 
-According to the specification in <b>openapi.yaml</b> users can have <b>ROLE_USER</b> and <b>ROLE_ADMIN</b>
+According to the specification in <b>openapi.yaml</b> users can have <b>ROLE_USER</b> and <b>ROLE_ADMIN</b>.
 ADMIN can patch and delete any comment or ad when USER is allowed to patch and delete only their own enties.
-When USER try to patch or delete an ad or comment of other person then the status <b>403/Forbidden</b> will be returned to the front.
+If a USER tries to patch or delete an ad or comment of other person then the status <b>403/Forbidden</b> will be returned to the front.
 
 ## How to build and launch
 
@@ -50,7 +53,7 @@ There is a <b>pom.xml</b> in the root directory.
 
 <code>mvn clean install package [-Dmaven.test.skip=true]</code>
 
-2) be sure your postgresql server is working. If case there isn't db server installed launch it within docker container, e.g.:
+2) be sure your postgresql server is working. In case when there isn't the database server installed there is an option to launch it within a docker container, e.g.:
 
 <code>docker run -name habr-pg-13.3 -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=postgres -e postgres:13.3</code>
 <br>In this example there are username, password and name of the database specified as 'posgres' for each of them.
