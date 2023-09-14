@@ -79,6 +79,8 @@ public class CommentService {
 
     public void delete(int adId, int commentId) {
         log.trace("-delete(adId={}, commentId={})", adId, commentId);
-        commentRepository.delete(getComment(adId, commentId));
+        Comment comment = getComment(adId, commentId);
+        currentUserService.checkPermission(comment);
+        commentRepository.delete(comment);
     }
 }
