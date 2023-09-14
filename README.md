@@ -22,7 +22,7 @@ The backend application's architecture includes:
 DTO are described </li>
 </ul>
 
-DTO and Response statuses are specified within <b>openapi.yaml<b>.
+DTO and Response statuses are specified within <b>openapi.yaml</b>.
 
 ## Database scheme
 
@@ -37,49 +37,36 @@ the <b>@Bean</b> of a <b>Password Encoder</b> and <b>filterChain</b>-method
 
 ## Authorization
 
-According to the specification in <b>openapi.yaml<b> users can have <b>ROLE_USER</b> and <b>ROLE_ADMIN</b>
+According to the specification in <b>openapi.yaml</b> users can have <b>ROLE_USER</b> and <b>ROLE_ADMIN</b>
 ADMIN can patch and delete any comment or ad when USER is allowed to patch and delete only their own enties.
 When USER try to patch or delete an ad or comment of other person then the status <b>403/Forbidden</b> will be returned to the front.
 
 ## How to build and launch
 
-The project is developed as a spring-boot application, intented to be build with maven
-so there is a <b>pom.xml</b> in the root directory.
+The project is developed as a spring-boot application, intented to be built with <b>maven</b>
+There is a <b>pom.xml</b> in the root directory.
 
-to build the jar use the next command:
+1) build the jar use the next command:
 
+<code>mvn clean install package [-Dmaven.test.skip=true]</code>
 
-to run the projectd first you need to run docker container of the frontend part:
+2) be sure your postgresql server is working. If case there isn't db server installed launch it within docker container, e.g.:
 
-
-The app uses the postgresql database. The data to access the database can be cofigured with the
-<b>application.properties</b>-file or specified in cmd-line:
-
-The db-server itself can be run as a docker container too:
-
-
-
-<u>Command to launch<u>:
-
-mvn package 
-
-java -jar target/pet-shelter-bot-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod --spring.datasource.username=<DB_USERNAME> --spring.datasource.password=<DB_PASSWORD> --telegram.bot.token=<YOUR_BOT_TELEGRAM_TOKEN>
+<code>docker run -name habr-pg-13.3 -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=postgres -e postgres:13.3</code>
+<br>In this example there are username, password and name of the database specified as 'posgres' for each of them.
 <br><br>
- where <br>
-    <li>DB_USERNAME, DB_PASSWORD -  username/password to your Postgres DB Server
-    <li>YOUR_TELEGRAM_BOT_TOKEN - a token you've got with Telegram @BotFather bot 
-<br><br>
-After a successfull launch you can interact with the bot in Telegram.
-<br>There are two different roles/scenarios for users.
-Users can have role either of a <b>Vounteers</b> or an <b>Adopter</b>
-<br>If the user is listed in the database as a shelter's volunteer 
-then they have within the bot a notification desk about requests for dialogs 
-and can participate dialogs answering questions asked by adopters.
-<br>Both adopters and volunteers are able to terminate their dialog session.
-<br>
-<br>Also there is API provided for shelter's employees who
-can manage list of volunteeers, asign adopters for pets,
-review reports from adopters about their pets etc.
-<br>To interact with API there is swagger-UI provided available on:
-<br>
-<br> http://localhost:8080/shelter/swagger-ui/index.html#/
+
+3) run the app:
+    
+<code>java -jar target/ads-0.0.1-SNAPSHOT.jar --spring.datasource.url=gdbc:postgresql://localhost:5432/postgres --spring.datasource.username=postgres  --spring.datasource.password=postgres</code> 
+
+4) There is an option to check functionality with the http-requests which are placed in files in the <b>http-requests</b> directory.
+   
+5) Run the front end within docker container using the command:
+   
+<code>docker run --rm -p 3000:000 ghcr.io/bizinmitya/front-react-avito:v1.19</code>
+
+7) Use in browser the next adress to access the app:
+
+<code>http://localhost:3000/</code>
+   
