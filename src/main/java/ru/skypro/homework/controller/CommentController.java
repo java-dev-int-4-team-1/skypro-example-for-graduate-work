@@ -46,7 +46,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/{commentId}")
-    @PreAuthorize("@commentService.hasPermission(#adId, #commentId)")
+    //@PreAuthorize("@commentService.hasPermission(#adId, #commentId)")
     public void deleteComment(@PathVariable("adId") Integer adId,
                                               @PathVariable("commentId") Integer commentId) {
         log.trace("deleteComment(adId={}, commentId={})", adId, commentId);

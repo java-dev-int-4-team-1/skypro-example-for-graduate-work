@@ -1,4 +1,4 @@
-package ru.skypro.homework.util_dev;
+package ru.skypro.homework.testutil;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/generate-data")
 public class GenerateDataController {
 
-    private final GenerateDataService genarateDataService;
+    private final GenerateDataService generateDataService;
 
     @GetMapping()
     public void get() {
-        genarateDataService.generateData(10, 40, 100);
+        generateDataService.generateData(10, 40, 100);
     }
 
 
