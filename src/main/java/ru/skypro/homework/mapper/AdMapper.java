@@ -19,8 +19,7 @@ import java.util.stream.Collectors;
 public abstract class AdMapper extends ImageMapper {
 
     public int map(User user) {
-
-        if (user == null) {
+        if (user == null ) {
             return -1;
         }
         Integer userId = user.getId();

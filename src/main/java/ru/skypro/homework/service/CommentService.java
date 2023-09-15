@@ -2,6 +2,7 @@ package ru.skypro.homework.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.Comments;
@@ -13,9 +14,6 @@ import ru.skypro.homework.mapper.CommentMapper;
 import ru.skypro.homework.repository.CommentRepository;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.Collection;
 
 @Slf4j
@@ -77,10 +75,10 @@ public class CommentService {
         return commentMapper.map(commentRepository.save(comment));
     }
 
+    //@PreAuthorize("@commentService.hasPermission(#adId, #commentId)")
     public void delete(int adId, int commentId) {
         log.trace("-delete(adId={}, commentId={})", adId, commentId);
-        Comment comment = getComment(adId, commentId);
-        currentUserService.checkPermission(comment);
-        commentRepository.delete(comment);
+        currentUserService.checkPermission(getComment(adId, commentId));
+        commentRepository.delete(getComment(adId, commentId));
     }
 }
