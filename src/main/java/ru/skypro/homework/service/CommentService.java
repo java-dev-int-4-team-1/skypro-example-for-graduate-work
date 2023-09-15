@@ -2,8 +2,8 @@ package ru.skypro.homework.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.dto.CommentDto;
 import ru.skypro.homework.dto.Comments;
 import ru.skypro.homework.dto.CreateOrUpdateComment;
@@ -61,11 +61,13 @@ public class CommentService {
         return commentMapper.map(comment);
     }
 
+    @Transactional
     public boolean hasPermission(int adId, int commentId) {
         log.trace("-hasPermission(adId={}, commentId={})", adId, commentId);
         return currentUserService.hasPermission(getComment(adId, commentId));
     }
 
+    @Transactional
     public CommentDto patch(int adId, int commentId, CreateOrUpdateComment createOrUpdateComment) {
         log.trace("-patch(adId={}, commentId={}, createOrUpdateComment={})", adId, commentId, createOrUpdateComment);
 
@@ -75,10 +77,10 @@ public class CommentService {
         return commentMapper.map(commentRepository.save(comment));
     }
 
-    //@PreAuthorize("@commentService.hasPermission(#adId, #commentId)")
+    @Transactional
     public void delete(int adId, int commentId) {
         log.trace("-delete(adId={}, commentId={})", adId, commentId);
-        currentUserService.checkPermission(getComment(adId, commentId));
+       // currentUserService.checkPermission(getComment(adId, commentId));
         commentRepository.delete(getComment(adId, commentId));
     }
 }

@@ -36,6 +36,7 @@ public class CommentController {
     }
 
     @PatchMapping("/{commentId}")
+    @Transactional
     @PreAuthorize("@commentService.hasPermission(#adId, #commentId)")
     public CommentDto patchComment(
             @PathVariable("adId") Integer adId,
@@ -48,7 +49,7 @@ public class CommentController {
 
     @DeleteMapping("/{commentId}")
     @Transactional
-    //@PreAuthorize("@commentService.hasPermission(#adId, #commentId)")
+    @PreAuthorize("@commentService.hasPermission(#adId, #commentId)")
     public void deleteComment(@PathVariable("adId") Integer adId,
                                               @PathVariable("commentId") Integer commentId) {
         log.trace("deleteComment(adId={}, commentId={})", adId, commentId);

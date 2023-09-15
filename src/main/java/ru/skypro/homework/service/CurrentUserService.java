@@ -1,5 +1,6 @@
 package ru.skypro.homework.service;
 
+import org.springframework.transaction.annotation.Transactional;
 import ru.skypro.homework.entity.CreatedByUser;
 import ru.skypro.homework.entity.User;
 
@@ -11,5 +12,7 @@ public interface CurrentUserService {
      * @param entity entity to check the ability to be modified by the current user
      */
     void checkPermission(CreatedByUser entity);
+
+    @Transactional
     boolean hasPermission(CreatedByUser entity);
 }

@@ -27,9 +27,9 @@ Content-Type: application/json
 
 
 ### Try to delete the comment created above (Check the comment's id before executing). Should return: '403/FORBIDDEN'
-DELETE http://localhost:8080/ads/2/comments/8
+DELETE http://localhost:8080/ads/2/comments/17
 Authorization: Basic user@gmail.com password
 
 ### Delete the comment created above (Check the comment's id before executing). Should return: '200/OK'
-DELETE http://localhost:8080/ads/2/comments/6
+DELETE http://localhost:8080/ads/2/comments/18
 Authorization: Basic hermes@planet-express.com password
