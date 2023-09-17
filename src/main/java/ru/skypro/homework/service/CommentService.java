@@ -70,9 +70,7 @@ public class CommentService {
     @Transactional
     public CommentDto patch(int adId, int commentId, CreateOrUpdateComment createOrUpdateComment) {
         log.trace("-patch(adId={}, commentId={}, createOrUpdateComment={})", adId, commentId, createOrUpdateComment);
-
         Comment comment = getComment(adId, commentId);
-
         comment.setText(createOrUpdateComment.getText());
         return commentMapper.map(commentRepository.save(comment));
     }
@@ -80,7 +78,6 @@ public class CommentService {
     @Transactional
     public void delete(int adId, int commentId) {
         log.trace("-delete(adId={}, commentId={})", adId, commentId);
-       // currentUserService.checkPermission(getComment(adId, commentId));
         commentRepository.delete(getComment(adId, commentId));
     }
 }

@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDto;
@@ -57,6 +59,8 @@ public class AdController {
     }
 
     @PatchMapping("/{id}")
+    @Transactional
+    @PreAuthorize("@userService.hasPermission(@adService.getAd(#id))")
     public AdDto patchProperties(
             @NotNull @PathVariable Integer id,
             @Valid @RequestBody CreateOrUpdateAd properties) {
@@ -67,6 +71,8 @@ public class AdController {
     }
 
     @PatchMapping(path="/{id}/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Transactional
+    @PreAuthorize("@userService.hasPermission(@adService.getAd(#id))")
     public AdDto patchImg(
             @NotNull @PathVariable Integer id,
             @RequestPart MultipartFile image) {
@@ -78,6 +84,8 @@ public class AdController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Transactional
+    @PreAuthorize("@userService.hasPermission(@adService.getAd(#id))")
     public void delete(@NotNull @PathVariable Integer id) {
 
         log.trace("delete(id={}", id);
