@@ -15,6 +15,7 @@ import java.util.stream.Stream;
 @MappedSuperclass
 public class AdTestUtil {
     protected final static int ID = 111;
+    protected final static int AUTHOR_ID = 2;
 
     protected final static String SOME_TEXT = "Lorem Ipsum";
     protected final static String TITLE = "title";
@@ -22,9 +23,9 @@ public class AdTestUtil {
     protected static String IMAGE = "image";
     protected final static int PRICE = 1_000;
 
-    protected static User generateAuthor() {
+    protected static User createTestAuthor() {
         User author = new User();
-        author.setId(ID);
+        author.setId(AUTHOR_ID);
         author.setFirstName("John");
         author.setLastName("Smith");
         author.setEmail("e@mail.org");
@@ -34,7 +35,7 @@ public class AdTestUtil {
     }
 
     protected static Ad generateAd() {
-        return generateAd(generateAuthor(), TITLE, DESCRIPTION, PRICE);
+        return generateAd(createTestAuthor(), TITLE, DESCRIPTION, PRICE);
     }
     protected static Ad generateAd(User author) {
         return generateAd(author, TITLE, DESCRIPTION, PRICE);
@@ -73,7 +74,7 @@ public class AdTestUtil {
 
     //given
     public static Stream<List<Ad>> streamAds() {
-        User author = new User();
+        User author = createTestAuthor();
         return Stream.of(
                 new ArrayList<>(0),
                 List.of(generateAd(author, TITLE + 0)),

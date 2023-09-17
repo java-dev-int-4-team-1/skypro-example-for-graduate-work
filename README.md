@@ -60,8 +60,8 @@ There is a <b>pom.xml</b> in the root directory. Below there are the steps descr
 
 3) run the app:
     
-<code>java -jar target/ads-0.0.1-SNAPSHOT.jar --spring.datasource.url=gdbc:postgresql://localhost:5432/postgres --spring.datasource.username=postgres  --spring.datasource.password=postgres</code> 
-
+<code>java -jar target/ads-0.0.1-SNAPSHOT.jar --spring.datasource.url=jdbc:postgresql://localhost:5432/postgres --spring.datasource.username=postgres  --spring.datasource.password=postgres</code> 
+    
 4) There is an option to check functionality with the http-requests which are placed in the files in the <b>http-requests</b> directory.
    
 5) Run the front end within docker container using the command:

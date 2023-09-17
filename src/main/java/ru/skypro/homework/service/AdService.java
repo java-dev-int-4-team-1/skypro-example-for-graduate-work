@@ -47,7 +47,7 @@ public class AdService implements AdGetter {
 
     public ExtendedAd getById(Integer id) {
         log.trace("-getById({})", id);
-        return adMapper.mapToExtendedAd(getAd(id));
+        return adMapper.mapExtended(getAd(id));
     }
 
 
