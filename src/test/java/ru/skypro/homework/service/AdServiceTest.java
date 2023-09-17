@@ -51,7 +51,7 @@ class AdServiceTest extends AdTestUtil {
     @MethodSource("streamAdsDto")
     void getAll(Ads ads, List<Ad> adList) {
         //given
-        User author = generateAuthor();
+        User author = createTestAuthor();
         //when
         when(adRepository.findAll()).thenReturn(adList);
         Ads adsDto =  adService.getAll();
@@ -80,7 +80,7 @@ class AdServiceTest extends AdTestUtil {
     void getById() {
         //given
         Ad ad = generateAd();
-        AdDto expected = adMapper.map(ad);
+        ExtendedAd expected = adMapper.mapExtended(ad);
         int id = ad.getId();
 
         //when
@@ -118,7 +118,7 @@ class AdServiceTest extends AdTestUtil {
         Ad ad = adMapper.map(properties, image);
         AdDto adDto = adMapper.map(ad);
         when(adRepository.save(ad)).thenReturn(ad);
-        when(currentUserService.getCurrentUser()).thenReturn(generateAuthor());
+        when(currentUserService.getCurrentUser()).thenReturn(createTestAuthor());
 
         //then
         assertThat(adService.create(properties, image))
@@ -154,7 +154,7 @@ class AdServiceTest extends AdTestUtil {
     @Test
     void patchProperties() {
         //given
-        User author = generateAuthor();
+        User author = createTestAuthor();
         Ad ad = generateAd(author, "Former Title", "Former Description", PRICE-1);
         CreateOrUpdateAd properties = generateCreateOrUpdateAd();
         Ad expected = generateAd(author);

@@ -47,7 +47,7 @@ public class AdService implements AdGetter {
 
     public ExtendedAd getById(Integer id) {
         log.trace("-getById({})", id);
-        return adMapper.mapToExtendedAd(getAd(id));
+        return adMapper.mapExtended(getAd(id));
     }
 
 
@@ -78,8 +78,6 @@ public class AdService implements AdGetter {
     public void delete(int id) {
         log.trace("-delete({})", id);
         Ad ad = getAd(id);
-        currentUserService.checkPermission(ad);
-
         imageManager.deleteImage(ad, ad.getImage());
         adRepository.delete(getAd(id));
     }
@@ -88,8 +86,6 @@ public class AdService implements AdGetter {
         log.trace("-patchProperties(id={}, properties={})", id, properties);
 
         Ad ad = getAd(id);
-        currentUserService.checkPermission(ad);
-
         properties.updateAd(ad);
         return adMapper.map(adRepository.save(ad));
     }
@@ -98,10 +94,7 @@ public class AdService implements AdGetter {
         log.trace("-patchImage(id={}, image.originalFilename={})", id, image.getOriginalFilename());
 
         Ad ad = getAd(id);
-        currentUserService.checkPermission(ad);
-
         setImage(image, ad);
-
         return adMapper.map(adRepository.save(ad));
     }
 

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
@@ -26,10 +27,17 @@ class AdMapperTest extends AdTestUtil {
     @Autowired
     private AdMapper adMapper;
 
+    @Value("${realm.img}")
+    private String realmImg;
+
+    @Value("${realm.ads}")
+    private String realmAds;
+
+
     @Test
     void adToAdDto() {
         //given
-        User author = new User();
+        User author = createTestAuthor();
         Ad ad = generateAd(author);
 
         //when
@@ -38,7 +46,8 @@ class AdMapperTest extends AdTestUtil {
         //then
         assertThat(adDto).isNotNull();
         assertThat(adDto.getTitle()).isEqualTo(TITLE);
-        assertThat(adDto.getImage()).isEqualTo(IMAGE);
+        assertThat(adDto.getImage()).isEqualTo(
+                "/" + realmImg + "/" + realmAds + "/" + IMAGE);
         assertThat(adDto.getPrice()).isEqualTo(PRICE);
         assertThat(adDto.getAuthor())
                 .isEqualTo(author.getId());
@@ -51,13 +60,14 @@ class AdMapperTest extends AdTestUtil {
         Ad ad = generateAd(author);
 
         //when
-        ExtendedAd extendedAd = adMapper.mapToExtendedAd(ad);
+        ExtendedAd extendedAd = adMapper.mapExtended(ad);
 
         //then
         assertThat(extendedAd).isNotNull();
         assertThat(extendedAd.getPk()).isEqualTo(ID);
         assertThat(extendedAd.getTitle()).isEqualTo(TITLE);
-        assertThat(extendedAd.getImage()).isEqualTo(IMAGE);
+        assertThat(extendedAd.getImage()).isEqualTo(
+                "/" + realmImg + "/" + realmAds + "/" + IMAGE);
         assertThat(extendedAd.getPrice()).isEqualTo(PRICE);
         assertThat(extendedAd.getAuthorFirstName())
                 .isEqualTo(author.getFirstName());
@@ -94,9 +104,8 @@ class AdMapperTest extends AdTestUtil {
     @MethodSource("streamAds")
     void adsToAdsDto(Collection<Ad> ads) {
         //when
-        User author = new User();
+        User author = createTestAuthor();
         Ads adsDto =  adMapper.map(ads);
-
 
         //then
         assertThat(adsDto).isNotNull();
@@ -106,11 +115,14 @@ class AdMapperTest extends AdTestUtil {
                             assertThat(adDto).isNotNull();
                             assertThat(adDto.getPk()).isEqualTo(ID);
                             assertThat(adDto.getTitle()).startsWith(TITLE);
-                            assertThat(adDto.getImage()).isEqualTo(IMAGE);
+                            assertThat(adDto.getImage()).isEqualTo(
+                                    "/" + realmImg + "/" + realmAds + "/" + IMAGE);
                             assertThat(adDto.getPrice()).isEqualTo(PRICE);
                             assertThat(adDto.getAuthor())
                                     .isEqualTo(author.getId());
                         });
     }
+
+
 }
 

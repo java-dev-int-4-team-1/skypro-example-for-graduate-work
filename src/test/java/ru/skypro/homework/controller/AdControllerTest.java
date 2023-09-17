@@ -133,18 +133,18 @@ class AdControllerTest extends AdTestUtil {
     @MethodSource("streamCorrectAdProperties")
     public void givenCreate_whenCorrectInputButUnauthorized_thenUnauthorized(CreateOrUpdateAd correctCreateAd) throws Exception {
         log.trace("givenCreate_whenCorrectInputButUnauthorized_thenUnauthorized");
-        performCreateUnauthorized(correctCreateAd).andExpect(status().isUnauthorized());
+        performCreateUnauthenticated(correctCreateAd).andExpect(status().isUnauthorized());
     }
 
     @ParameterizedTest
     @MethodSource("streamIncorrectAdProperties")
     public void givenCreate_whenIncorrectInputButUnauthorized_thenUnauthorized(CreateOrUpdateAd incorrectCreateAd) throws Exception {
         log.trace("givenCreate_whenIncorrectInputButUnauthorized_thenUnauthorized");
-        performCreateUnauthorized(incorrectCreateAd).andExpect(status().isUnauthorized());
+        performCreateUnauthenticated(incorrectCreateAd).andExpect(status().isUnauthorized());
     }
 
 
-    private ResultActions performCreateUnauthorized(CreateOrUpdateAd incorrectCreateAd) throws Exception {
+    private ResultActions performCreateUnauthenticated(CreateOrUpdateAd incorrectCreateAd) throws Exception {
         byte[] propertiesJson = objectMapper.writeValueAsBytes(incorrectCreateAd);
 
         MockMultipartFile propertiesMockMultipartFile = new MockMultipartFile("properties", "ad.txt",

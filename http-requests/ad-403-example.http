@@ -14,17 +14,17 @@ Content-Type: application/json
 }
 
 --PartBoundary
-Content-Disposition: form-data; name="image"; filename="1-Character_Fry.png"
+Content-Disposition: form-data; name="image"; filename="Character_Fry.png"
 Content-Type: image/jpeg
 
-< ../data/img/users/1-Character_Fry.png
+< ../data/img/test-sources/Character_Fry.png
 --PartBoundary
 
 
 ### Try to delete the ad created above (Check the ad's id before executing). Should return: '403/FORBIDDEN'
-DELETE http://localhost:8080/ads/3
+DELETE http://localhost:8080/ads/7
 Authorization: Basic user@gmail.com password
 
 ### Delete the ad created above. (Check the ad's id before executing). Should return: '204/NO_CONTENT'
-DELETE http://localhost:8080/ads/3
+DELETE http://localhost:8080/ads/7
 Authorization: Basic hermes@planet-express.com password

@@ -23,11 +23,4 @@ public class AdAppExceptionHandler {
         return ResponseEntity.badRequest().build();
     }
 
-    @ExceptionHandler({EditForbiddenException.class})
-    public ResponseEntity<HttpStatus> handleEditForbiddenException() {
-        log.trace("handleEditForbiddenException: response status 403/FORBIDDEN will be returned");
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-    }
-
-
 }

@@ -13,7 +13,6 @@ import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.CreatedByUser;
 import ru.skypro.homework.entity.User;
-import ru.skypro.homework.exception.EditForbiddenException;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.util.ImageManager;
@@ -74,22 +73,6 @@ public class UserService implements CurrentUserService {
                 SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
         return userRepository.findByEmail(name);
-    }
-
-    @Override
-    public void checkPermission(CreatedByUser entity) {
-
-        User currentUser = getCurrentUser();
-        int currentUserId = currentUser.getId();
-        int authorId = entity.getAuthor().getId();
-
-        log.trace("--checkPermission(author.id={}, current-user.id={})",
-                authorId,  currentUserId);
-
-        if(currentUser.getRole() != Role.ADMIN &&
-                currentUserId != authorId) {
-            throw new EditForbiddenException(currentUser, authorId);
-        }
     }
 
     @Override
