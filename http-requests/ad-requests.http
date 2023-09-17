@@ -1,0 +1,98 @@
+### Get the ad by its ID=1
+GET http://localhost:8080/ads/1
+
+### Get all the ads of the authorized user
+GET http://localhost:8080/ads/me
+Authorization: Basic user@gmail.com password
+
+### Get all the ads
+GET http://localhost:8080/ads/
+Authorization: Basic user@gmail.com password
+
+### Delete the ad by its ID=1
+DELETE http://localhost:8080/ads/1
+Authorization: Basic user@gmail.com password
+
+### Create a new ad: incorrect data (the length of the description > 64). Should return: '400/Bad Request'
+POST http://localhost:8080/ads/
+Authorization: Basic user@gmail.com password
+Content-Type: multipart/form-data; boundary=PartBoundary
+
+--PartBoundary
+Content-Disposition: form-data; name="properties"
+Content-Type: application/json
+
+{
+  "title": "Big Ben",
+  "price": 9999999,
+  "description": "For your mansion. The Great Bell of the Great Clock of Westminster"
+}
+
+### Create a new ad: correct data. Should return: '201/Created'
+POST http://localhost:8080/ads/
+Authorization: Basic user@gmail.com password
+Content-Type: multipart/form-data; boundary=PartBoundary
+
+--PartBoundary
+Content-Disposition: form-data; name="properties"
+Content-Type: application/json
+
+{
+  "title": "Big Ben",
+  "price": 9999999,
+  "description": "4 your mansion. The Great Bell of the Great Westmnstr's Clock"
+}
+
+--PartBoundary
+Content-Disposition: form-data; name="image"; filename="Big_Ben_small_with_Labour_Party_(UK)_colour.png"
+Content-Type: image/jpeg
+
+< ../data/img/test-sources/Big_Ben_small_with_Labour_Party_(UK)_colour.png
+--PartBoundary
+
+### Patch the ad by its ID=1 : does not work
+PATCH http://localhost:8080/ads/1
+Authorization: Basic user@gmail.com password
+Content-Type: application/json
+
+{
+  "title": "The Title",
+  "price": 100,
+  "description": "some description"
+}
+
+### Patch the ad with incorrect properties: price is too big. Should return '400/BadRequest'
+PATCH http://localhost:8080/ads/1
+Authorization: Basic user@gmail.com password
+Content-Type: application/json
+
+{
+  "title": "The Title",
+  "price": 10000001,
+  "description": "some description"
+}
+
+### Just an example here if some different unknown PATH-request is described
+PATCH http://localhost:8080/hogwards/
+Authorization: Basic user@gmail.com password
+Content-Type: application/json
+
+{
+"name"  : "Gryffindor",
+"color" : "red",
+"title": "Bender",
+"price": 105,
+"description": "explicitly useful tool and good friend"
+}
+
+### Patch the ad's image for the ad with ID=1
+PATCH http://localhost:8080/ads/1/image
+Authorization: Basic user@gmail.com password
+Content-Type: multipart/form-data; boundary=PartBoundary
+
+--PartBoundary
+Content-Disposition: form-data; name="image"; filename="bender.jpg"
+Content-Type: image/jpeg
+
+< ../data/img/ads/bender.jpg
+--PartBoundary

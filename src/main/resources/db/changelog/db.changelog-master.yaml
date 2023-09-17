@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - include:
+      file: /db/changelog/create-table/create-table-users.xml
+  - include:
+      file: /db/changelog/create-table/create-table-ads.xml
+  - include:
+      file: /db/changelog/create-table/create-table-comments.xml
+
+  - include:
+      file: /db/changelog/insert-into/insert-into-users.xml
+  - include:
+      file: /db/changelog/insert-into/insert-into-ads.xml

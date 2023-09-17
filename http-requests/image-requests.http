@@ -1,0 +1,11 @@
+### Get the ad's image 'bender.jpg'
+GET http://localhost:8080/img/ads/2-bender.jpg
+Authorization: Basic user@gmail.com password
+
+### Get the user's image for Fry
+GET http://localhost:8080/img/users/1-Character_Fry.png
+Authorization: Basic user@gmail.com password
+
+### Get the user's image for Fry but filename is not correct: 400/BAD REQUEST will be returned
+GET http://localhost:8080/img/users/1-Character_Fry~.png
+Authorization: Basic user@gmail.com password

@@ -1,0 +1,35 @@
+### Create a new comment: correct data. Should return: '200/OK'
+POST http://localhost:8080/ads/2/comments/
+Authorization: Basic hermes@planet-express.com password
+Content-Type: application/json
+
+{
+  "text": "This is a comment made by Hermes"
+}
+
+### Try to patch the comment created above (Check the comment's id before executing). Should return: '403/FORBIDDEN'
+PATCH http://localhost:8080/ads/2/comments/2
+Authorization: Basic user@gmail.com password
+Content-Type: application/json
+
+{
+  "text": "This is a modified comment by Fry"
+}
+
+### Patch the comment created above (Check the comment's id before executing). Should return: '200/OK'
+PATCH http://localhost:8080/ads/2/comments/2
+Authorization: Basic hermes@planet-express.com password
+Content-Type: application/json
+
+{
+"text": "This is a modified comment by Hermes"
+}
+
+
+### Try to delete the comment created above (Check the comment's id before executing). Should return: '403/FORBIDDEN'
+DELETE http://localhost:8080/ads/2/comments/2
+Authorization: Basic user@gmail.com password
+
+### Delete the comment created above (Check the comment's id before executing). Should return: '200/OK'
+DELETE http://localhost:8080/ads/2/comments/2
+Authorization: Basic hermes@planet-express.com password
