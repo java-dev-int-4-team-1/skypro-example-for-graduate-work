@@ -54,7 +54,7 @@ There is a <b>pom.xml</b> in the root directory. Below there are the steps descr
 
 2) be sure your postgresql server is working. In case when there isn't a postgresql database server installed there is an option to launch it within a docker container, e.g.:
 
-<code>docker run -name habr-pg-13.3 -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=postgres -e postgres:13.3</code>
+<code>docker run -name habr-pg-13.3 -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=postgres -d postgres:13.3</code>
 <br>In this example there are username, password and name of the database specified as 'postgres' for each of them.
 <br><br>
 
