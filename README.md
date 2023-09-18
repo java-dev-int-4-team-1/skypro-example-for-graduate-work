@@ -1,6 +1,6 @@
 # Skypro graduate work: Back-end Ad Server routines Implementation
 <br>
-Team work.
+Team work
 <br>Authors: Stanislav Dudin, Katerina Petrova, Sergei Gots
 <br><br>
 The Project is the backend part implementation for an ad service web application.
@@ -24,7 +24,7 @@ DTO and Responses statuses are specified within <b>openapi.yaml</b>.
 
 ## Database scheme
 
-The data scheme is provided with the liquibase change-log that describes creating the tables <b>users, ads, comments</b>
+The data scheme management is provided with the liquibase change-log that describes creating the tables <b>users, ads, comments</b>
 and inserting some initial data in order to demonstrate application's functionality.
 Db-changelog is available under <b>resources/db/changelog</b> 
 
