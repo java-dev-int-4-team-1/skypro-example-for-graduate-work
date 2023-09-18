@@ -56,7 +56,10 @@ There is a <b>pom.xml</b> in the root directory. Below there are the steps descr
 
 <code>docker run -name habr-pg-13.3 -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=postgres -d postgres:13.3</code>
 <br>In this example there are username, password and name of the database specified as 'postgres' for each of them.
+<br>Hence one can make a connection with the postgres server executing the command
 <br><br>
+<code>psql -h localhost -U postgres</code>
+<br>
 
 3) run the app:
     
