@@ -13,6 +13,7 @@ import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.CreatedByUser;
 import ru.skypro.homework.entity.User;
+import ru.skypro.homework.exception.UnauthorizedException;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.util.ImageManager;
@@ -67,12 +68,20 @@ public class UserService implements CurrentUserService {
         imageManager.deleteImage(user, prevImage);
     }
 
+    /**
+     * If there is not authorized request then throws UnathorizedException
+     * @return current user
+     */
     @Override
     public User getCurrentUser() {
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
-        return userRepository.findByEmail(name);
+        User currentUser = userRepository.findByEmail(name);
+        if(currentUser == null) {
+            throw new UnauthorizedException();
+        }
+        return currentUser;
     }
 
     @Override

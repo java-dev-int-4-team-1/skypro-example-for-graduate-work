@@ -1,7 +1,13 @@
-### Get the ad by its ID=1 when unantheticated
+### Get the ad by its ID=1 when unantheticated. Should return: '401/Unauthorized'
 GET http://localhost:8080/ads/1
 
-### Get all the ads of the authorized user
+### Get all the ads for an unauthorized user. Should return: '200/OK'
+GET http://localhost:8080/ads
+
+### Get all the ads "of" an unauthorized user. Should return: '401/Unauthorized'
+GET http://localhost:8080/ads/me
+
+### Get all the ads of the authorized user. Should return: '200/OK'
 GET http://localhost:8080/ads/me
 Authorization: Basic user@gmail.com password
 
