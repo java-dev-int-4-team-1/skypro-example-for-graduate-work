@@ -4,10 +4,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
@@ -32,6 +34,12 @@ import static org.mockito.Mockito.*;
 @AutoConfigureMockMvc
 class AdServiceTest extends AdTestUtil {
 
+    @Value("${realm.img}")
+    private String realmImg;
+
+    @Value("${realm.ads}")
+    private String realmAds;
+
     @Autowired
     private AdService adService;
 
@@ -42,7 +50,7 @@ class AdServiceTest extends AdTestUtil {
     private AdRepository adRepository;
 
     @MockBean
-    private CurrentUserService currentUserService;
+    private UserService currentUserService;
 
     @MockBean
     private ImageManager imageManager;
@@ -64,7 +72,7 @@ class AdServiceTest extends AdTestUtil {
                     assertThat(adDto).isNotNull();
                     assertThat(adDto.getPk()).isEqualTo(ID);
                     assertThat(adDto.getTitle()).startsWith(TITLE);
-                    assertThat(adDto.getImage()).isEqualTo(IMAGE);
+                    assertThat(adDto.getImage()).isEqualTo("/" + realmImg + "/" + realmAds + "/" + IMAGE);
                     assertThat(adDto.getPrice()).isEqualTo(PRICE);
                     assertThat(adDto.getAuthor())
                             .isEqualTo(author.getId());
@@ -112,13 +120,14 @@ class AdServiceTest extends AdTestUtil {
     void create() {
         //given
         CreateOrUpdateAd properties = generateCreateOrUpdateAd();
-        MockMultipartFile image = new MockMultipartFile(IMAGE, IMAGE.getBytes());
+        MockMultipartFile image = new MockMultipartFile(IMAGE, IMAGE, "png",  IMAGE.getBytes());
 
         //when
         Ad ad = adMapper.map(properties, image);
         AdDto adDto = adMapper.map(ad);
-        when(adRepository.save(ad)).thenReturn(ad);
-        when(currentUserService.getCurrentUser()).thenReturn(createTestAuthor());
+        when(adRepository.save(any(Ad.class))).thenReturn(ad);
+        when(currentUserService.getCurrentUser()).thenReturn(TEST_AUTHOR);
+        when(imageManager.uploadImage(any(Ad.class), any(MultipartFile.class))).thenReturn(IMAGE);
 
         //then
         assertThat(adService.create(properties, image))
@@ -139,6 +148,7 @@ class AdServiceTest extends AdTestUtil {
         //then
         verify(adRepository).findById(id);
         verify(adRepository).delete(ad);
+        verify(imageManager).deleteImage(ad, ad.getImage());
     }
 
 

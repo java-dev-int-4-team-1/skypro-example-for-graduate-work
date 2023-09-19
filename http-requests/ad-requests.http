@@ -1,4 +1,4 @@
-### Get the ad by its ID=1
+### Get the ad by its ID=1 when unantheticated
 GET http://localhost:8080/ads/1
 
 ### Get all the ads of the authorized user
