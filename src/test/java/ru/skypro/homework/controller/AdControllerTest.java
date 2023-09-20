@@ -243,8 +243,9 @@ class AdControllerTest extends AdTestUtil {
                         .content(objectMapper.writeValueAsBytes(properties))
 
                 //then
-        ).andExpect((result)->
-            assertThat(result.getResponse().getStatus()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+        ).andExpect(
+                result->
+                    assertThat(result.getResponse().getStatus()).isEqualTo(HttpStatus.UNAUTHORIZED.value())
         );
     }
 }
