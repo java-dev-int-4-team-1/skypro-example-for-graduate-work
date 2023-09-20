@@ -12,7 +12,5 @@ public interface CurrentUserService {
     @Transactional
     User getCurrentUser();
     @Transactional
-    boolean isAuthenticated();
-    @Transactional
     boolean hasPermission(CreatedByUser entity);
 }

@@ -13,7 +13,6 @@ import ru.skypro.homework.dto.UpdateUser;
 import ru.skypro.homework.dto.UserDto;
 import ru.skypro.homework.entity.CreatedByUser;
 import ru.skypro.homework.entity.User;
-import ru.skypro.homework.exception.UnauthorizedException;
 import ru.skypro.homework.mapper.UserMapper;
 import ru.skypro.homework.repository.UserRepository;
 import ru.skypro.homework.util.ImageManager;
@@ -82,11 +81,7 @@ public class UserService implements CurrentUserService {
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
         String name = authentication.getName();
-        User currentUser = userRepository.findByEmail(name);
-        if(currentUser == null) {
-            throw new UnauthorizedException();
-        }
-        return currentUser;
+        return userRepository.findByEmail(name);
     }
 
     @Override
@@ -104,10 +99,4 @@ public class UserService implements CurrentUserService {
             currentUserId == authorId;
     }
 
-    @Override
-    @Transactional
-    public boolean isAuthenticated() {
-        getCurrentUser();
-        return true;
-    }
 }

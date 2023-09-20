@@ -7,7 +7,6 @@ GET http://localhost:8080/ads
 ### Get all the ads "of" an unauthorized user. Should return: '401/Unauthorized'
 GET http://localhost:8080/ads/me
 
-
 ### Get all the ads of the authorized user. Should return: '200/OK'
 GET http://localhost:8080/ads/me
 Authorization: Basic user@gmail.com password
@@ -62,25 +61,7 @@ Content-Type: application/json
 
 ### Create a new ad: unantheticated. Should return: '401/Unathorized'
 POST http://localhost:8080/ads/
-Authorization: Basic user@gmail.com password
-Content-Type: multipart/form-data; boundary=PartBoundary
 
---PartBoundary
-Content-Disposition: form-data; name="properties"
-Content-Type: application/json
-
-{
-  "title": "Big Ben",
-  "price": 9999999,
-  "description": "For your mansion. The Great Bell of the Great Clock of Westminster"
-}
-
---PartBoundary
-Content-Disposition: form-data; name="image"; filename="Big_Ben_small_with_Labour_Party_UK_colour.png"
-Content-Type: image/jpeg
-
-< ../data/img/test-sources/Big_Ben_small_with_Labour_Party_UK_colour.png
---PartBoundary
 
 ### Patch the ad by its ID=1. Should return: '200/OK'
 PATCH http://localhost:8080/ads/1
@@ -96,7 +77,7 @@ Content-Type: application/json
 
 ### Patch unantheticated the ad by its ID=1. Should return: '401/Unathorized'
 PATCH http://localhost:8080/ads/1
-Authorization: Basic user@gmail.com wrong-password
+Authorization: Basic another-user@gmail.com wrong-password
 
 ### Patch the ad with incorrect properties: price is too big. Should return '400/BadRequest'
 PATCH http://localhost:8080/ads/1
@@ -124,12 +105,12 @@ Content-Type: application/json
 
 ### Patch the ad's image for the ad with ID=1
 PATCH http://localhost:8080/ads/1/image
-Authorization: Basic user@gmail.com password
+Authorization: Basic user@gmail.com pawwssword
 Content-Type: multipart/form-data; boundary=PartBoundary
 
 --PartBoundary
 Content-Disposition: form-data; name="image"; filename="bender.jpg"
 Content-Type: image/jpeg
 
-< ../data/img/ads/bender.jpg
+< ../data/img/test-sources/bender.jpg
 --PartBoundary

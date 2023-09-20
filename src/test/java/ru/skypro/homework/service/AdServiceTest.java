@@ -56,7 +56,7 @@ class AdServiceTest extends AdTestUtil {
     private ImageManager imageManager;
 
     @ParameterizedTest
-    @MethodSource("streamAdsDto")
+    @MethodSource("streamAds")
     void getAll(Ads ads, List<Ad> adList) {
         //given
         User author = createTestAuthor();
