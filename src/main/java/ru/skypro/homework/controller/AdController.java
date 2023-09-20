@@ -48,6 +48,8 @@ public class AdController {
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
+    @Transactional
+    @PreAuthorize("@userService.isAuthenticated()")
      public AdDto create(
              @Valid @RequestPart CreateOrUpdateAd properties,
              @RequestPart MultipartFile image) {

@@ -7,5 +7,7 @@ import ru.skypro.homework.entity.User;
 public interface CurrentUserService {
     User getCurrentUser();
     @Transactional
+    boolean isAuthenticated();
+    @Transactional
     boolean hasPermission(CreatedByUser entity);
 }

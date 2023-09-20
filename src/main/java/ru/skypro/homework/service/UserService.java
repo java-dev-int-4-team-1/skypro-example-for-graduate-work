@@ -99,4 +99,10 @@ public class UserService implements CurrentUserService {
             currentUserId == authorId;
     }
 
+    @Override
+    @Transactional
+    public boolean isAuthenticated() {
+        getCurrentUser();
+        return true;
+    }
 }
