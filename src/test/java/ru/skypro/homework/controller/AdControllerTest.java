@@ -17,8 +17,10 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.skypro.homework.dto.AdDto;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
+import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.testutil.AdTestUtil;
 
 import java.nio.charset.StandardCharsets;
@@ -46,6 +48,9 @@ class AdControllerTest extends AdTestUtil {
 
     @MockBean
     private AdService adService;
+
+    @MockBean
+    private UserService currentUserService;
     private final static String LOGIN = "user@gmail.com";
     private final static String PASSWORD = "password";
 
@@ -121,6 +126,11 @@ class AdControllerTest extends AdTestUtil {
 
         log.trace("imageMockMultipartFile.getName()={}", imageMockMultipartFile.getName());
 
+        //when
+        when(currentUserService.isAuthenticated()).thenReturn(true);
+
+
+        //then
         return mockMvc.perform(MockMvcRequestBuilders
                 .multipart(HttpMethod.POST, "/ads")
                 .file(propertiesMockMultipartFile)
@@ -138,13 +148,14 @@ class AdControllerTest extends AdTestUtil {
 
     @ParameterizedTest
     @MethodSource("streamIncorrectAdProperties")
-    public void givenCreate_whenIncorrectInputButUnauthorized_thenUnauthorized(CreateOrUpdateAd incorrectCreateAd) throws Exception {
-        log.trace("givenCreate_whenIncorrectInputButUnauthorized_thenUnauthorized");
-        performCreateUnauthenticated(incorrectCreateAd).andExpect(status().isUnauthorized());
+    public void givenCreate_whenIncorrectInputButUnauthorized_thenBadRequest(CreateOrUpdateAd incorrectCreateAd) throws Exception {
+        log.trace("givenCreate_whenIncorrectInputButUnauthorized_BadRequest");
+        performCreateUnauthenticated(incorrectCreateAd).andExpect(status().isBadRequest());
     }
 
 
     private ResultActions performCreateUnauthenticated(CreateOrUpdateAd incorrectCreateAd) throws Exception {
+        //given
         byte[] propertiesJson = objectMapper.writeValueAsBytes(incorrectCreateAd);
 
         MockMultipartFile propertiesMockMultipartFile = new MockMultipartFile("properties", "ad.txt",
@@ -152,7 +163,10 @@ class AdControllerTest extends AdTestUtil {
         MockMultipartFile imageMockMultipartFile = new MockMultipartFile(IMAGE, "some-image.png",
                 "image/png", "an-image".getBytes());
 
+        //when
+        when(currentUserService.isAuthenticated()).thenReturn(false);
 
+        //then
         return mockMvc.perform(MockMvcRequestBuilders
                 .multipart(HttpMethod.POST, "/ads")
                 .file(propertiesMockMultipartFile)
@@ -162,7 +176,7 @@ class AdControllerTest extends AdTestUtil {
 
 
     @Test
-    public void patchProperties() throws Exception {
+    public void patchProperties_whenAuthorized() throws Exception {
         //given
         CreateOrUpdateAd properties = generateCreateOrUpdateAd();
 
@@ -172,8 +186,14 @@ class AdControllerTest extends AdTestUtil {
         AdDto expected = adMapper.map(
                 adMapper.map(properties, imageMockMultipartFile)
         );
+        Ad ad = new Ad();
+        ad.setId(ID);
+
 
         //when
+        when(adService.getAd(ID)).thenReturn(ad);
+        when(currentUserService.getCurrentUser()).thenReturn(TEST_AUTHOR);
+        when(currentUserService.hasPermission(any(Ad.class))).thenReturn(true);
         when(adService.patchProperties(ID, properties)).thenReturn(expected);
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -196,5 +216,36 @@ class AdControllerTest extends AdTestUtil {
         });
     }
 
+    @Test
+    public void patchProperties_whenUnauthorized() throws Exception {
+        //given
+        CreateOrUpdateAd properties = generateCreateOrUpdateAd();
 
+        MockMultipartFile imageMockMultipartFile = new MockMultipartFile(IMAGE, "some-image.png",
+                "image/png", "an-image".getBytes());
+
+        AdDto expected = adMapper.map(
+                adMapper.map(properties, imageMockMultipartFile)
+        );
+        Ad ad = new Ad();
+        ad.setId(ID);
+
+
+        //when
+        when(adService.getAd(ID)).thenReturn(ad);
+        when(currentUserService.getCurrentUser()).thenReturn(TEST_AUTHOR);
+        when(currentUserService.hasPermission(any(Ad.class))).thenReturn(true);
+        when(adService.patchProperties(ID, properties)).thenReturn(expected);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .patch("/ads/{id}", Integer.toString(ID))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(properties))
+
+                //then
+        ).andExpect(
+                result->
+                    assertThat(result.getResponse().getStatus()).isEqualTo(HttpStatus.UNAUTHORIZED.value())
+        );
+    }
 }

@@ -10,7 +10,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class AdAppExceptionHandler {
 
-
+    @ExceptionHandler({UnauthorizedException.class})
+    public ResponseEntity<HttpStatus> handleUnauthorizedException() {
+        log.trace("handleNotFoundException(): response status 401/UNAUTHORIZED will be returned");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
     @ExceptionHandler({EntityNotFoundException.class})
     public ResponseEntity<HttpStatus> handleNotFoundException() {
         log.trace("handleNotFoundException(): response status 404/NOT FOUND will be returned");
