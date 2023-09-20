@@ -75,7 +75,7 @@ public class AdTestUtil {
     }
 
     //given
-    public static Stream<List<Ad>> streamAds() {
+    public static Stream<List<Ad>> streamAdsList() {
 
         return Stream.of(
                 new ArrayList<>(0),
@@ -88,9 +88,9 @@ public class AdTestUtil {
         );
     }
 
-    public static Stream<Arguments> streamAdsDto() {
+    public static Stream<Arguments> streamAds() {
 
-        return streamAds()
+        return streamAdsList()
                 .map(ads -> Arguments.of(
                         Mappers.getMapper(AdMapper.class).map(ads),
                         ads)
