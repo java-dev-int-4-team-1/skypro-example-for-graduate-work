@@ -1,6 +1,6 @@
 # Skypro graduate work: Back-end Ad Server routines Implementation
 <br>
-Team work.
+Team work
 <br>Authors: Stanislav Dudin, Katerina Petrova, Sergei Gots
 <br><br>
 The Project is the backend part implementation for an ad service web application.
@@ -24,7 +24,7 @@ DTO and Responses statuses are specified within <b>openapi.yaml</b>.
 
 ## Database scheme
 
-The data scheme is provided with the liquibase change-log that describes creating the tables <b>users, ads, comments</b>
+The data scheme management is provided with the liquibase change-log that describes creating the tables <b>users, ads, comments</b>
 and inserting some initial data in order to demonstrate application's functionality.
 Db-changelog is available under <b>resources/db/changelog</b> 
 
@@ -54,9 +54,12 @@ There is a <b>pom.xml</b> in the root directory. Below there are the steps descr
 
 2) be sure your postgresql server is working. In case when there isn't a postgresql database server installed there is an option to launch it within a docker container, e.g.:
 
-<code>docker run -name habr-pg-13.3 -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=postgres -e postgres:13.3</code>
+<code>docker run -name habr-pg-13.3 -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=postgres -d postgres:13.3</code>
 <br>In this example there are username, password and name of the database specified as 'postgres' for each of them.
+<br>Hence one can make a connection with the postgres server executing the command
 <br><br>
+<code>psql -h localhost -U postgres</code>
+<br>
 
 3) run the app:
     
