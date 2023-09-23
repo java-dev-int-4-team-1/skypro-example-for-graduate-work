@@ -39,6 +39,7 @@ public class UserService implements CurrentUserService {
         this.encoder = encoder;
     }
 
+    @Transactional
     public boolean setNewPassword(NewPassword newPassword) {
         User user = getCurrentUser();
         if (encoder.matches(newPassword.getCurrentPassword(), user.getPassword())) {
@@ -49,16 +50,19 @@ public class UserService implements CurrentUserService {
         return false;
     }
 
+    @Transactional
     public void updateUser(UpdateUser updateUser) {
         User user = getCurrentUser();
         userMapper.updateUser(updateUser, user);
         userRepository.save(user);
     }
 
+    @Transactional
     public UserDto getUser() {
         return userMapper.userEntityToUserDTO(getCurrentUser());
     }
 
+    @Transactional
     public void updateImage(MultipartFile image){
         User user = getCurrentUser();
         String prevImage = user.getImage();
@@ -67,7 +71,12 @@ public class UserService implements CurrentUserService {
         imageManager.deleteImage(user, prevImage);
     }
 
+    /**
+     * If there is not authorized request then throws UnauthorizedException
+     * @return current user
+     */
     @Override
+    @Transactional
     public User getCurrentUser() {
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();

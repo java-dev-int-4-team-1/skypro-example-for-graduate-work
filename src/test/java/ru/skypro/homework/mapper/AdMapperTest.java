@@ -101,7 +101,7 @@ class AdMapperTest extends AdTestUtil {
 
 
     @ParameterizedTest()
-    @MethodSource("streamAds")
+    @MethodSource("streamAdsList")
     void adsToAdsDto(Collection<Ad> ads) {
         //when
         User author = createTestAuthor();

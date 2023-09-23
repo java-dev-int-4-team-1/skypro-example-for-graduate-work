@@ -79,7 +79,7 @@ public class AdService implements AdGetter {
         log.trace("-delete({})", id);
         Ad ad = getAd(id);
         imageManager.deleteImage(ad, ad.getImage());
-        adRepository.delete(getAd(id));
+        adRepository.delete(ad);
     }
 
     public AdDto patchProperties(int id, CreateOrUpdateAd properties) {

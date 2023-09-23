@@ -16,9 +16,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.skypro.homework.dto.AdDto;
+import ru.skypro.homework.dto.Ads;
 import ru.skypro.homework.dto.CreateOrUpdateAd;
+import ru.skypro.homework.entity.Ad;
 import ru.skypro.homework.mapper.AdMapper;
 import ru.skypro.homework.service.AdService;
+import ru.skypro.homework.service.UserService;
 import ru.skypro.homework.testutil.AdTestUtil;
 
 import java.nio.charset.StandardCharsets;
@@ -46,6 +49,9 @@ class AdControllerTest extends AdTestUtil {
 
     @MockBean
     private AdService adService;
+
+    @MockBean
+    private UserService currentUserService;
     private final static String LOGIN = "user@gmail.com";
     private final static String PASSWORD = "password";
 
@@ -70,8 +76,8 @@ class AdControllerTest extends AdTestUtil {
 
     @ParameterizedTest
     @MethodSource("streamIncorrectAdProperties")
-    public void givenCreate_whenIncorrectInput_thenBadRequest(CreateOrUpdateAd incorrectCreateAd) throws Exception {
-        log.trace("givenCreate_whenIncorrectInput_thenBadRequest");
+    public void givenCreate_whenIncorrectInput_then400(CreateOrUpdateAd incorrectCreateAd) throws Exception {
+        log.trace("givenCreate_whenIncorrectInput_then400");
         performCreate(incorrectCreateAd).andExpect(status().isBadRequest());
     }
 
@@ -87,8 +93,8 @@ class AdControllerTest extends AdTestUtil {
 
     @ParameterizedTest
     @MethodSource("streamCorrectAdProperties")
-    public void givenCreate_whenCorrectInput_thenCreated(CreateOrUpdateAd correctCreateAd) throws Exception {
-        log.trace("givenCreate_whenCorrectInput_thenCreated");
+    public void givenCreate_whenCorrectInput_then201(CreateOrUpdateAd correctCreateAd) throws Exception {
+        log.trace("givenCreate_whenCorrectInput_then201");
 
 
         MockMultipartFile imageMockMultipartFile = new MockMultipartFile(IMAGE, "some-image.png",
@@ -121,6 +127,7 @@ class AdControllerTest extends AdTestUtil {
 
         log.trace("imageMockMultipartFile.getName()={}", imageMockMultipartFile.getName());
 
+        //then
         return mockMvc.perform(MockMvcRequestBuilders
                 .multipart(HttpMethod.POST, "/ads")
                 .file(propertiesMockMultipartFile)
@@ -131,20 +138,21 @@ class AdControllerTest extends AdTestUtil {
 
     @ParameterizedTest
     @MethodSource("streamCorrectAdProperties")
-    public void givenCreate_whenCorrectInputButUnauthorized_thenUnauthorized(CreateOrUpdateAd correctCreateAd) throws Exception {
-        log.trace("givenCreate_whenCorrectInputButUnauthorized_thenUnauthorized");
+    public void givenCreate_whenCorrectInputButUnauthorized_then410(CreateOrUpdateAd correctCreateAd) throws Exception {
+        log.trace("givenCreate_whenCorrectInputButUnauthorized_then401");
         performCreateUnauthenticated(correctCreateAd).andExpect(status().isUnauthorized());
     }
 
     @ParameterizedTest
     @MethodSource("streamIncorrectAdProperties")
-    public void givenCreate_whenIncorrectInputButUnauthorized_thenUnauthorized(CreateOrUpdateAd incorrectCreateAd) throws Exception {
-        log.trace("givenCreate_whenIncorrectInputButUnauthorized_thenUnauthorized");
+    public void givenCreate_whenIncorrectInputButUnauthorized_then401(CreateOrUpdateAd incorrectCreateAd) throws Exception {
+        log.trace("givenCreate_whenIncorrectInputButUnauthorized_then401");
         performCreateUnauthenticated(incorrectCreateAd).andExpect(status().isUnauthorized());
     }
 
 
     private ResultActions performCreateUnauthenticated(CreateOrUpdateAd incorrectCreateAd) throws Exception {
+        //given
         byte[] propertiesJson = objectMapper.writeValueAsBytes(incorrectCreateAd);
 
         MockMultipartFile propertiesMockMultipartFile = new MockMultipartFile("properties", "ad.txt",
@@ -152,7 +160,7 @@ class AdControllerTest extends AdTestUtil {
         MockMultipartFile imageMockMultipartFile = new MockMultipartFile(IMAGE, "some-image.png",
                 "image/png", "an-image".getBytes());
 
-
+        //then
         return mockMvc.perform(MockMvcRequestBuilders
                 .multipart(HttpMethod.POST, "/ads")
                 .file(propertiesMockMultipartFile)
@@ -162,7 +170,7 @@ class AdControllerTest extends AdTestUtil {
 
 
     @Test
-    public void patchProperties() throws Exception {
+    public void givenPatchProperties_whenAuthorized() throws Exception {
         //given
         CreateOrUpdateAd properties = generateCreateOrUpdateAd();
 
@@ -172,8 +180,14 @@ class AdControllerTest extends AdTestUtil {
         AdDto expected = adMapper.map(
                 adMapper.map(properties, imageMockMultipartFile)
         );
+        Ad ad = new Ad();
+        ad.setId(ID);
+
 
         //when
+        when(adService.getAd(ID)).thenReturn(ad);
+        when(currentUserService.getCurrentUser()).thenReturn(TEST_AUTHOR);
+        when(currentUserService.hasPermission(any(Ad.class))).thenReturn(true);
         when(adService.patchProperties(ID, properties)).thenReturn(expected);
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -196,5 +210,73 @@ class AdControllerTest extends AdTestUtil {
         });
     }
 
+    @Test
+    public void givenPatchProperties_whenUnauthorized() throws Exception {
+        //given
+        CreateOrUpdateAd properties = generateCreateOrUpdateAd();
 
+        MockMultipartFile imageMockMultipartFile = new MockMultipartFile(IMAGE, "some-image.png",
+                "image/png", "an-image".getBytes());
+
+        AdDto expected = adMapper.map(
+                adMapper.map(properties, imageMockMultipartFile)
+        );
+        Ad ad = new Ad();
+        ad.setId(ID);
+
+
+        //when
+        when(adService.getAd(ID)).thenReturn(ad);
+        when(currentUserService.getCurrentUser()).thenReturn(TEST_AUTHOR);
+        when(currentUserService.hasPermission(any(Ad.class))).thenReturn(true);
+        when(adService.patchProperties(ID, properties)).thenReturn(expected);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .patch("/ads/{id}", Integer.toString(ID))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsBytes(properties))
+
+                //then
+        ).andExpect(
+                result->
+                    assertThat(result.getResponse().getStatus()).isEqualTo(HttpStatus.UNAUTHORIZED.value())
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("streamAds")
+    public void givenGetAds_whenUnauthenticated_then200(Ads ads) throws Exception {
+        //when
+        when(adService.getAll()).thenReturn(ads);
+
+        //given
+        mockMvc.perform(MockMvcRequestBuilders
+                .get("/ads")
+        //then
+        ).andExpect(result-> {
+            assertThat(result.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
+            Ads actual = objectMapper.readValue(
+                    result.getResponse().getContentAsString(StandardCharsets.UTF_8),
+                    Ads.class);
+            assertThat(actual)
+                    .isNotNull()
+                    //note there are just references comparison within this check:
+                    .isEqualTo(ads);
+        })
+        ;
+    }
+
+    @Test
+    public void givenGetAdsMe_whenUnauthenticated_then401() throws Exception {
+        //given
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/ads/me")
+                //then
+        ).andExpect(result->
+            assertThat(result
+                    .getResponse()
+                    .getStatus())
+            .isEqualTo(HttpStatus.UNAUTHORIZED.value())
+        );
+    }
 }

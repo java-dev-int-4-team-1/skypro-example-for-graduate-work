@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class AdAppExceptionHandler {
 
-
     @ExceptionHandler({EntityNotFoundException.class})
     public ResponseEntity<HttpStatus> handleNotFoundException() {
         log.trace("handleNotFoundException(): response status 404/NOT FOUND will be returned");

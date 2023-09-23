@@ -23,6 +23,8 @@ public class AdTestUtil {
     protected static String IMAGE = "image";
     protected final static int PRICE = 1_000;
 
+    protected final static User TEST_AUTHOR = createTestAuthor();
+
     protected static User createTestAuthor() {
         User author = new User();
         author.setId(AUTHOR_ID);
@@ -41,8 +43,8 @@ public class AdTestUtil {
         return generateAd(author, TITLE, DESCRIPTION, PRICE);
     }
 
-    protected static Ad generateAd(User author, String title) {
-        return generateAd(author, title, DESCRIPTION, PRICE);
+    protected static Ad generateAd(String title) {
+        return generateAd(TEST_AUTHOR, title, DESCRIPTION, PRICE);
     }
     protected static Ad generateAd(User author,
                                    String title,
@@ -73,22 +75,22 @@ public class AdTestUtil {
     }
 
     //given
-    public static Stream<List<Ad>> streamAds() {
-        User author = createTestAuthor();
+    public static Stream<List<Ad>> streamAdsList() {
+
         return Stream.of(
                 new ArrayList<>(0),
-                List.of(generateAd(author, TITLE + 0)),
+                List.of(generateAd(TITLE + 0)),
                 List.of(
-                        generateAd(author, TITLE + 0),
-                        generateAd(author, TITLE + 1),
-                        generateAd(author, TITLE + 2)
+                        generateAd(TITLE + 0),
+                        generateAd(TITLE + 1),
+                        generateAd(TITLE + 2)
                 )
         );
     }
 
-    public static Stream<Arguments> streamAdsDto() {
+    public static Stream<Arguments> streamAds() {
 
-        return streamAds()
+        return streamAdsList()
                 .map(ads -> Arguments.of(
                         Mappers.getMapper(AdMapper.class).map(ads),
                         ads)
