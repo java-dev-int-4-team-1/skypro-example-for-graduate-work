@@ -69,7 +69,7 @@ There is a <b>pom.xml</b> in the root directory. Below there are the steps descr
    
 5) Run the front end within docker container using the command:
    
-<code>docker run --rm -p 3000:000 ghcr.io/bizinmitya/front-react-avito:v1.19</code>
+<code>docker run --rm -p 3000:3000 ghcr.io/bizinmitya/front-react-avito:v1.19</code>
 
 7) Use in browser the next address to access the app:
 
