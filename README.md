@@ -39,8 +39,8 @@ An authenticated user has their avatar image, ads also supposed to have their im
 
 ## Authorization
 
-According to the specification in <b>openapi.yaml</b> users can have <b>ROLE_USER</b> and <b>ROLE_ADMIN</b>.
-ADMIN can patch and delete any comment or ad when USER is allowed to patch and delete only their own entries.
+According to the specification in <b>openapi.yaml</b> users can have either the role <b>ROLE_USER</b> or <b>ROLE_ADMIN</b>.
+ADMIN is able to patch and delete any comment or ad when USER is allowed to patch and delete only their own entries.
 If a USER tries to patch or delete an ad or comment of other person then the status <b>403/Forbidden</b> will be returned to the front.
 
 ## How to build and launch
